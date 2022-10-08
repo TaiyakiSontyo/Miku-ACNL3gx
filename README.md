@@ -50,7 +50,9 @@ EN
 
 # 互換性 / Compatibility
 日本語 / Japanese - 完全互換(Fully Compatible)
+
 英語 / English - 非互換(Incompatible)
+
 中国語 / Chinese　- 非互換(Incompatible)
 
 # CTRPluginFrameworkの設定 / Settings of CTRPluginFramework
