@@ -92,4 +92,5 @@ https://github.com/ponpoko094/Colorful-MHX3gx
 
 # ライセンス / license
 Colorful-MHX3gx is licensed under the [MIT License](https://github.com/TaiyakiSontyo/Miku-ACNL3gx/edit/main/LICENSE)
+
 Miku-ACNL3gx 2022~
