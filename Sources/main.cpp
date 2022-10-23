@@ -1,4 +1,5 @@
 #include <CTRPluginFramework.hpp>
+#include "3ds.h"
 #include "cheats.hpp"
 #include "colorset.hpp"
 #include "csvc.h"
@@ -157,6 +158,7 @@ namespace CTRPluginFramework
 			*fb += new MenuEntry(Color::Orange << "壁貫通",cheat4,"ON: L + →\nOFF: L + ←");
 			*fb += new MenuEntry(Color::Orange << "穴に落ちなくなる",cheat5,"穴の上を歩ける");
 			*fb += new MenuEntry(Color::Orange << "置き方変更",item5,"X+↓");
+			*fb += new MenuEntry(Color::Orange << "ドロップ関連",item62,"X+→");
 
 		MenuFolder *fd = new MenuFolder(Color::Orange << "アイテム/ポケット/ドロップ");
 		
@@ -177,6 +179,11 @@ namespace CTRPluginFramework
 				MenuFolder *fd1b = new MenuFolder(Color::Orange << "木");
 					*fd1b += new MenuEntry(Color::Orange << "木を一回で切れる",item2);
 					*fd1b += new MenuEntry(Color::Orange << "木切れない",nullptr,item3);
+					*fd1b += new MenuEntry(Color::Orange << "木をゆすると切れる",item66);
+					*fd1b += new MenuEntry(Color::Orange << "切るときに倒すエフェクト表示",item67);
+					*fd1b += new MenuEntry(Color::Orange << "木の実無限",item68);
+					*fd1b += new MenuEntry(Color::Orange << "桜満開",nullptr,item69);
+					*fd1b += new MenuEntry(Color::Orange << "クリスマスツリー",nullptr,item70);
 				fd1->Append(fd1b);
 				
 				MenuFolder *fd1d = new MenuFolder(Color::Orange << "スコップ");
@@ -191,6 +198,10 @@ namespace CTRPluginFramework
 					*fd1d += new MenuEntry(Color::Orange << "岩を壊す動作//掘り出す",item46);
 					*fd1d += new MenuEntry(Color::Orange << "岩を壊す動作//切り株",item47);
 					*fd1d += new MenuEntry(Color::Orange << "岩を壊す動作//埋める",item48);
+					*fd1d += new MenuEntry(Color::Orange << "掘り出したアイテム変更",item55,"掘り出したアイテムがお金になります");
+					*fd1d += new MenuEntry(Color::Orange << "木,マイデザを掘れる",item63,"A長押しで掘れます");
+					*fd1d += new MenuEntry(Color::Orange << "堀るときのアイテム変更",nullptr,item61);
+					*fd1d += new MenuEntry(Color::Orange << "どこでも穴掘れる",nullptr,item64);
 				fd1->Append(fd1d);
 				
 				MenuFolder *fd1c = new MenuFolder(Color::Orange << "その他");
@@ -199,9 +210,13 @@ namespace CTRPluginFramework
 					*fd1c += new MenuEntry(Color::Orange << "遊び道具速度上昇",nullptr,item19,"01: ピコピコハンマー\n02: 豆\n03: シャボン玉\n04: 風車\n05: 恵方巻,アイス\n06: コーヒー,サイダー\n07: クラッカー");
 					*fd1c += new MenuEntry(Color::Orange << "アクション動作速度上昇",nullptr,item20,"01: ドアの開閉\n02: 直立呼吸\n03: エリア移動時の自動歩行\n04: 建物から出る\n05: 向きを変えて椅子から降りる\n06: 住人歩行速度\n07: プレイヤー歩行速度");
 					*fd1c += new MenuEntry(Color::Orange << "何でもおいしく食べる",item27);
+					*fd1c += new MenuEntry(Color::Orange << "食べるときの動作変更",nullptr,item57);
 					*fd1c += new MenuEntry(Color::Orange << "ポケット項目追加",item34,"項目が'部屋に飾る,壁にかける,食べる,地面に植える,みせびらかす,飲む,タイマーを計る,おサイフにしまう'に変化します");
 					*fd1c += new MenuEntry(Color::Orange << "ポケット項目消去",item35,"項目が'やめる'だけになります");
+					*fd1c += new MenuEntry(Color::Orange << "ポケット項目追加(選択)",nullptr,item58);
+					*fd1c += new MenuEntry(Color::Orange << "ポケット項目追加2(選択)",nullptr,item59);
 					*fd1c += new MenuEntry(Color::Orange << "道具機能変更",nullptr,item37);
+					*fd1c += new MenuEntry(Color::Orange << "どこでも釣りができる",nullptr,item65);
 				fd1->Append(fd1c);
 				
 			fd->Append(fd1);
@@ -219,6 +234,7 @@ namespace CTRPluginFramework
 				*fd2 += new MenuEntry(Color::Orange << "カタログの注文をポケットに入れる",item26,"カタログの画面を上画面に表示した時、R+Yでポケットに追加");
 				*fd2 += new MenuEntry(Color::Orange << "ポケットに没アイテム表示",item28,"ポケットに???のアイテムを表示させます");
 				*fd2 += new MenuEntry(Color::Orange << "拾った没アイテムがポケットに入る",item29,"何でも拾う　で拾ったアイテムをポケットに入れられる");
+				*fd2 += new MenuEntry(Color::Orange << "アイテム制限解除",nullptr,item51);
 			fd->Append(fd2);
 			
 			MenuFolder *fd3 = new MenuFolder(Color::Orange << "ドロップ");
@@ -229,6 +245,11 @@ namespace CTRPluginFramework
 				*fd3 += new MenuEntry(Color::Orange << "普通に置く",item10);
 				*fd3 += new MenuEntry(Color::Orange << "スライド動作で置く",nullptr,item30);
 				*fd3 += new MenuEntry(Color::Orange << "物を重ねて置ける",nullptr,item31);
+				*fd3 += new MenuEntry(Color::Orange << "回転してドロップ",item52,"回転するとドロップします\nB+↑: ON\nB+↓: OFF");
+				*fd3 += new MenuEntry(Color::Orange << "掘る動作でドロップ",item60);
+				*fd3 += new MenuEntry(Color::Orange << "Aを押して地面のアイテムを消す",item53,"Aを押してね");
+				*fd3 += new MenuEntry(Color::Orange << "置き花火燃えカス変更",nullptr,item54);
+				*fd3 += new MenuEntry(Color::Orange << "置けない時の警告非表示",item56,"アイテムを置けないときの警告を無表示にします");
 			fd->Append(fd3);
 			
 			
@@ -243,6 +264,7 @@ namespace CTRPluginFramework
 				*fe1 += new MenuEntry(Color::Orange << "部屋移動(地上)",nullptr,move4,"01: 村\n02: 駅\n03: キャンプ場\n04: 役場\n05: Rパーカーズ\n06: モダンな交番\n07: クラシックな交番\n08: カフェ\n09: リセット監視センター\n10: オートキャンプ(左)\n11: オートキャンプ(右)");
 				*fe1 += new MenuEntry(Color::Orange << "通信中ワープ",nullptr,move5,"01: 島に全員ワープ\n02: 村に全員ワープ");
 				*fe1 += new MenuEntry(Color::Orange << "プレイヤーテレポート",move6,"1P B＋↑\n2P B＋→\n3P B＋↓\n4P B＋←");
+				*fe1 += new MenuEntry(Color::Orange << "スライドパッドだけでダッシュ",nullptr,move8);
 			fe->Append(fe1);
 			
 			MenuFolder *fe2 = new MenuFolder(Color::Orange << "アクション");
@@ -259,6 +281,8 @@ namespace CTRPluginFramework
 				*fe2 += new MenuEntry(Color::Orange << "変な動き",act2,"自分にしか見えない");
 				*fe2 += new MenuEntry(Color::Orange << "歩きながらリアクション",act3,"ししょーのリアクションを歩きながら使える");
 				*fe2 += new MenuEntry(Color::Orange << "連続リアクション",act4,"X + R");
+				*fe2 += new MenuEntry(Color::Orange << "リアクション固定/終了",act19,"Rで固定,Bで終了");
+				*fe2 += new MenuEntry(Color::Orange << "動きが変になる",act23,"B+→:オン\nB+←:オフ");
 				*fe2 += new MenuEntry(Color::Orange << "アクション実行1",nullptr,act5,"Yで実行");
 				*fe2 += new MenuEntry(Color::Orange << "アクション実行2",nullptr,act6,"Yで実行");
 				*fe2 += new MenuEntry(Color::Orange << "アクション実行3",nullptr,act8,"外専用");
@@ -266,6 +290,12 @@ namespace CTRPluginFramework
 				*fe2 += new MenuEntry(Color::Orange << "ACTコマンド",nullptr,act7,"必要なのだけにまとめました");
 				*fe2 += new MenuEntry(Color::Orange << "師匠のアクションコピー",nullptr,act12);
 				*fe2 += new MenuEntry(Color::Orange << "ネタ帳アクション変更",nullptr,act13,"ネタ帳のスペシャルのアクションを変更します");
+				*fe2 += new MenuEntry(Color::Orange << "潜ると黒くなる",act18,"潜ると黒くなります");
+				*fe2 += new MenuEntry(Color::Orange << "穴に落ちる",act20,"Rで穴に落ちます");
+				*fe2 += new MenuEntry(Color::Orange << "自動歩行",act21,"Rで勝手に歩き出します");
+				*fe2 += new MenuEntry(Color::Orange << "透明道具を持つ",act22,"道具を持っている上体になります");
+				*fe2 += new MenuEntry(Color::Orange << "早着替え",act24,"Rで実行");
+				*fe2 += new MenuEntry(Color::Orange << "即解除",nullptr,act25);
 			fe->Append(fe2);
 
 
@@ -296,6 +326,7 @@ namespace CTRPluginFramework
 					*fc3 += new MenuEntry(Color::Orange << "強制エラー",sima20,"L + X\n提供: のむさん\nThank you!");
 					*fc3 += new MenuEntry(Color::Orange << "自分透明化",sima23,"自分の画面では透明になりません\n提供: のむさん\nThank you!");
 					*fc3 += new MenuEntry(Color::Orange << "ムーンジャンプ",sima28,"オンライン対応\n\nL+↑: ON\nL+↓: OFF");
+					*fc3 += new MenuEntry(Color::Orange << "P1判定",nullptr,sima34);
 				fc->Append(fc3);
 			
 				MenuFolder *fc4 = new MenuFolder(Color::Orange << "その他");
@@ -307,8 +338,16 @@ namespace CTRPluginFramework
 					*fc4 += new MenuEntry(Color::Orange << "チャット消えない",sima17,"ベスチャが使えなくなります\nチートONと併用ができません\n\n提供: のむさん\nThank you!");
 					*fc4 += new MenuEntry(Color::Orange << "@マーク使用可能",sima18,"提供: のむさん\nThank you!");
 					*fc4 += new MenuEntry(Color::Orange << "文字数制限解除(島)",sima19,"提供: のむさん\nThank you!");
+					*fc4 += new MenuEntry(Color::Orange << "3文字以上の数字使用可能",sima33);
 					*fc4 += new MenuEntry(Color::Orange << "島のおみやげ変更",sima22,"オンライン対応\n全て売り切れになります\n提供: のむさん\nThank you!");
 				fc->Append(fc4);
+				
+				MenuFolder *fc5 = new MenuFolder(Color::Orange << "オフライン");
+					*fc5 += new MenuEntry(Color::Orange << "ATMを売り切れ看板に変更",sima29);
+					*fc5 += new MenuEntry(Color::Orange << "島のアイテム全消去",nullptr,sima30);
+					*fc5 += new MenuEntry(Color::Orange << "全アイテムに水やり",nullptr,sima31);
+					*fc5 += new MenuEntry(Color::Orange << "ハニワ変更",nullptr,sima32);
+				fc->Append(fc5);
 				
 			fe->Append(fc);
 			
@@ -324,6 +363,10 @@ namespace CTRPluginFramework
 				*ff1 += new MenuEntry(Color::Orange << "どこでも泳ぐ",player5,"B+→ ON\nB+← OFF");
 				*ff1 += new MenuEntry(Color::Orange << "他人のマイデザを書き換える",player6,"X+↑ ON\nX+↓ OFF");
 				*ff1 += new MenuEntry(Color::Orange << "通信中押されない",player7,"他の人から押されなくなります");
+				*ff1 += new MenuEntry(Color::Orange << "アクセと同時に被り物を被れる",player15);
+				*ff1 += new MenuEntry(Color::Orange << "海で歩ける",nullptr,player16);
+				*ff1 += new MenuEntry(Color::Orange << "スライディング無効",nullptr,player17);
+				*ff1 += new MenuEntry(Color::Orange << "住人と距離をとる",nullptr,player18);
 			ff->Append(ff1);
 			
 			MenuFolder *ff2 = new MenuFolder(Color::Orange << "住人");
@@ -360,14 +403,15 @@ namespace CTRPluginFramework
 		
 			MenuFolder *fh1 = new MenuFolder(Color::Orange << "ベル");
 				*fh1 += new MenuEntry(Color::Orange << "所持金額固定",money1);
+				*fh1 += new MenuEntry(Color::Orange << "貯金最大",money2);
 			fh->Append(fh1);
 			
 			MenuFolder *fh2 = new MenuFolder(Color::Orange << "故郷チケット");
-			
+				*fh2 += new MenuEntry(Color::Orange << "故郷チケット最大",money3);
 			fh->Append(fh2);
 			
 			MenuFolder *fh3 = new MenuFolder(Color::Orange << "島メダル");
-			
+				*fh3 += new MenuEntry(Color::Orange << "島メダル最大",money4);
 			fh->Append(fh3);
 			
 			MenuFolder *fh4 = new MenuFolder(Color::Orange << "バッジ");
@@ -396,13 +440,63 @@ namespace CTRPluginFramework
 			
 			
 		MenuFolder *fj = new MenuFolder(Color::Orange << "その他");
-			*fj += new MenuEntry(Color::Orange << "セーブメニュー表示",nullptr,other1);
-			*fj += new MenuEntry(Color::Orange << "スクリーンショット",nullptr,other2);
-			*fj += new MenuEntry(Color::Orange << "メニューの開閉速度上昇",other3);
-			*fj += new MenuEntry(Color::Orange << "デバッグメニュー追加",other4,"ソパカの真ん中のところに追加されます");
-			*fj += new MenuEntry(Color::Orange << "チャット見えない",other5);
-			*fj += new MenuEntry(Color::Orange << "チャット欄消失",other6);
-			*fj += new MenuEntry(Color::Orange << "改行ON",other7);
+			MenuFolder *fj1 = new MenuFolder(Color::Orange << "音声");
+				MenuFolder *fj1a = new MenuFolder(Color::Orange << "効果音");
+					*fj1a += new MenuEntry(Color::Orange << "効果音を有効にする",music1,"L+↑:ON,L+↓:OFF,A:実行,R:stop\n\n効果音を有効にする前にONにしておいて下さい");
+					*fj1a += new MenuEntry(Color::Orange << "コインを置く音",music2);
+					*fj1a += new MenuEntry(Color::Orange << "お金を置く音",music3);
+					*fj1a += new MenuEntry(Color::Orange << "ぴこ",music4);
+					*fj1a += new MenuEntry(Color::Orange << "すぽ",music5);
+					*fj1a += new MenuEntry(Color::Orange << "達成",music6);
+					*fj1a += new MenuEntry(Color::Orange << "クラクション",music7);
+					*fj1a += new MenuEntry(Color::Orange << "キラーン",music8);
+					*fj1a += new MenuEntry(Color::Orange << "雷",music9);
+					*fj1a += new MenuEntry(Color::Orange << "スタート",music10);
+					*fj1a += new MenuEntry(Color::Orange << "唸り声",music11);
+					*fj1a += new MenuEntry(Color::Orange << "にゃお",music12);
+					*fj1a += new MenuEntry(Color::Orange << "ぽよ",music13);
+				fj1->Append(fj1a);
+				MenuFolder *fj1b = new MenuFolder(Color::Orange << "BGM");
+					*fj1b += new MenuEntry(Color::Orange << "タイトル",music25);
+					*fj1b += new MenuEntry(Color::Orange << "しずえ画面",music26);
+					*fj1b += new MenuEntry(Color::Orange << "ハッピーホームアカデミー",music27);
+					*fj1b += new MenuEntry(Color::Orange << "プレイヤー村に到着",music28);
+					*fj1b += new MenuEntry(Color::Orange << "役場に向かえ",music29);
+					*fj1b += new MenuEntry(Color::Orange << "家の場所決め",music30);
+					*fj1b += new MenuEntry(Color::Orange << "家をここに決定",music31);
+					*fj1b += new MenuEntry(Color::Orange << "新村長誕生",music32);
+					*fj1b += new MenuEntry(Color::Orange << "午後",music33);
+					*fj1b += new MenuEntry(Color::Orange << "けけアイドル",music34);
+					*fj1b += new MenuEntry(Color::Orange << "没1",music14);
+					*fj1b += new MenuEntry(Color::Orange << "没2",music15);
+					*fj1b += new MenuEntry(Color::Orange << "没3",music16);
+					*fj1b += new MenuEntry(Color::Orange << "没4",music17);
+					*fj1b += new MenuEntry(Color::Orange << "没5",music18);
+					*fj1b += new MenuEntry(Color::Orange << "没6",music19);
+				fj1->Append(fj1b);
+				MenuFolder *fj1c = new MenuFolder(Color::Orange << "ショートミュージック");
+					*fj1c += new MenuEntry(Color::Orange << "1UP",music20);
+					*fj1c += new MenuEntry(Color::Orange << "なんか起動する",music21);
+					*fj1c += new MenuEntry(Color::Orange << "ピッピッ",music22);
+					*fj1c += new MenuEntry(Color::Orange << "機械音",music23);
+					*fj1c += new MenuEntry(Color::Orange << "ピロピロ",music24);
+				fj1->Append(fj1c);
+			fj->Append(fj1);
+			MenuFolder *fj2 = new MenuFolder(Color::Orange << "常駐ON");
+				*fj2 += new MenuEntry(Color::Orange << "セーブメニュー表示",nullptr,other1);
+				*fj2 += new MenuEntry(Color::Orange << "スクリーンショット",nullptr,other2);
+				*fj2 += new MenuEntry(Color::Orange << "メニューの開閉速度上昇",other3);
+				*fj2 += new MenuEntry(Color::Orange << "デバッグメニュー追加",other4,"ソパカの真ん中のところに追加されます");
+				*fj2 += new MenuEntry(Color::Orange << "チャット見えない",other5);
+				*fj2 += new MenuEntry(Color::Orange << "チャット欄消失",other6);
+				*fj2 += new MenuEntry(Color::Orange << "改行ON",other7);
+				*fj2 += new MenuEntry(Color::Orange << "魚逃げない",other8);
+				*fj2 += new MenuEntry(Color::Orange << "魚が一発の食いつきで釣れる",other9);
+				*fj2 += new MenuEntry(Color::Orange << "タイマーカンスト",other10);
+			fj->Append(fj2);
+			MenuFolder *fj3 = new MenuFolder(Color::Orange << "常駐OFF");
+			
+			fj->Append(fj3);
 		
 		
 		MenuFolder *fk = new MenuFolder("メンテナンス");
@@ -410,6 +504,7 @@ namespace CTRPluginFramework
 			*fk += new MenuEntry(Color::Orange << "3gx関連ファイル編集",nullptr,maintenance2);
 			*fk += new MenuEntry(Color::Orange << "ファイル記入系",nullptr,maintenance3);
 			*fk += new MenuEntry(Color::Orange << "Utile系",nullptr,maintenance4);
+			*fk += new MenuEntry(Color::Orange << "ゲームコイン最大",maintenance5);
 		
 		
 		*Pmenu += new MenuEntry(Color::Orange << "各種説明",nullptr,setumei2);
@@ -450,10 +545,15 @@ namespace CTRPluginFramework
 	int main(void)
 		
 	{
-
+		u64 hash = 0;
+		CFGU_GenHashConsoleUnique(0, &hash);
+        
+		if (!(hash == 14354097094029585229)) //hash.txtの中身に書き換える
+		return 0;
+		
 		MessageBox("チート画面で下画面の'Tools'の中の'Settings'の中の'auto'の項目4点にチェックを入れると、設定したものとFavoriteを記憶します。\n他の3gxからの変更やバージョンの変更で動作がおかしい場合は" << Color::Yellow << " CTRPFDate.bin " << Color::White << "を削除して初期設定を行ってください\n\nなにかバグ等不具合があれば" << Color::Cyan << " たいやき#5374 " << Color::White << "まで。",DialogType::DialogOk).SetClear(ClearScreen::None)();
 		
-		Pmenu = new PluginMenu(Color::LimeGreen << CTRPFname, 0, 0, 9, about1 + NewLINE + about2 + NewLINE + about3 + NewLINE + about4 + NewLINE + about5);
+		Pmenu = new PluginMenu(Color::LimeGreen << CTRPFname, 0, 1, 0, about1 + NewLINE + about2 + NewLINE + about3 + NewLINE + about4 + NewLINE + about5);
 		Pmenu->SynchronizeWithFrame(true);
 		OSD::Notify(Color::Cyan << "Made by Taiyaki!");
 		OSD::Notify(Color::Cyan << "Loading ACNL_PLG...");

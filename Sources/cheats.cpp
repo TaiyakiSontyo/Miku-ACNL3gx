@@ -8,6 +8,9 @@
 namespace CTRPluginFramework
 {
 u32 offset=0;
+u32 cmp32=0;
+u32 date32=0;
+
 
 /***********メモ*************
 1. 英語のキーボード入力表示
@@ -124,6 +127,10 @@ std::string frdCodeStr = Utils::Format("%04d-%04d-%04d", (frdCode >> 32) & 0xFFF
 
 10. 充電残量
 https://github.com/LumaTeam/Luma3DS/blob/master/sysmodules/rosalina/source/menu.c
+
+11. ポケット16番目Read
+Process::Read32(offset + 0x31F506AC, data32);
+Process::Write32(offset + 0x002FE5D4, data32);
 
 **************************/
 
@@ -714,6 +721,78 @@ void sima28(MenuEntry *entry)
 		OSD::Notify("Moon jump " << Color::Yellow << "OFF!");
 	}
 }
+
+void sima29(MenuEntry *entry)
+{
+	offset = 0x30000000;
+	Process::Write32(offset + 0x508584, 0x00002ECA);
+}
+
+void sima30(MenuEntry *entry)
+{
+	Keyboard key("島のアイテムを全消去します\n"<< Color::Red << "オフライン用",{"実行"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		date32 = 0x00007FFE;
+		for (int i = 0; i < 0x00000FFC; i++)
+		{
+			Process::Write32(offset + 0x31FB98D8, date32);
+		}
+	}
+}
+
+void sima31(MenuEntry *entry)
+{
+	Keyboard key("全アイテムに水やり\n"<< Color::Red << "オフライン用",{"実行"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		offset = 0x31000000;
+		for (int i = 0; i < 0x00000FFC; i++)
+		{
+			Process::Write8(offset + 0x0FB98D8, 0x00000040);
+			offset += 0x00000004;
+		}
+	}
+}
+
+void sima32(MenuEntry *entry)
+{
+	Keyboard key("ハニワ変更\nハニワをほかの建物に変更します",{"戻す","カフェ"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		offset = 0x31000000;
+		Process::Write8(offset + 0xFBA8DC, 0x6A);
+	}
+	if ( r == 1 ) {
+		offset = 0x31000000;
+		Process::Write8(offset + 0xFBA8DC, 0x4E);
+	}
+}
+
+void sima33(MenuEntry *entry)
+{
+	Process::Write32(offset + 0xAD0158, 0x00000000);
+}
+
+void sima34(MenuEntry *entry)
+{
+	Keyboard key("プレイヤー1の判定になります(ホスト判定)",{"ON","OFF"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		Process::Write32(offset + 0x59E6D0, 0x0A000003);
+		Process::Write32(offset + 0x59E894, 0x0A000010);
+		Process::Write32(offset + 0x59FC2C, 0x0A00002C);
+		Process::Write32(offset + 0x59FD8C, 0x0A00002C);
+	}
+	if ( r == 1 ) {
+		Process::Write32(offset + 0x59E6D0, 0xEA000003);
+		Process::Write32(offset + 0x59E894, 0xEA000010);
+		Process::Write32(offset + 0x59FC2C, 0xE1A00000);
+		Process::Write32(offset + 0x59FD8C, 0xE1A00000);
+	}
+}
+
+
 
 /////////////////////////////////////////////////////////////
 //                          アイテム                         //
@@ -1746,6 +1825,896 @@ void item50(MenuEntry *entry)
 	Process::Write32(offset + 0x00001106, 0x000000DF);
 }
 
+void item51(MenuEntry *entry)
+{
+	Keyboard key("アイテムの制限を解除します",{"ON","OFF"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		offset = 0x00000000;
+		Process::Write32(offset + 0x59FB00, 0xE3E00000);
+		Process::Write32(offset + 0x59FB04, 0xEA000012);
+		Process::Write32(offset + 0x59FD00, 0xE3A00000);
+		Process::Write32(offset + 0x59FD04, 0xE8BD83F0);
+		MessageBox("アイテム制限解除ON")();
+	}
+	if ( r == 1 ) {
+		offset = 0x00000000;
+		Process::Write32(offset + 0x59FB00, 0xE1A05001);
+		Process::Write32(offset + 0x59FB04, 0x1A000001);
+		Process::Write32(offset + 0x59FD00, 0xE24DD01C);
+		Process::Write32(offset + 0x59FD04, 0xE1A07001);
+		MessageBox("アイテム制限解除OFF")();
+	}
+}
+
+void item52(MenuEntry *entry)
+{
+	if (Controller::IsKeysPressed( B + DPadDown ))
+	{
+		Process::Write32(offset + 0x595864, 0x00000000);
+		OSD::Notify("Role delete " << Color::Yellow << "ON!");
+	}
+	if (Controller::IsKeysPressed( B + DPadUp ))
+	{
+		Process::Write32(offset + 0x595864, 0xEBF59CC7);
+		OSD::Notify("Role delete " << Color::Yellow << "OFF!");
+	}
+}
+
+void item53(MenuEntry *entry)
+{
+	Process::Write32(offset + 0x596870, 0x0A000056);
+	Process::Write32(offset + 0x596890, 0xE3A0001D);
+	Process::Write32(offset + 0x5968D0, 0x1A000001);
+	Process::Write32(offset + 0x5968D8, 0x1A00003C);
+	Process::Write32(offset + 0x5968E4, 0x0A000039);
+	Process::Write32(offset + 0x596920, 0x0A00002A);
+	
+	if (Controller::IsKeysPressed( A ))
+	{
+		Process::Write32(offset + 0x596870, 0xE1A00000);
+		Process::Write32(offset + 0x596890, 0xE1A00000);
+		Process::Write32(offset + 0x5968D0, 0xE1A00000);
+		Process::Write32(offset + 0x5968D8, 0xE1A00000);
+		Process::Write32(offset + 0x5968E4, 0xE1A00000);
+		Process::Write32(offset + 0x596920, 0xE1A00000);
+		OSD::Notify(Color::Cyan << "Delete items now");
+	}
+}
+
+void item54(MenuEntry *entry)
+{
+	Keyboard key("置き花火のあとに出てくるものを変更します\n\n01: お金\n02: 消える",{"01:お金","02:消える"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		Process::Write32(offset + 0x5961A8, 0x00002117);
+		MessageBox("置き花火→お金")();
+	}
+	if ( r == 1 ) {
+		Process::Write32(offset + 0x5961A8, 0x00007FFE);
+		MessageBox("置き花火→消える")();
+	}
+}
+
+void item55(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	Process::Write32(offset + 0x99FA4, 0x00002117);
+}
+
+void item56(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	Process::Write32(offset + 0xA50D4, 0x00050900);
+}
+
+void item57(MenuEntry *entry)
+{
+	Keyboard key("食べるときの動作変更\n\n01:飴玉\n02:きのこ効果\n03:くちゃくちゃ食べない",{"01:飴玉","02:きのこ効果","03:くちゃくちゃ食べない"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		Process::Write32(offset + 0x64FFF4, 0xE1A00000);
+		MessageBox("きのこ効果ON")();
+	}
+	if ( r == 1 ) {
+		Process::Write32(offset + 0x6501EC, 0x77777777);
+		MessageBox("くちゃくちゃ食べないON")();
+	}
+}
+
+void item58(MenuEntry *entry)
+{
+	Keyboard key("ポケット項目追加(手動)\n\n01:へやにかざる,カベにかける\n02:たべる\n03:地面に植える\n04:地面に植えるOFF\n05:みせびらかす\n06:みせびらかすOFF\n07:のむ\n08:のむOFF\n09:タイマーをはかる\n10:タイマーをはかるOFF\n11:おサイフにしまう\n12:オサイフにしまうOFF\n13:やめるのみ\n14:やめるのみOFF",{"01","02","03","04","05","06","07","08","09","10","11","12","13","14"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		Process::Write32(offset + 0x19BFC8, 0xE1A00000);
+	}
+	if ( r == 1 ) {
+		Process::Write32(offset + 0x19C150, 0xE1A00000);
+	}
+	if ( r == 2 ) {
+		Process::Write32(offset + 0x19B8F8, 0xE1A00000);
+	}
+	if ( r == 3 ) {
+		Process::Write32(offset + 0x19B8F8, 0x0A000009);
+	}
+	if ( r == 4 ) {
+		Process::Write32(offset + 0x19B9D8, 0xE1A00000);
+	}
+	if ( r == 5 ) {
+		Process::Write32(offset + 0x19B9D8, 0x1A000012);
+	}
+	if ( r == 6 ) {
+		Process::Write32(offset + 0x19BB64, 0xE1A00000);
+	}
+	if ( r == 7 ) {
+		Process::Write32(offset + 0x19BB64, 0x1A000020);
+	}
+	if ( r == 8 ) {
+		Process::Write32(offset + 0x19BB08, 0xE1A00000);
+	}
+	if ( r == 9 ) {
+		Process::Write32(offset + 0x19BB08, 0x1A000011);
+	}
+	if ( r == 10 ) {
+		Process::Write32(offset + 0x19BACC, 0xE1A00000);
+	}
+	if ( r == 11 ) {
+		Process::Write32(offset + 0x19BACC, 0x1A000009);
+	}
+	if ( r == 12 ) {
+		Process::Write32(offset + 0x19B8C0, 0xE1A00000);
+	}
+	if ( r == 13 ) {
+		Process::Write32(offset + 0x19B8C0, 0x0A000007);
+	}
+}
+
+void item59(MenuEntry *entry)
+{
+	Keyboard key("ポケット項目追加(手動)\n\n01:身に着ける\n02:身に着けるOFF\n03:手紙を書く\n04:手紙を書くOFF\n05:ラッピングを開ける\n06:ラッピングを開けるOFF\n07:(ランダムでアイテムが出る)開ける\n08:(ランダムでアイテムが出る)開けるOFF\n09:にがす\n10:にがす2OFF\n11:にがす\n12:にがす2OFF\n13:捨てる\n14:捨てるOFF\n15:ラッピングする\n16:ラッピングするOFF",{"01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		Process::Write32(offset + 0x19B950, 0xE3A00000);
+	}
+	if ( r == 1 ) {
+		Process::Write32(offset + 0x19B950, 0x0A000008);
+	}
+	if ( r == 2 ) {
+		Process::Write32(offset + 0x19BA38, 0xE3A00000);
+	}
+	if ( r == 3 ) {
+		Process::Write32(offset + 0x19BA38, 0x0A000008);
+	}
+	if ( r == 4 ) {
+		Process::Write32(offset + 0x19BC10, 0xE3A00000);
+	}
+	if ( r == 5 ) {
+		Process::Write32(offset + 0x19BC10, 0x0A000009);
+	}
+	if ( r == 6 ) {
+		Process::Write32(offset + 0x19BC44, 0xE3A00000);
+	}
+	if ( r == 7 ) {
+		Process::Write32(offset + 0x19BC44, 0x1A000009);
+	}
+	if ( r == 8 ) {
+		Process::Write32(offset + 0x19BCC0, 0xE3A00000);
+	}
+	if ( r == 9 ) {
+		Process::Write32(offset + 0x19BCC0, 0x0A000013);
+	}
+	if ( r == 10 ) {
+		Process::Write32(offset + 0x19BD40, 0xE3A00000);
+	}
+	if ( r == 11 ) {
+		Process::Write32(offset + 0x19BD40, 0x0A000015);
+	}
+	if ( r == 12 ) {
+		Process::Write32(offset + 0x19BDDC, 0xE3A00000);
+	}
+	if ( r == 13 ) {
+		Process::Write32(offset + 0x19BDDC, 0x1A000008);
+	}
+	if ( r == 14 ) {
+		Process::Write32(offset + 0x19B1A0, 0xE3A00000);
+	}
+	if ( r == 15 ) {
+		Process::Write32(offset + 0x19B1A0, 0x1A000075);
+	}
+}
+
+void item60(MenuEntry *entry)
+{
+	Process::Write32(offset + 0x67B780, 0x00955FF8);
+	Process::Write32(offset + 0x6818D0, 0x00955FF8);
+	Process::Write32(offset + 0x955FF8, 0x0000335B);
+}
+
+void item61(MenuEntry *entry)
+{
+	Keyboard key("掘ったときに置くアイテム変更",{"穴","スズラン","針葉樹","お金の木","青バラ","金バラ","竹","低木","消えない穴"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		Process::Write32(offset + 0x5984F4, 0xE3A0109E);
+	}
+	if ( r == 1 ) {
+		Process::Write32(offset + 0x5984F4, 0xE3A010C8);
+	}
+	if ( r == 2 ) {
+		Process::Write32(offset + 0x5984F4, 0xE3A0102B);
+	}
+	if ( r == 3 ) {
+		Process::Write32(offset + 0x5984F4, 0xE3A01070);
+	}
+	if ( r == 4 ) {
+		Process::Write32(offset + 0x5984F4, 0xE3A010B9);
+	}
+	if ( r == 5 ) {
+		Process::Write32(offset + 0x5984F4, 0xE3A010BA);
+	}
+	if ( r == 6 ) {
+		Process::Write32(offset + 0x5984F4, 0xE3A01039);
+	}
+	if ( r == 7 ) {
+		Process::Write32(offset + 0x5984F4, 0xE3A01085);
+	}
+	if ( r == 8 ) {
+		Process::Write32(offset + 0x5984F4, 0xE3A010FD);
+	}
+}
+
+void item62(MenuEntry *entry)
+{
+	if (Controller::IsKeysPressed( X + DPadRight ))
+	{
+		Keyboard key("ドロップ関連変更",{"アイテム置ける範囲(15x15)","アイテム置ける範囲(13x13)","アイテム置ける範囲(11x11)","アイテム置ける範囲(9x9)","アイテム置ける範囲(7x7)","アイテム置ける範囲(5x5)","アイテム置ける範囲(3x3)","アイテム置ける範囲(1x1)","通常(元に戻す)","オートドロップ","オートドロップOFF","オートドロップ(たくさん)","オートドロップ(たくさん)OFF","スライドドロップ","ポケットでアイテムを動かして置く"});
+		int r = key.Open();
+		if ( r == 0 ) {
+			Process::Write32(offset + 0x0597B80, 0xEA000006);
+			Process::Write32(offset + 0x030B844, 0x13A00001);
+			Process::Write32(offset + 0x0597A94, 0xE28AB0E1);
+			Process::Write32(offset + 0x0597C80, 0xE35400E1);
+			Process::Write32(offset + 0x0597B20, 0xE1A01000);
+			Process::Write32(offset + 0x0859104, 0xFCFBFAF9);
+			Process::Write32(offset + 0x0859108, 0x00FFFEFD);
+			Process::Write32(offset + 0x085910C, 0x04030201);
+			Process::Write32(offset + 0x0859110, 0xF9070605);
+			Process::Write32(offset + 0x0859114, 0xFDFCFBFA);
+			Process::Write32(offset + 0x0859118, 0x0100FFFE);
+			Process::Write32(offset + 0x085911C, 0x05040302);
+			Process::Write32(offset + 0x0859120, 0xFAF90706);
+			Process::Write32(offset + 0x0859124, 0xFEFDFCFB);
+			Process::Write32(offset + 0x0859128, 0x020100FF);
+			Process::Write32(offset + 0x085912C, 0x06050403);
+			Process::Write32(offset + 0x0859130, 0xFBFAF907);
+			Process::Write32(offset + 0x0859134, 0xFFFEFDFC);
+			Process::Write32(offset + 0x0859138, 0x03020100);
+			Process::Write32(offset + 0x085913C, 0x07060504);
+			Process::Write32(offset + 0x0859140, 0xFCFBFAF9);
+			Process::Write32(offset + 0x0859144, 0x00FFFEFD);
+			Process::Write32(offset + 0x0859148, 0x04030201);
+			Process::Write32(offset + 0x085914C, 0xF9070605);
+			Process::Write32(offset + 0x0859150, 0xFDFCFBFA);
+			Process::Write32(offset + 0x0859154, 0x0100FFFE);
+			Process::Write32(offset + 0x0859158, 0x05040302);
+			Process::Write32(offset + 0x085915C, 0xFAF90706);
+			Process::Write32(offset + 0x0859160, 0xFEFDFCFB);
+			Process::Write32(offset + 0x0859164, 0x020100FF);
+			Process::Write32(offset + 0x0859168, 0x06050403);
+			Process::Write32(offset + 0x085916C, 0xFBFAF907);
+			Process::Write32(offset + 0x0859170, 0xFFFEFDFC);
+			Process::Write32(offset + 0x0859174, 0x03020100);
+			Process::Write32(offset + 0x0859178, 0x07060504);
+			Process::Write32(offset + 0x085917C, 0xFCFBFAF9);
+			Process::Write32(offset + 0x0859180, 0x00FFFEFD);
+			Process::Write32(offset + 0x0859184, 0x04030201);
+			Process::Write32(offset + 0x0859188, 0xF9070605);
+			Process::Write32(offset + 0x085918C, 0xFDFCFBFA);
+			Process::Write32(offset + 0x0859190, 0x0100FFFE);
+			Process::Write32(offset + 0x0859194, 0x05040302);
+			Process::Write32(offset + 0x0859198, 0xFAF90706);
+			Process::Write32(offset + 0x085919C, 0xFEFDFCFB);
+			Process::Write32(offset + 0x08591A0, 0x020100FF);
+			Process::Write32(offset + 0x08591A4, 0x06050403);
+			Process::Write32(offset + 0x08591A8, 0xFBFAF907);
+			Process::Write32(offset + 0x08591AC, 0xFFFEFDFC);
+			Process::Write32(offset + 0x08591B0, 0x03020100);
+			Process::Write32(offset + 0x08591B4, 0x07060504);
+			Process::Write32(offset + 0x08591B8, 0xFCFBFAF9);
+			Process::Write32(offset + 0x08591BC, 0x00FFFEFD);
+			Process::Write32(offset + 0x08591C0, 0x04030201);
+			Process::Write32(offset + 0x08591C4, 0xF9070605);
+			Process::Write32(offset + 0x08591C8, 0xFDFCFBFA);
+			Process::Write32(offset + 0x08591CC, 0x0100FFFE);
+			Process::Write32(offset + 0x08591D0, 0x05040302);
+			Process::Write32(offset + 0x08591D4, 0xFAF90706);
+			Process::Write32(offset + 0x08591D8, 0xFEFDFCFB);
+			Process::Write32(offset + 0x08591DC, 0x020100FF);
+			Process::Write32(offset + 0x08591E0, 0x06050403);
+			Process::Write32(offset + 0x08591E4, 0xF9F9F907);
+			Process::Write32(offset + 0x08591E8, 0xF9F9F9F9);
+			Process::Write32(offset + 0x08591EC, 0xF9F9F9F9);
+			Process::Write32(offset + 0x08591F0, 0xF9F9F9F9);
+			Process::Write32(offset + 0x08591F4, 0xFAFAFAFA);
+			Process::Write32(offset + 0x08591F8, 0xFAFAFAFA);
+			Process::Write32(offset + 0x08591FC, 0xFAFAFAFA);
+			Process::Write32(offset + 0x0859200, 0xFBFAFAFA);
+			Process::Write32(offset + 0x0859204, 0xFBFBFBFB);
+			Process::Write32(offset + 0x0859208, 0xFBFBFBFB);
+			Process::Write32(offset + 0x085920C, 0xFBFBFBFB);
+			Process::Write32(offset + 0x0859210, 0xFCFCFBFB);
+			Process::Write32(offset + 0x0859214, 0xFCFCFCFC);
+			Process::Write32(offset + 0x0859218, 0xFCFCFCFC);
+			Process::Write32(offset + 0x085921C, 0xFCFCFCFC);
+			Process::Write32(offset + 0x0859220, 0xFDFDFDFC);
+			Process::Write32(offset + 0x0859224, 0xFDFDFDFD);
+			Process::Write32(offset + 0x0859228, 0xFDFDFDFD);
+			Process::Write32(offset + 0x085922C, 0xFDFDFDFD);
+			Process::Write32(offset + 0x0859230, 0xFEFEFEFE);
+			Process::Write32(offset + 0x0859234, 0xFEFEFEFE);
+			Process::Write32(offset + 0x0859238, 0xFEFEFEFE);
+			Process::Write32(offset + 0x085923C, 0xFFFEFEFE);
+			Process::Write32(offset + 0x0859240, 0xFFFFFFFF);
+			Process::Write32(offset + 0x0859244, 0xFFFFFFFF);
+			Process::Write32(offset + 0x0859248, 0xFFFFFFFF);
+			Process::Write32(offset + 0x085924C, 0x0000FFFF);
+			Process::Write32(offset + 0x0859250, 0x00000000);
+			Process::Write32(offset + 0x0859254, 0x00000000);
+			Process::Write32(offset + 0x0859258, 0x00000000);
+			Process::Write32(offset + 0x085925C, 0x01010100);
+			Process::Write32(offset + 0x0859260, 0x01010101);
+			Process::Write32(offset + 0x0859264, 0x01010101);
+			Process::Write32(offset + 0x0859268, 0x01010101);
+			Process::Write32(offset + 0x085926C, 0x02020202);
+			Process::Write32(offset + 0x0859270, 0x02020202);
+			Process::Write32(offset + 0x0859274, 0x02020202);
+			Process::Write32(offset + 0x0859278, 0x03020202);
+			Process::Write32(offset + 0x085927C, 0x03030303);
+			Process::Write32(offset + 0x0859280, 0x03030303);
+			Process::Write32(offset + 0x0859284, 0x03030303);
+			Process::Write32(offset + 0x0859288, 0x04040303);
+			Process::Write32(offset + 0x085928C, 0x04040404);
+			Process::Write32(offset + 0x0859290, 0x04040404);
+			Process::Write32(offset + 0x0859294, 0x04040404);
+			Process::Write32(offset + 0x0859298, 0x05050504);
+			Process::Write32(offset + 0x085929C, 0x05050505);
+			Process::Write32(offset + 0x08592A0, 0x05050505);
+			Process::Write32(offset + 0x08592A4, 0x05050505);
+			Process::Write32(offset + 0x08592A8, 0x06060606);
+			Process::Write32(offset + 0x08592AC, 0x06060606);
+			Process::Write32(offset + 0x08592B0, 0x06060606);
+			Process::Write32(offset + 0x08592B4, 0x07060606);
+			Process::Write32(offset + 0x08592B8, 0x07070707);
+			Process::Write32(offset + 0x08592BC, 0x07070707);
+			Process::Write32(offset + 0x08592C0, 0x07070707);
+			Process::Write32(offset + 0x08592C4, 0x01350707);
+		} 
+		if ( r == 1 ) {
+			Process::Write32(offset + 0x0597B80, 0xEA000006);
+			Process::Write32(offset + 0x030B844, 0x13A00001);
+			Process::Write32(offset + 0x0597A94, 0xE28AB0A9);
+			Process::Write32(offset + 0x0597C80, 0xE35400A9);
+			Process::Write32(offset + 0x0597B20, 0xE1A01000);
+			Process::Write32(offset + 0x0859104, 0xFDFCFBFA);
+			Process::Write32(offset + 0x0859108, 0x0100FFFE);
+			Process::Write32(offset + 0x085910C, 0x05040302);
+			Process::Write32(offset + 0x0859110, 0xFCFBFA06);
+			Process::Write32(offset + 0x0859114, 0x00FFFEFD);
+			Process::Write32(offset + 0x0859118, 0x04030201);
+			Process::Write32(offset + 0x085911C, 0xFBFA0605);
+			Process::Write32(offset + 0x0859120, 0xFFFEFDFC);
+			Process::Write32(offset + 0x0859124, 0x03020100);
+			Process::Write32(offset + 0x0859128, 0xFA060504);
+			Process::Write32(offset + 0x085912C, 0xFEFDFCFB);
+			Process::Write32(offset + 0x0859130, 0x020100FF);
+			Process::Write32(offset + 0x0859134, 0x06050403);
+			Process::Write32(offset + 0x0859138, 0xFDFCFBFA);
+			Process::Write32(offset + 0x085913C, 0x0100FFFE);
+			Process::Write32(offset + 0x0859140, 0x05040302);
+			Process::Write32(offset + 0x0859144, 0xFCFBFA06);
+			Process::Write32(offset + 0x0859148, 0x00FFFEFD);
+			Process::Write32(offset + 0x085914C, 0x04030201);
+			Process::Write32(offset + 0x0859150, 0xFBFA0605);
+			Process::Write32(offset + 0x0859154, 0xFFFEFDFC);
+			Process::Write32(offset + 0x0859158, 0x03020100);
+			Process::Write32(offset + 0x085915C, 0xFA060504);
+			Process::Write32(offset + 0x0859160, 0xFEFDFCFB);
+			Process::Write32(offset + 0x0859164, 0x020100FF);
+			Process::Write32(offset + 0x0859168, 0x06050403);
+			Process::Write32(offset + 0x085916C, 0xFDFCFBFA);
+			Process::Write32(offset + 0x0859170, 0x0100FFFE);
+			Process::Write32(offset + 0x0859174, 0x05040302);
+			Process::Write32(offset + 0x0859178, 0xFCFBFA06);
+			Process::Write32(offset + 0x085917C, 0x00FFFEFD);
+			Process::Write32(offset + 0x0859180, 0x04030201);
+			Process::Write32(offset + 0x0859184, 0xFBFA0605);
+			Process::Write32(offset + 0x0859188, 0xFFFEFDFC);
+			Process::Write32(offset + 0x085918C, 0x03020100);
+			Process::Write32(offset + 0x0859190, 0xFA060504);
+			Process::Write32(offset + 0x0859194, 0xFEFDFCFB);
+			Process::Write32(offset + 0x0859198, 0x020100FF);
+			Process::Write32(offset + 0x085919C, 0x06050403);
+			Process::Write32(offset + 0x08591A0, 0xFDFCFBFA);
+			Process::Write32(offset + 0x08591A4, 0x0100FFFE);
+			Process::Write32(offset + 0x08591A8, 0x05040302);
+			Process::Write32(offset + 0x08591AC, 0xFAFAFA06);
+			Process::Write32(offset + 0x08591B0, 0xFAFAFAFA);
+			Process::Write32(offset + 0x08591B4, 0xFAFAFAFA);
+			Process::Write32(offset + 0x08591B8, 0xFBFBFAFA);
+			Process::Write32(offset + 0x08591BC, 0xFBFBFBFB);
+			Process::Write32(offset + 0x08591C0, 0xFBFBFBFB);
+			Process::Write32(offset + 0x08591C4, 0xFCFBFBFB);
+			Process::Write32(offset + 0x08591C8, 0xFCFCFCFC);
+			Process::Write32(offset + 0x08591CC, 0xFCFCFCFC);
+			Process::Write32(offset + 0x08591D0, 0xFCFCFCFC);
+			Process::Write32(offset + 0x08591D4, 0xFDFDFDFD);
+			Process::Write32(offset + 0x08591D8, 0xFDFDFDFD);
+			Process::Write32(offset + 0x08591DC, 0xFDFDFDFD);
+			Process::Write32(offset + 0x08591E0, 0xFEFEFEFD);
+			Process::Write32(offset + 0x08591E4, 0xFEFEFEFE);
+			Process::Write32(offset + 0x08591E8, 0xFEFEFEFE);
+			Process::Write32(offset + 0x08591EC, 0xFFFFFEFE);
+			Process::Write32(offset + 0x08591F0, 0xFFFFFFFF);
+			Process::Write32(offset + 0x08591F4, 0xFFFFFFFF);
+			Process::Write32(offset + 0x08591F8, 0x00FFFFFF);
+			Process::Write32(offset + 0x08591FC, 0x00000000);
+			Process::Write32(offset + 0x0859200, 0x00000000);
+			Process::Write32(offset + 0x0859204, 0x00000000);
+			Process::Write32(offset + 0x0859208, 0x01010101);
+			Process::Write32(offset + 0x085920C, 0x01010101);
+			Process::Write32(offset + 0x0859210, 0x01010101);
+			Process::Write32(offset + 0x0859214, 0x02020201);
+			Process::Write32(offset + 0x0859218, 0x02020202);
+			Process::Write32(offset + 0x085921C, 0x02020202);
+			Process::Write32(offset + 0x0859220, 0x03030202);
+			Process::Write32(offset + 0x0859224, 0x03030303);
+			Process::Write32(offset + 0x0859228, 0x03030303);
+			Process::Write32(offset + 0x085922C, 0x04030303);
+			Process::Write32(offset + 0x0859230, 0x04040404);
+			Process::Write32(offset + 0x0859234, 0x04040404);
+			Process::Write32(offset + 0x0859238, 0x04040404);
+			Process::Write32(offset + 0x085923C, 0x05050505);
+			Process::Write32(offset + 0x0859240, 0x05050505);
+			Process::Write32(offset + 0x0859244, 0x05050505);
+			Process::Write32(offset + 0x0859248, 0x06060605);
+			Process::Write32(offset + 0x085924C, 0x06060606);
+			Process::Write32(offset + 0x0859250, 0x06060606);
+			Process::Write32(offset + 0x0859254, 0x01790606);
+		}
+		if ( r == 2 ) {
+			Process::Write32(offset + 0x030B844, 0x13A00001);
+			Process::Write32(offset + 0x0597A94, 0xE28AB079);
+			Process::Write32(offset + 0x0597B20, 0xE1A01000);
+			Process::Write32(offset + 0x0597B80, 0xEA000006);
+			Process::Write32(offset + 0x0597C80, 0xE3540079);
+			Process::Write32(offset + 0x0859104, 0xFEFDFCFB);
+			Process::Write32(offset + 0x0859108, 0x020100FF);
+			Process::Write32(offset + 0x085910C, 0xFB050403);
+			Process::Write32(offset + 0x0859110, 0xFFFEFDFC);
+			Process::Write32(offset + 0x0859114, 0x03020100);
+			Process::Write32(offset + 0x0859118, 0xFCFB0504);
+			Process::Write32(offset + 0x085911C, 0x00FFFEFD);
+			Process::Write32(offset + 0x0859120, 0x04030201);
+			Process::Write32(offset + 0x0859124, 0xFDFCFB05);
+			Process::Write32(offset + 0x0859128, 0x0100FFFE);
+			Process::Write32(offset + 0x085912C, 0x05040302);
+			Process::Write32(offset + 0x0859130, 0xFEFDFCFB);
+			Process::Write32(offset + 0x0859134, 0x020100FF);
+			Process::Write32(offset + 0x0859138, 0xFB050403);
+			Process::Write32(offset + 0x085913C, 0xFFFEFDFC);
+			Process::Write32(offset + 0x0859140, 0x03020100);
+			Process::Write32(offset + 0x0859144, 0xFCFB0504);
+			Process::Write32(offset + 0x0859148, 0x00FFFEFD);
+			Process::Write32(offset + 0x085914C, 0x04030201);
+			Process::Write32(offset + 0x0859150, 0xFDFCFB05);
+			Process::Write32(offset + 0x0859154, 0x0100FFFE);
+			Process::Write32(offset + 0x0859158, 0x05040302);
+			Process::Write32(offset + 0x085915C, 0xFEFDFCFB);
+			Process::Write32(offset + 0x0859160, 0x020100FF);
+			Process::Write32(offset + 0x0859164, 0xFB050403);
+			Process::Write32(offset + 0x0859168, 0xFFFEFDFC);
+			Process::Write32(offset + 0x085916C, 0x03020100);
+			Process::Write32(offset + 0x0859170, 0xFCFB0504);
+			Process::Write32(offset + 0x0859174, 0x00FFFEFD);
+			Process::Write32(offset + 0x0859178, 0x04030201);
+			Process::Write32(offset + 0x085917C, 0xFBFBFB05);
+			Process::Write32(offset + 0x0859180, 0xFBFBFBFB);
+			Process::Write32(offset + 0x0859184, 0xFBFBFBFB);
+			Process::Write32(offset + 0x0859188, 0xFCFCFCFC);
+			Process::Write32(offset + 0x085918C, 0xFCFCFCFC);
+			Process::Write32(offset + 0x0859190, 0xFDFCFCFC);
+			Process::Write32(offset + 0x0859194, 0xFDFDFDFD);
+			Process::Write32(offset + 0x0859198, 0xFDFDFDFD);
+			Process::Write32(offset + 0x085919C, 0xFEFEFDFD);
+			Process::Write32(offset + 0x08591A0, 0xFEFEFEFE);
+			Process::Write32(offset + 0x08591A4, 0xFEFEFEFE);
+			Process::Write32(offset + 0x08591A8, 0xFFFFFFFE);
+			Process::Write32(offset + 0x08591AC, 0xFFFFFFFF);
+			Process::Write32(offset + 0x08591B0, 0xFFFFFFFF);
+			Process::Write32(offset + 0x08591B4, 0x00000000);
+			Process::Write32(offset + 0x08591B8, 0x00000000);
+			Process::Write32(offset + 0x08591BC, 0x01000000);
+			Process::Write32(offset + 0x08591C0, 0x01010101);
+			Process::Write32(offset + 0x08591C4, 0x01010101);
+			Process::Write32(offset + 0x08591C8, 0x02020101);
+			Process::Write32(offset + 0x08591CC, 0x02020202);
+			Process::Write32(offset + 0x08591D0, 0x02020202);
+			Process::Write32(offset + 0x08591D4, 0x03030302);
+			Process::Write32(offset + 0x08591D8, 0x03030303);
+			Process::Write32(offset + 0x08591DC, 0x03030303);
+			Process::Write32(offset + 0x08591E0, 0x04040404);
+			Process::Write32(offset + 0x08591E4, 0x04040404);
+			Process::Write32(offset + 0x08591E8, 0x05040404);
+			Process::Write32(offset + 0x08591EC, 0x05050505);
+			Process::Write32(offset + 0x08591F0, 0x05050505);
+			Process::Write32(offset + 0x08591F4, 0x00000505);
+		}
+		if ( r == 3 ) {
+			Process::Write32(offset + 0x0597B80, 0xEA000006);
+			Process::Write32(offset + 0x030B844, 0x13A00001);
+			Process::Write32(offset + 0x0597A94, 0xE28AB051);
+			Process::Write32(offset + 0x0597C80, 0xE3540051);
+			Process::Write32(offset + 0x0597B20, 0xE1A01000);
+			Process::Write32(offset + 0x0859104, 0xFFFEFDFC);
+			Process::Write32(offset + 0x0859108, 0x03020100);
+			Process::Write32(offset + 0x085910C, 0xFEFDFC04);
+			Process::Write32(offset + 0x0859110, 0x020100FF);
+			Process::Write32(offset + 0x0859114, 0xFDFC0403);
+			Process::Write32(offset + 0x0859118, 0x0100FFFE);
+			Process::Write32(offset + 0x085911C, 0xFC040302);
+			Process::Write32(offset + 0x0859120, 0x00FFFEFD);
+			Process::Write32(offset + 0x0859124, 0x04030201);
+			Process::Write32(offset + 0x0859128, 0xFFFEFDFC);
+			Process::Write32(offset + 0x085912C, 0x03020100);
+			Process::Write32(offset + 0x0859130, 0xFEFDFC04);
+			Process::Write32(offset + 0x0859134, 0x020100FF);
+			Process::Write32(offset + 0x0859138, 0xFDFC0403);
+			Process::Write32(offset + 0x085913C, 0x0100FFFE);
+			Process::Write32(offset + 0x0859140, 0xFC040302);
+			Process::Write32(offset + 0x0859144, 0x00FFFEFD);
+			Process::Write32(offset + 0x0859148, 0x04030201);
+			Process::Write32(offset + 0x085914C, 0xFFFEFDFC);
+			Process::Write32(offset + 0x0859150, 0x03020100);
+			Process::Write32(offset + 0x0859154, 0xFCFCFC04);
+			Process::Write32(offset + 0x0859158, 0xFCFCFCFC);
+			Process::Write32(offset + 0x085915C, 0xFDFDFCFC);
+			Process::Write32(offset + 0x0859160, 0xFDFDFDFD);
+			Process::Write32(offset + 0x0859164, 0xFEFDFDFD);
+			Process::Write32(offset + 0x0859168, 0xFEFEFEFE);
+			Process::Write32(offset + 0x085916C, 0xFEFEFEFE);
+			Process::Write32(offset + 0x0859170, 0xFFFFFFFF);
+			Process::Write32(offset + 0x0859174, 0xFFFFFFFF);
+			Process::Write32(offset + 0x0859178, 0x000000FF);
+			Process::Write32(offset + 0x085917C, 0x00000000);
+			Process::Write32(offset + 0x0859180, 0x01010000);
+			Process::Write32(offset + 0x0859184, 0x01010101);
+			Process::Write32(offset + 0x0859188, 0x02010101);
+			Process::Write32(offset + 0x085918C, 0x02020202);
+			Process::Write32(offset + 0x0859190, 0x02020202);
+			Process::Write32(offset + 0x0859194, 0x03030303);
+			Process::Write32(offset + 0x0859198, 0x03030303);
+			Process::Write32(offset + 0x085919C, 0x04040403);
+			Process::Write32(offset + 0x08591A0, 0x04040404);
+			Process::Write32(offset + 0x08591A4, 0x00000404);
+			Process::Write32(offset + 0x08591A8, 0x00000000);
+		}
+		if ( r == 4 ) {
+			Process::Write32(offset + 0x0597B80, 0xEA000006);
+			Process::Write32(offset + 0x030B844, 0x13A00001);
+			Process::Write32(offset + 0x0597A94, 0xE28AB031);
+			Process::Write32(offset + 0x0597C80, 0xE3540031);
+			Process::Write32(offset + 0x0597B20, 0xE1A01000);
+			Process::Write32(offset + 0x0859104, 0x00FFFEFD);
+			Process::Write32(offset + 0x0859108, 0xFD030201);
+			Process::Write32(offset + 0x085910C, 0x0100FFFE);
+			Process::Write32(offset + 0x0859110, 0xFEFD0302);
+			Process::Write32(offset + 0x0859114, 0x020100FF);
+			Process::Write32(offset + 0x0859118, 0xFFFEFD03);
+			Process::Write32(offset + 0x085911C, 0x03020100);
+			Process::Write32(offset + 0x0859120, 0x00FFFEFD);
+			Process::Write32(offset + 0x0859124, 0xFD030201);
+			Process::Write32(offset + 0x0859128, 0x0100FFFE);
+			Process::Write32(offset + 0x085912C, 0xFEFD0302);
+			Process::Write32(offset + 0x0859130, 0x020100FF);
+			Process::Write32(offset + 0x0859134, 0xFDFDFD03);
+			Process::Write32(offset + 0x0859138, 0xFDFDFDFD);
+			Process::Write32(offset + 0x085913C, 0xFEFEFEFE);
+			Process::Write32(offset + 0x0859140, 0xFFFEFEFE);
+			Process::Write32(offset + 0x0859144, 0xFFFFFFFF);
+			Process::Write32(offset + 0x0859148, 0x0000FFFF);
+			Process::Write32(offset + 0x085914C, 0x00000000);
+			Process::Write32(offset + 0x0859150, 0x01010100);
+			Process::Write32(offset + 0x0859154, 0x01010101);
+			Process::Write32(offset + 0x0859158, 0x02020202);
+			Process::Write32(offset + 0x085915C, 0x03020202);
+			Process::Write32(offset + 0x0859160, 0x03030303);
+			Process::Write16(offset + 0x0859164, 0x00000303);
+		}
+		if ( r == 5 ) {
+			Process::Write32(offset + 0x030B844, 0x13A00001);
+			Process::Write32(offset + 0x0597A94, 0xE28AB019);
+			Process::Write32(offset + 0x0597B20, 0xE1A01000);
+			Process::Write32(offset + 0x0597B80, 0xEA000006);
+			Process::Write32(offset + 0x0597C80, 0xE3540019);
+			Process::Write32(offset + 0x0859104, 0x0100FFFE);
+			Process::Write32(offset + 0x0859108, 0x00FFFE02);
+			Process::Write32(offset + 0x085910C, 0xFFFE0201);
+			Process::Write32(offset + 0x0859110, 0xFE020100);
+			Process::Write32(offset + 0x0859114, 0x020100FF);
+			Process::Write32(offset + 0x0859118, 0x0100FFFE);
+			Process::Write32(offset + 0x085911C, 0xFEFEFE02);
+			Process::Write32(offset + 0x0859120, 0xFFFFFEFE);
+			Process::Write32(offset + 0x0859124, 0x00FFFFFF);
+			Process::Write32(offset + 0x0859128, 0x00000000);
+			Process::Write32(offset + 0x085912C, 0x01010101);
+			Process::Write32(offset + 0x0859130, 0x02020201);
+			Process::Write32(offset + 0x0859134, 0x00000202);
+		}
+		if ( r == 6 ) {
+			Process::Write32(offset + 0x0597A94, 0xE28AB009);
+			Process::Write32(offset + 0x0597C80, 0xE3540009);
+		}
+		if ( r == 7 ) {
+			Process::Write32(offset + 0x0597A94, 0xE28AB001);
+			Process::Write32(offset + 0x0597C80, 0xE3540001);
+		}
+		if ( r == 8 ) {
+			Process::Write32(offset + 0x0597B80, 0x0A000006);
+			Process::Write32(offset + 0x030B844, 0x13A00000);
+			Process::Write32(offset + 0x0597A94, 0xE28AB009);
+			Process::Write32(offset + 0x0597C80, 0xE3540009);
+			Process::Write32(offset + 0x0597B20, 0xE7971100);
+			Process::Write32(offset + 0x0859104, 0x01FF0000);
+			Process::Write32(offset + 0x0859108, 0x01FF01FF);
+			Process::Write32(offset + 0x085910C, 0xFFFF0000);
+			Process::Write32(offset + 0x0859110, 0x010000FF);
+			Process::Write32(offset + 0x0859114, 0x00000101);
+			Process::Write32(offset + 0x0859118, 0x00000000);
+			Process::Write32(offset + 0x085911C, 0x00000008);
+			Process::Write32(offset + 0x0859120, 0x00000006);
+			Process::Write32(offset + 0x0859124, 0x00000007);
+			Process::Write32(offset + 0x0859128, 0x00000004);
+			Process::Write32(offset + 0x085912C, 0x00000005);
+			Process::Write32(offset + 0x0859130, 0x00000002);
+			Process::Write32(offset + 0x0859134, 0x00000003);
+			Process::Write32(offset + 0x0859138, 0x00000001);
+			Process::Write32(offset + 0x085913C, 0x00000000);
+			Process::Write32(offset + 0x0859140, 0x00000007);
+			Process::Write32(offset + 0x0859144, 0x00000008);
+			Process::Write32(offset + 0x0859148, 0x00000005);
+			Process::Write32(offset + 0x085914C, 0x00000006);
+			Process::Write32(offset + 0x0859150, 0x00000003);
+			Process::Write32(offset + 0x0859154, 0x00000004);
+			Process::Write32(offset + 0x0859158, 0x00000001);
+			Process::Write32(offset + 0x085915C, 0x00000002);
+			Process::Write32(offset + 0x0859160, 0x00000000);
+			Process::Write32(offset + 0x0859164, 0x00000005);
+			Process::Write32(offset + 0x0859168, 0x00000007);
+			Process::Write32(offset + 0x085916C, 0x00000003);
+			Process::Write32(offset + 0x0859170, 0x00000008);
+			Process::Write32(offset + 0x0859174, 0x00000001);
+			Process::Write32(offset + 0x0859178, 0x00000006);
+			Process::Write32(offset + 0x085917C, 0x00000002);
+			Process::Write32(offset + 0x0859180, 0x00000004);
+			Process::Write32(offset + 0x0859184, 0x00000000);
+			Process::Write32(offset + 0x0859188, 0x00000003);
+			Process::Write32(offset + 0x085918C, 0x00000005);
+			Process::Write32(offset + 0x0859190, 0x00000001);
+			Process::Write32(offset + 0x0859194, 0x00000007);
+			Process::Write32(offset + 0x0859198, 0x00000002);
+			Process::Write32(offset + 0x085919C, 0x00000008);
+			Process::Write32(offset + 0x08591A0, 0x00000004);
+			Process::Write32(offset + 0x08591A4, 0x00000006);
+			Process::Write32(offset + 0x08591A8, 0x00000000);
+			Process::Write32(offset + 0x08591AC, 0x00000001);
+			Process::Write32(offset + 0x08591B0, 0x00000003);
+			Process::Write32(offset + 0x08591B4, 0x00000002);
+			Process::Write32(offset + 0x08591B8, 0x00000005);
+			Process::Write32(offset + 0x08591BC, 0x00000004);
+			Process::Write32(offset + 0x08591C0, 0x00000007);
+			Process::Write32(offset + 0x08591C4, 0x00000006);
+			Process::Write32(offset + 0x08591C8, 0x00000008);
+			Process::Write32(offset + 0x08591CC, 0x00000000);
+			Process::Write32(offset + 0x08591D0, 0x00000002);
+			Process::Write32(offset + 0x08591D4, 0x00000001);
+			Process::Write32(offset + 0x08591D8, 0x00000004);
+			Process::Write32(offset + 0x08591DC, 0x00000003);
+			Process::Write32(offset + 0x08591E0, 0x00000006);
+			Process::Write32(offset + 0x08591E4, 0x00000005);
+			Process::Write32(offset + 0x08591E8, 0x00000008);
+			Process::Write32(offset + 0x08591EC, 0x00000007);
+			Process::Write32(offset + 0x08591F0, 0x00000000);
+			Process::Write32(offset + 0x08591F4, 0x00000004);
+			Process::Write32(offset + 0x08591F8, 0x00000002);
+			Process::Write32(offset + 0x08591FC, 0x00000006);
+			Process::Write32(offset + 0x0859200, 0x00000001);
+			Process::Write32(offset + 0x0859204, 0x00000008);
+			Process::Write32(offset + 0x0859208, 0x00000003);
+			Process::Write32(offset + 0x085920C, 0x00000007);
+			Process::Write32(offset + 0x0859210, 0x00000005);
+			Process::Write32(offset + 0x0859214, 0x00000000);
+			Process::Write32(offset + 0x0859218, 0x00000006);
+			Process::Write32(offset + 0x085921C, 0x00000008);
+			Process::Write32(offset + 0x0859220, 0x00000004);
+			Process::Write32(offset + 0x0859224, 0x00000007);
+			Process::Write32(offset + 0x0859228, 0x00000002);
+			Process::Write32(offset + 0x085922C, 0x00000005);
+			Process::Write32(offset + 0x0859230, 0x00000001);
+			Process::Write32(offset + 0x0859234, 0x00000003);
+			Process::Write32(offset + 0x0859238, 0x20000000);
+			Process::Write32(offset + 0x085923C, 0x60004000);
+			Process::Write32(offset + 0x0859240, 0xA0008000);
+			Process::Write32(offset + 0x0859244, 0xE000C000);
+			Process::Write32(offset + 0x0859248, 0x20A220A1);
+			Process::Write32(offset + 0x085924C, 0x20A420A3);
+			Process::Write32(offset + 0x0859250, 0x20A620A5);
+			Process::Write32(offset + 0x0859254, 0x01790177);
+			Process::Write32(offset + 0x0859258, 0x0176017B);
+			Process::Write32(offset + 0x085925C, 0x01720178);
+			Process::Write32(offset + 0x0859260, 0x01340175);
+			Process::Write32(offset + 0x0859264, 0x01310136);
+			Process::Write32(offset + 0x0859268, 0x01320133);
+			Process::Write32(offset + 0x085926C, 0x0013012E);
+			Process::Write32(offset + 0x0859270, 0x00150012);
+			Process::Write32(offset + 0x0859274, 0x00100011);
+			Process::Write32(offset + 0x0859278, 0x0158000D);
+			Process::Write32(offset + 0x085927C, 0x015C015A);
+			Process::Write32(offset + 0x0859280, 0x01560157);
+			Process::Write32(offset + 0x0859284, 0x01500159);
+			Process::Write32(offset + 0x0859288, 0x01520151);
+			Process::Write32(offset + 0x085928C, 0x00020003);
+			Process::Write32(offset + 0x0859290, 0x01060004);
+			Process::Write32(offset + 0x0859294, 0x01050108);
+			Process::Write32(offset + 0x0859298, 0x01020101);
+			Process::Write32(offset + 0x085929C, 0x017F00FE);
+			Process::Write32(offset + 0x08592A0, 0x0180017C);
+			Process::Write32(offset + 0x08592A4, 0x00FD0182);
+			Process::Write32(offset + 0x08592A8, 0x0016FFFF);
+			Process::Write32(offset + 0x08592AC, 0xFFFF0017);
+			Process::Write32(offset + 0x08592B0, 0x017AFFFF);
+			Process::Write32(offset + 0x08592B4, 0x017A017A);
+			Process::Write32(offset + 0x08592B8, 0x017A017A);
+			Process::Write32(offset + 0x08592BC, 0x017A017A);
+			Process::Write32(offset + 0x08592C0, 0x01350135);
+			Process::Write32(offset + 0x08592C4, 0x01350135);
+		}
+		if ( r == 9 ) {
+			Process::Write32(offset + 0x019DF08, 0xE1A00000);
+			Process::Write32(offset + 0x019B504, 0xE3A07000);
+			Process::Write32(offset + 0x019CF5C, 0xE1A00000);
+			Process::Write32(offset + 0x019C548, 0xE1A00000);
+			Process::Write32(offset + 0x019DDE4, 0xE1A00000);
+			Process::Write32(offset + 0x019DF08, 0xE1A00000);
+			Process::Write32(offset + 0x026F000, 0xE1A00000);
+			Process::Write32(offset + 0x030B844, 0x13A00001);
+		}
+		if ( r == 10 ) {
+			Process::Write32(offset + 0x019DF08, 0xE1A00000);
+			Process::Write32(offset + 0x019C548, 0xEB03FB85);
+			Process::Write32(offset + 0x019DDE4, 0xEB03F55E);
+			Process::Write32(offset + 0x019DF08, 0xEB10FA8C);
+			Process::Write32(offset + 0x026F000, 0xEB00B0D7);
+			Process::Write32(offset + 0x030B844, 0x13A00000);
+		}
+		if ( r == 11 ) {
+			Process::Write32(offset + 0x019DF08, 0xE1A00000);
+			Process::Write32(offset + 0x01654D4, 0xEA000005);
+			Process::Write32(offset + 0x01655D4, 0xE3A00001);
+			Process::Write32(offset + 0x01655E0, 0xEA000006);
+			Process::Write32(offset + 0x019B604, 0xE1A00000);
+			Process::Write32(offset + 0x019C548, 0xE1A00000);
+			Process::Write32(offset + 0x019DF08, 0xE1A00000);
+			Process::Write32(offset + 0x026F000, 0xE1A00000);
+			Process::Write32(offset + 0x05989FC, 0xEA000026);
+		}
+		if ( r == 12 ) {
+			Process::Write32(offset + 0x019DF08, 0xE1A00000);
+			Process::Write32(offset + 0x01654D4, 0x0A000005);
+			Process::Write32(offset + 0x01655D4, 0xEB18007B);
+			Process::Write32(offset + 0x01655E0, 0x1A000005);
+			Process::Write32(offset + 0x019B604, 0x0A00000C);
+			Process::Write32(offset + 0x019C548, 0xEB03FB85);
+			Process::Write32(offset + 0x019DF08, 0xEB10FA8C);
+			Process::Write32(offset + 0x026F000, 0xEB00B0D7);
+			Process::Write32(offset + 0x05989FC, 0x0A000044);
+		}
+		if ( r == 13 ) {
+			Process::Write32(offset + 0x019B504, 0xE3A07000);
+			Process::Write32(offset + 0x019CF5C, 0xE1A00000);
+		}
+		if ( r == 14 ) {
+			offset = 0x32000000;
+			Process::Write32(offset + 0x0E1E5A4, 0x32E1A360);
+			Process::Write32(offset + 0x0E2AB4C, 0x32E26908);
+		}
+	}
+}
+
+void item63(MenuEntry *entry)
+{
+	Process::Write32(offset + 0x598330, 0xEBF59214);
+	if (Controller::IsKeysPressed( A ))
+	{
+		Process::Write32(offset + 0x598330, 0xE3A00001);
+	}
+}
+
+void item64(MenuEntry *entry)
+{
+	Keyboard key("どこでも穴を掘れるようになります",{"ON","OFF"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		Process::Write32(offset + 0x663324, 0xE3A0104F);
+		Process::Write32(offset + 0x674F10, 0xE3A0104F);
+		Process::Write32(offset + 0x6691B8, 0xE3A01049);
+	}
+	if ( r == 1 ) {
+		Process::Write32(offset + 0x663324, 0xE3A0104C);
+		Process::Write32(offset + 0x674F10, 0xE3A0104C);
+		Process::Write32(offset + 0x6691B8, 0xE3A0104B);
+	}
+}
+
+void item65(MenuEntry *entry)
+{
+	Keyboard key("どこでも釣りができます(魚がかかるとは言ってない)",{"ON","OFF"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		Process::Write32(offset + 0x67E840, 0xE3A010B0);
+	}
+	if ( r == 1 ) {
+		Process::Write32(offset + 0x67E840, 0xE3A010B1);
+	}
+}
+
+void item66(MenuEntry *entry)
+{
+	Process::Write32(offset + 0x595B0C, 0xE1A00000);
+	Process::Write32(offset + 0x595B14, 0xE1A00000);
+	Process::Write32(offset + 0x595B1C, 0x1A00001B);
+	Process::Write32(offset + 0x595B24, 0xEA000080);
+}
+
+void item67(MenuEntry *entry)
+{
+	Process::Write32(offset + 0x597D90, 0xE3A06001);
+}
+
+void item68(MenuEntry *entry)
+{
+	Process::Write32(offset + 0x595C00, 0xE3A07008);
+	Process::Write32(offset + 0x595C04, 0xE3A04000);
+}
+
+void item69(MenuEntry *entry)
+{
+	Keyboard key("桜が満開になります",{"ON","OFF"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		Process::Write32(offset + 0x599524, 0xE3A08005);
+		Process::Write32(offset + 0x599674, 0xE28F2074);
+	}
+	if ( r == 1 ) {
+		Process::Write32(offset + 0x599524, 0xE1A08000);
+		Process::Write32(offset + 0x599674, 0xE28F206C);
+	}
+}
+
+void item70(MenuEntry *entry)
+{
+	Keyboard key("木がクリスマスツリーになります",{"ON","OFF"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		Process::Write32(offset + 0x106260, 0x2000461D);
+		Process::Write32(offset + 0x106264, 0x28001C00);
+	}
+	if ( r == 1 ) {
+		Process::Write32(offset + 0x106260, 0xF1F6461D);
+		Process::Write32(offset + 0x106264, 0x2800EC92);
+	}
+}
+
 /////////////////////////////////////////////////////////////
 //                           移動                          //
 /////////////////////////////////////////////////////////////
@@ -1979,6 +2948,20 @@ void move6(MenuEntry *entry)
         }
 }
 */
+
+void move8(MenuEntry *entry)
+{
+	Keyboard key("スライドパッドを動かすだけでダッシュします",{"ON","OFF"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		Process::Write32(offset + 0x68CCA0, 0xE3500001);
+		MessageBox("スライドパッドだけでダッシュON")();
+	}
+	if ( r == 1 ) {
+		Process::Write32(offset + 0x68CCA0, 0xE3A00001);
+		MessageBox("スライドパッドだけでダッシュOFF")();
+	}
+}
 
 /////////////////////////////////////////////////////////////
 //                         アクション                         //
@@ -2699,22 +3682,102 @@ void act17(MenuEntry *entry)
 	if (Controller::IsKeysPressed( A ))
 	{
 		offset = 0x33000000;
-		Process::(offset + 0x99FE4, 0x00009200);
+		Process::Write32(offset + 0x99FE4, 0x00009200);
 		OSD::Notify("Action jajan" << Color::Yellow << "ON!");
 	}
 }
 
 void act18(MenuEntry *entry)
 {
-	if (Controller::IsKeysPressed( A ))
+	offset = 0x33000000;
+	Process::Write32(offset + 0x9A70C, 0x00017233);
+}
+
+void act19(MenuEntry *entry)
+{
+	if (Controller::IsKeysPressed( B ))
 	{
-		if (Process::Read32(offset + 0x0099F84, cmp32) && cmp32 == 0xFFFFFFFF)
-		{
-		Process::Write32(offset + 0x0099FE4, 0x324C6080);
-		}
-		Process::Write32(offset + 0x009A110, 0x324C6080);
+		offset = 0x33000000;
+		Process::Write16(offset + 0x9A3F5, 0x00000000);
+		Process::Write16(offset + 0x9A521, 0x00000000);
+		OSD::Notify("End reaction " << Color::Yellow << "ON!");
+	}
+	if (Controller::IsKeysPressed( R ))
+	{
+		offset = 0x33000000;
+		Process::Write16(offset + 0x9A3F5, 0x00000100);
+		Process::Write16(offset + 0x9A521, 0x00000100);
+		OSD::Notify("Fixed reaction " << Color::Yellow << "ON!");
 	}
 }
+
+void act20(MenuEntry *entry)
+{
+	Process::Write32(offset + 0x6774B8, 0xEBF215B2);
+	if (Controller::IsKeysPressed( R ))
+	{
+		Process::Write32(offset + 0x6774B8, 0xEA000000);
+		OSD::Notify(Color::Cyan << "Fall in a hole");
+	}
+}
+
+void act21(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99FE4, offset) && offset != 0x060D0600)
+	{
+		offset += 0x0000012C;
+	}
+	if (Controller::IsKeysPressed( R ))
+	{
+		Process::Write32(offset + 0x99E7C, 0x407851EC);
+	}
+}
+
+void act22(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	Process::Write32(offset + 0x9670C, 0x00000016);
+}
+
+void act23(MenuEntry *entry)
+{
+	if (Controller::IsKeysPressed( B + DPadRight ))
+	{
+		Process::Write32(offset + 0x653070, 0xE3A00001);
+		Process::Write32(offset + 0x880B2C, 0x40C00000);
+	}
+	if (Controller::IsKeysPressed( B + DPadLeft ))
+	{
+		Process::Write32(offset + 0x653070, 0x0A000004);
+		Process::Write32(offset + 0x880B2C, 0x3F800000);
+	}
+}
+
+void act24(MenuEntry *entry)
+{
+	Process::Write32(offset + 0x66C1D4, 0xE3A01060);
+	if (Controller::IsKeysPressed( R ))
+	{
+		Process::Write32(offset + 0x66723C, 0xE3A01061);
+		OSD::Notify("Quick change " << Color::Orange << "ON!");
+	}
+}
+
+void act25(MenuEntry *entry)
+{
+	Keyboard key("即解除系\n\n01:穴\n02:クラゲ",{"01:穴","02:クラゲ"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		Process::Write32(offset + 0x66723C, 0xE3A01061);
+		MessageBox("穴解除")();
+	}
+	if ( r == 1 ) {
+		Process::Write32(offset + 0x68C258, 0xE3A01028);
+		MessageBox("クラゲ解除")();
+	}
+}
+
 
 /////////////////////////////////////////////////////////////
 //                         プレイヤー                        //
@@ -3166,7 +4229,49 @@ void player14(MenuEntry *entry)
 		MessageBox("速度: 超速い")();
 	}
 }
-	
+
+void player15(MenuEntry *entry)
+{
+	Process::Write32(offset + 0x68B128, 0xE1A00000);
+}
+
+void player16(MenuEntry *entry)
+{
+	Keyboard key("海で歩けるようになります",{"ON","OFF"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		Process::Write32(offset + 0x64D31C, 0x03A00000);
+	}
+	if ( r == 1 ) {
+		Process::Write32(offset + 0x64D31C, 0x03A00001);
+	}
+}
+
+void player17(MenuEntry *entry)
+{
+	Keyboard key("スライディングが無効になります",{"ON","OFF"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		Process::Write32(offset + 0x6519F0, 0x77777777);
+	}
+	if ( r == 1 ) {
+		Process::Write32(offset + 0x6519F0, 0x3F800000);
+	}
+}
+
+void player18(MenuEntry *entry)
+{
+	Keyboard key("住人と距離をとります",{"ON","OFF"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		offset = 0x33000000;
+		Process::Write32(offset + 0x9A330, 0x42680000);
+	}
+	if ( r == 1 ) {
+		offset = 0x33000000;
+		Process::Write32(offset + 0x9A330, 0x3F800000);
+	}
+}
 
 /////////////////////////////////////////////////////////////
 //                        写真館                           //
@@ -3236,6 +4341,38 @@ void money1(MenuEntry *entry)
 	Process::Write32(offset + 0x2C01C8, 0xE3A08000);
 }
 
+void money2(MenuEntry *entry)
+{
+	offset = 0x00000000;
+	if (Process::Read32(offset + 0xAA914C, cmp32) && cmp32 != 0x00000000)
+	{
+		Process::Read32(offset + 0xAA914C, offset);
+		Process::Write32(offset + 0x6B8C, 0x8CF95678);
+		Process::Write32(offset + 0x6B90, 0x0D118636);
+	}
+}
+
+void money3(MenuEntry *entry)
+{
+	offset = 0x00000000;
+	if (Process::Read32(offset + 0xAA914C, cmp32) && cmp32 != 0x00000000)
+	{
+	Process::Read32(offset + 0xAA914C, offset);
+	Process::Write32(offset + 0x8D1C, 0xE3911E31);
+	Process::Write32(offset + 0x8D20, 0x7D0D5687);
+	}
+}
+
+void money4(MenuEntry *entry)
+{
+	offset = 0x00000000;
+	if (Process::Read32(offset + 0xAA914C, cmp32) && cmp32 != 0x00000000)
+	{
+	Process::Read32(offset + 0xAA914C, offset);
+	Process::Write32(offset + 0x6B9C, 0xE3911E31);
+	Process::Write32(offset + 0x6BA0, 0x7D0D5687);
+	}
+}
 	
 /////////////////////////////////////////////////////////////
 //                         スタイル                          //
@@ -3300,11 +4437,11 @@ void other2(MenuEntry *entry)
 	int r = key.Open();
 	if ( r == 0 ) {
 		Process::Write32(offset + 0x5B2AE0, 0xE3A00001);
-		MessageBox("スクリーンショットをオフにしたよ")
+		MessageBox("スクリーンショットをオフにしたよ")();
 	}
 	if ( r == 1 ) {
 		Process::Write32(offset + 0x5B2AE0, 0xE3500000);
-		MessageBox("スクリーンショットをオフにしたよ")
+		MessageBox("スクリーンショットをオフにしたよ")();
 	}
 }
 
@@ -3335,6 +4472,396 @@ void other7(MenuEntry *entry)
 	Process::Write32(offset + 0xAD0250, 0x01000000);
 }
 
+void other8(MenuEntry *entry)
+{
+	Process::Write32(offset + 0x1EAA70, 0xE3500001);
+}
+
+void other9(MenuEntry *entry)
+{
+	Process::Write32(offset + 0x1EA7A0, 0xE3A0005A);
+}
+
+void other10(MenuEntry *entry)
+{
+	offset = 0x00000000;
+	Process::Write32(offset + 0x94A724, 0x7FFFFFFF);
+	Process::Write32(offset + 0x94A728, 0x7FFFFFFF);
+	Process::Write32(offset + 0x94A72C, 0x7FFFFFFF);
+}
+
+/////////////////////////////////////////////////////////////
+//                           音楽                          //
+/////////////////////////////////////////////////////////////
+void music1(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	Process::Write32(offset + 0x9B310, 0x00000000);
+	if(Process::Read32(offset + 0x0099F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	if (Controller::IsKeysPressed( R ))
+	{
+		Process::Write32(offset + 0x99FE4, 0x060D0600); //stop
+	}
+	offset = 0x33000000;
+	Process::Write16(offset + 0x9A706, 0x002E);
+	if (Controller::IsKeysPressed( L + DPadUp ))
+	{
+		Process::Write32(offset + 0x682A68, 0xE1A00000);
+		Process::Write32(offset + 0x682A8C, 0xE1A00000);
+		Process::Write32(offset + 0x682A20, 0xE1A00000);
+		Process::Write32(offset + 0x682AA0, 0xE3A010C4); //ON
+	}
+	if (Controller::IsKeysPressed( L + DPadDown ))
+	{
+		Process::Write32(offset + 0x0682A8C, 0x1A000008);
+		Process::Write32(offset + 0x0682A68, 0x1A000014);
+		Process::Write32(offset + 0x0682A20, 0x0A000026);
+		Process::Write32(offset + 0x0682AA0, 0xE3A01070); //OFF
+	}
+}
+
+void music2(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000560);
+}
+
+void music3(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000560);
+}
+
+void music4(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000400);
+}
+
+void music5(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000402);
+}
+
+void music6(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x0100068E);
+}
+
+void music7(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000117);
+}
+
+void music8(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x0100012B);
+}
+
+void music9(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000660);
+}
+
+void music10(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x010004C4);
+}
+
+void music11(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000832);
+}
+
+void music12(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000940);
+}
+
+void music13(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000450);
+}
+
+void music14(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x010000D0);
+}
+
+void music15(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x010000D1);
+}
+
+void music16(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x010000D2);
+}
+
+void music17(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x010000D3);
+}
+
+void music18(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x010000D4);
+}
+
+void music19(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x010000D5);
+}
+
+void music20(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x010007F5);
+}
+
+void music21(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000650);
+}
+
+void music22(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x010004B2);
+}
+
+void music23(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x0100093D);
+}
+
+void music24(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000810);
+}
+
+void music25(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000000);
+}
+
+void music26(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000001);
+}
+
+void music27(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000002);
+}
+
+void music28(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000003);
+}
+
+void music29(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000008);
+}
+
+void music30(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x0100000B);
+}
+
+void music31(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x0100000C);
+}
+
+void music32(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x0100000E);
+}
+
+void music33(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x0100000F);
+}
+
+void music34(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000945);
+}
+
+/*void music(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000C17);
+}*/
 
 /////////////////////////////////////////////////////////////
 //                         メンテ                            //
@@ -3517,6 +5044,12 @@ void maintenance4(MenuEntry *entry)
 	if ( r == 1 ) {
 		MessageBox("" + Utils::Random(0, 10))();
 	}
+}
+
+void maintenance5(MenuEntry *entry)
+{
+	offset = 0x00000000;
+	Process::Write16(offset + 0x94CAE4, 0xE0FF);
 }
 
 
