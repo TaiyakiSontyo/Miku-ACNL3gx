@@ -48,6 +48,12 @@ namespace CTRPluginFramework
 	void sima26(MenuEntry *entry);
 	void sima27(MenuEntry *entry);
 	void sima28(MenuEntry *entry);
+	void sima29(MenuEntry *entry);
+	void sima30(MenuEntry *entry);
+	void sima31(MenuEntry *entry);
+	void sima32(MenuEntry *entry);
+	void sima33(MenuEntry *entry);
+	void sima34(MenuEntry *entry);
 	
 	void item1(MenuEntry *entry);
 	void item2(MenuEntry *entry);
@@ -99,6 +105,26 @@ namespace CTRPluginFramework
 	void item48(MenuEntry *entry);
 	void item49(MenuEntry *entry);
 	void item50(MenuEntry *entry);
+	void item51(MenuEntry *entry);
+	void item52(MenuEntry *entry);
+	void item53(MenuEntry *entry);
+	void item54(MenuEntry *entry);
+	void item55(MenuEntry *entry);
+	void item56(MenuEntry *entry);
+	void item57(MenuEntry *entry);
+	void item58(MenuEntry *entry);
+	void item59(MenuEntry *entry);
+	void item60(MenuEntry *entry);
+	void item61(MenuEntry *entry);
+	void item62(MenuEntry *entry);
+	void item63(MenuEntry *entry);
+	void item64(MenuEntry *entry);
+	void item65(MenuEntry *entry);
+	void item66(MenuEntry *entry);
+	void item67(MenuEntry *entry);
+	void item68(MenuEntry *entry);
+	void item69(MenuEntry *entry);
+	void item70(MenuEntry *entry);
 	
 	void move1(MenuEntry *entry);
 	void move2(MenuEntry *entry);
@@ -107,6 +133,7 @@ namespace CTRPluginFramework
 	void move5(MenuEntry *entry);
 	void move6(MenuEntry *entry);
 	/*void move7(MenuEntry *entry);*/
+	void move8(MenuEntry *entry);
 	
 	void act1(MenuEntry *entry);
 	void act2(MenuEntry *entry);
@@ -125,6 +152,14 @@ namespace CTRPluginFramework
 	void act15(MenuEntry *entry);
 	void act16(MenuEntry *entry);
 	void act17(MenuEntry *entry);
+	void act18(MenuEntry *entry);
+	void act19(MenuEntry *entry);
+	void act20(MenuEntry *entry);
+	void act21(MenuEntry *entry);
+	void act22(MenuEntry *entry);
+	void act23(MenuEntry *entry);
+	void act24(MenuEntry *entry);
+	void act25(MenuEntry *entry);
 	
 	void player1(MenuEntry *entry);
 	void player2(MenuEntry *entry);
@@ -140,11 +175,18 @@ namespace CTRPluginFramework
 	void player12(MenuEntry *entry);
 	void player13(MenuEntry *entry);
 	void player14(MenuEntry *entry);
+	void player15(MenuEntry *entry);
+	void player16(MenuEntry *entry);
+	void player17(MenuEntry *entry);
+	void player18(MenuEntry *entry);
 	
 	void photo1(MenuEntry *entry);
 	void photo2(MenuEntry *entry);
 	
 	void money1(MenuEntry *entry);
+	void money2(MenuEntry *entry);
+	void money3(MenuEntry *entry);
+	void money4(MenuEntry *entry);
 	
 	void style1(MenuEntry *entry);
 	void style2(MenuEntry *entry);
@@ -157,11 +199,51 @@ namespace CTRPluginFramework
 	void other5(MenuEntry *entry);
 	void other6(MenuEntry *entry);
 	void other7(MenuEntry *entry);
+	void other8(MenuEntry *entry);
+	void other9(MenuEntry *entry);
+	void other10(MenuEntry *entry);
+	
+	void music1(MenuEntry *entry);
+	void music2(MenuEntry *entry);
+	void music3(MenuEntry *entry);
+	void music4(MenuEntry *entry);
+	void music5(MenuEntry *entry);
+	void music6(MenuEntry *entry);
+	void music7(MenuEntry *entry);
+	void music8(MenuEntry *entry);
+	void music9(MenuEntry *entry);
+	void music10(MenuEntry *entry);
+	void music11(MenuEntry *entry);
+	void music12(MenuEntry *entry);
+	void music13(MenuEntry *entry);
+	void music14(MenuEntry *entry);
+	void music15(MenuEntry *entry);
+	void music16(MenuEntry *entry);
+	void music17(MenuEntry *entry);
+	void music18(MenuEntry *entry);
+	void music19(MenuEntry *entry);
+	void music20(MenuEntry *entry);
+	void music21(MenuEntry *entry);
+	void music22(MenuEntry *entry);
+	void music23(MenuEntry *entry);
+	void music24(MenuEntry *entry);
+	void music25(MenuEntry *entry);
+	void music26(MenuEntry *entry);
+	void music27(MenuEntry *entry);
+	void music28(MenuEntry *entry);
+	void music29(MenuEntry *entry);
+	void music30(MenuEntry *entry);
+	void music31(MenuEntry *entry);
+	void music32(MenuEntry *entry);
+	void music33(MenuEntry *entry);
+	void music34(MenuEntry *entry);
+	//void music(MenuEntry *entry);
 	
 	void maintenance1(MenuEntry *entry);
 	void maintenance2(MenuEntry *entry);
 	void maintenance3(MenuEntry *entry);
 	void maintenance4(MenuEntry *entry);
+	void maintenance5(MenuEntry *entry);
 	
 }
 #endif
