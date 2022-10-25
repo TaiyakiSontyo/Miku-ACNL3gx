@@ -4,6 +4,7 @@
 #include <CTRPluginFramework.hpp>
 #include <Unicode.h>
 
+
 namespace CTRPluginFramework
 {
 	using StringVector = std::vector<std::string>;
@@ -20,40 +21,6 @@ namespace CTRPluginFramework
 	void cheat4(MenuEntry *entry);
 	void cheat5(MenuEntry *entry);
 	void cheat6(MenuEntry *entry);
-	
-	void sima1(MenuEntry *entry);
-	void sima2(MenuEntry *entry);
-	void sima3(MenuEntry *entry);
-	void sima4(MenuEntry *entry);
-	void sima5(MenuEntry *entry);
-	void sima7(MenuEntry *entry);
-	void sima8(MenuEntry *entry);
-	void sima9(MenuEntry *entry);
-	void sima10(MenuEntry *entry);
-	void sima11(MenuEntry *entry);
-	void sima12(MenuEntry *entry);
-	void sima13(MenuEntry *entry);
-	void sima14(MenuEntry *entry);
-	void sima15(MenuEntry *entry);
-	void sima16(MenuEntry *entry);
-	void sima17(MenuEntry *entry);
-	void sima18(MenuEntry *entry);
-	void sima19(MenuEntry *entry);
-	void sima20(MenuEntry *entry);
-	void sima21(MenuEntry *entry);
-	void sima22(MenuEntry *entry);
-	void sima23(MenuEntry *entry);
-	void sima24(MenuEntry *entry);
-	void sima25(MenuEntry *entry);
-	void sima26(MenuEntry *entry);
-	void sima27(MenuEntry *entry);
-	void sima28(MenuEntry *entry);
-	void sima29(MenuEntry *entry);
-	void sima30(MenuEntry *entry);
-	void sima31(MenuEntry *entry);
-	void sima32(MenuEntry *entry);
-	void sima33(MenuEntry *entry);
-	void sima34(MenuEntry *entry);
 	
 	void item1(MenuEntry *entry);
 	void item2(MenuEntry *entry);
@@ -161,6 +128,40 @@ namespace CTRPluginFramework
 	void act24(MenuEntry *entry);
 	void act25(MenuEntry *entry);
 	
+	void sima1(MenuEntry *entry);
+	void sima2(MenuEntry *entry);
+	void sima3(MenuEntry *entry);
+	void sima4(MenuEntry *entry);
+	void sima5(MenuEntry *entry);
+	void sima7(MenuEntry *entry);
+	void sima8(MenuEntry *entry);
+	void sima9(MenuEntry *entry);
+	void sima10(MenuEntry *entry);
+	void sima11(MenuEntry *entry);
+	void sima12(MenuEntry *entry);
+	void sima13(MenuEntry *entry);
+	void sima14(MenuEntry *entry);
+	void sima15(MenuEntry *entry);
+	void sima16(MenuEntry *entry);
+	void sima17(MenuEntry *entry);
+	void sima18(MenuEntry *entry);
+	void sima19(MenuEntry *entry);
+	void sima20(MenuEntry *entry);
+	void sima21(MenuEntry *entry);
+	void sima22(MenuEntry *entry);
+	void sima23(MenuEntry *entry);
+	void sima24(MenuEntry *entry);
+	void sima25(MenuEntry *entry);
+	void sima26(MenuEntry *entry);
+	void sima27(MenuEntry *entry);
+	void sima28(MenuEntry *entry);
+	void sima29(MenuEntry *entry);
+	void sima30(MenuEntry *entry);
+	void sima31(MenuEntry *entry);
+	void sima32(MenuEntry *entry);
+	void sima33(MenuEntry *entry);
+	void sima34(MenuEntry *entry);
+	
 	void player1(MenuEntry *entry);
 	void player2(MenuEntry *entry);
 	void player3(MenuEntry *entry);
@@ -191,17 +192,6 @@ namespace CTRPluginFramework
 	void style1(MenuEntry *entry);
 	void style2(MenuEntry *entry);
 	void style3(MenuEntry *entry);
-	
-	void other1(MenuEntry *entry);
-	void other2(MenuEntry *entry);
-	void other3(MenuEntry *entry);
-	void other4(MenuEntry *entry);
-	void other5(MenuEntry *entry);
-	void other6(MenuEntry *entry);
-	void other7(MenuEntry *entry);
-	void other8(MenuEntry *entry);
-	void other9(MenuEntry *entry);
-	void other10(MenuEntry *entry);
 	
 	void music1(MenuEntry *entry);
 	void music2(MenuEntry *entry);
@@ -238,6 +228,18 @@ namespace CTRPluginFramework
 	void music33(MenuEntry *entry);
 	void music34(MenuEntry *entry);
 	//void music(MenuEntry *entry);
+	
+	void other1(MenuEntry *entry);
+	void other2(MenuEntry *entry);
+	void other3(MenuEntry *entry);
+	void other4(MenuEntry *entry);
+	void other5(MenuEntry *entry);
+	void other6(MenuEntry *entry);
+	void other7(MenuEntry *entry);
+	void other8(MenuEntry *entry);
+	void other9(MenuEntry *entry);
+	void other10(MenuEntry *entry);
+	void other11(MenuEntry *entry);
 	
 	void maintenance1(MenuEntry *entry);
 	void maintenance2(MenuEntry *entry);
