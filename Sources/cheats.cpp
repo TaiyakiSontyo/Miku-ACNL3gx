@@ -11,130 +11,25 @@ u32 offset=0;
 u32 cmp32=0;
 u32 date32=0;
 
+const u32 a1 = 0x00000000;
+const u32 a2 = 0xE3A00000;
+const u32 a3 = 0xFFFFFFFF;
+const u32 a4 = 0x7FFFFFFF;
+const u32 a5 = 0xE1A00000;
+const u32 a6 = 0xE3A08000;
+const u32 a7 = 0xE3A01070;
+const u32 a8 = 0xE3A01049;
+const u32 a9 = 0xE3A01055;
+const u32 a10 = 0xE3A0106C;
+const u32 a11 = 0x3F800000;
+const u32 a12 = 0x3F000000;
+const u32 a13 = 0x3E000000;
+const u32 a14 = 0x3FF00000;
+const u32 a15 = 0x41000000;
+const u32 a16 = 0xE3A00001;
 
-/***********メモ*************
-1. 英語のキーボード入力表示
-	std::string moji;
-	Keyboard(moji).Open(moji);
 
-2. フォルダ作成
-	Directory::Create();
-	
-3. ファイル作成
-	File::Create();
 
-4. ↑の二つの例
-	File::Create(フォルダ/ファイル名);
-	
-5. 	無かったら作成
-	if ((Directory::IsExists("ここにファイル名")) == 0 ) {
-		
-	}
-	
-6. ファイル名を指定して作成
-	std::string filename;
-	Keyboard(filename).Open(filename);
-	File::Create(Utils::Format("Test Code/%s.bin",filename.c_str()));
-	
-7. 高度なファイル作成
-	void something(MenuEntry *entry)
-	{
-		if (!Directory::IsExists("Test Code"))
-			Directory::Create("Test Code");
-		Keyboard key("",{"保存","リストア","削除"});
-		File fp;
-		int r = key.Open();
-		if ( r == 0 ) {
-			KeyboardJP key("ファイル名指定");
-			std::string filename;
-			if(key.Open(filename)!=-1)
-			{
-				filename += ".bin";
-				File::Open(fp,"プレイヤー名/"+filename,File::RWC);
-				for(int i=0;i<8;i++)
-					fp.Dump(0x88D09BC + 0xFC*i,24);
-				fp.Flush(); //保存
-				fp.Close();
-				
-				MessageBox("ダンプ成功", "")();
-			}
-		}
-		else if ( numberselect != -1 ) {
-			Directory dir("Test Code");
-			StringVector
-			list;
-			if (dir.ListFiles(list,".bin") == Directory::OPResult::NOT_OPEN) {
-				MessageBox("Error!!", "")();
-				return;
-			}
-			if (list.empty()) {
-				MessageBox("Error!!", "ファイルが見つかりませんでした。\n先にダンプしてください。")();
-				return;
-			}
-			std::string a;
-			if (numberselect == 1) a = "リストアするファイルを選択してください";
-			else a="削除するファイルを選択してください。";
-			Keyboard keybord(a,list);
-			int userChoice = keybord.Open();
-			if (userChoice !=-1) {
-				if (numberselect == 1) {
-					File.Open(fp,"Test Code/"+list[userChoice], File::RWC);
-					for (int i=0;i<8;i++)
-						fp.Inject(0x88D09BC+0xFC*i,24);
-					fp.Flush();
-					fp.Close();
-					MessageBox("リストアしました")();
-				}else{
-					File::Remove("Test Code/"+list[userChoice]);
-					MessageBox("ファイルを削除しました")();
-				}
-			}
-		}
-	}
-
-8.選択肢のやつ
-	void test(MenuEntry *entry) {
-Keyboard key("",{"選択肢A","選択式B"});
-int a = key.Open();
-if(a==0)
- {
- Keyboard key("",{"選択肢A+"});
-int b = key.Open();
-if(b==0)
-{
-    Process::Write32(0x0C49ED0C , 0x00000001);
-Keyboard key({"A++"});
-key.Open();
-処理
-}
- }
-if(a==1)
-{
-Keyboard key("",{"選択肢B+"});
-int b = key.Open();
-if(b==0)
-{
-    Process::Write32(0x0C49ED0C , 0x00000001);
-}
-}
-
-9. フレコ表示
-https://github.com/RedShyGuy/Vapecord-ACNL-Plugin/blob/master/libctrpf/source/CTRPluginFrameworkImpl/System/SystemImpl.cpp
-https://github.com/devkitPro/libctru/blob/master/libctru/include/3ds/services/frd.h
-u64 frdCode;
-GetLocalFriendCode(&frdCode);
-std::string frdCodeStr = Utils::Format("%04d-%04d-%04d", (frdCode >> 32) & 0xFFFF, (frdCode >> 16) & 0xFFFF), frdCode & 0xFFFF);
-
-10. 充電残量
-https://github.com/LumaTeam/Luma3DS/blob/master/sysmodules/rosalina/source/menu.c
-
-11. ポケット16番目Read
-Process::Read32(offset + 0x31F506AC, data32);
-Process::Write32(offset + 0x002FE5D4, data32);
-
-**************************/
-
-//////////なんか///////////
 
 bool cheat_code(u32 value, u32 lowerbound, u32 upperbound)
 	{
@@ -146,10 +41,8 @@ bool cheat_code1(u16 value, u16 lowerbound, u16 upperbound)
 	return value > lowerbound && value < upperbound;
 }
 
-/////////////////////////
 
-/////////////////////////////説明//////////////////////////////
-
+/**/
 void setumei1(MenuEntry *entry)
 { /* 製作者　*/
 	Keyboard key("製作者", {"Discord","Twitter","YouTube","Instagram",});
@@ -193,12 +86,12 @@ void setumei3(MenuEntry *entry)
 	"のむさん#7891")();
 }
 
-/////////////////////////////////////////////////////////////
-//                       常時on推奨                        //
-/////////////////////////////////////////////////////////////
+
+
+
 void cheat1(MenuEntry *entry)
 { /* チートON */
-	Process::Write32(offset + 0x002C01C8, 0xE3A08000);
+	Process::Write32(offset + 0x002C01C8, a6);
 	Process::Write8(offset + 0xAD0158, 0x02);
 	Process::Write32(offset + 0x00AD0250, 0x01000000);
 	
@@ -228,25 +121,25 @@ void cheat1(MenuEntry *entry)
 	Process::Write32(offset + 0x00E15740, 0x45800000);
 	Process::Write32(offset + 0x00AD0250, 0x01000000);
 	
-	offset = 0x00000000;
+	offset = a1;
 	if (Controller::IsKeysPressed( DPadUp + A ))
 	{
 		Process::Write32(offset + 0x005989FC, 0xEA000030);
 	}
 
-	offset = 0x00000000;
+	offset = a1;
 	if (Controller::IsKeysPressed( Left + A ))
 	{
 		Process::Write32(offset + 0x005989FC, 0x0A000044);
 	}
 	
-	offset = 0x00000000;
-	Process::Write32(offset + 0x0019BFC8, 0xE1A00000);
-	Process::Write32(offset + 0x0019C150, 0xE1A00000);
-	Process::Write32(offset + 0x0019B9D8, 0xE1A00000);
-	Process::Write32(offset + 0x002C01C8, 0xE3A08000);
+	offset = a1;
+	Process::Write32(offset + 0x0019BFC8, a5);
+	Process::Write32(offset + 0x0019C150, a5);
+	Process::Write32(offset + 0x0019B9D8, a5);
+	Process::Write32(offset + 0x002C01C8, a6);
 	Process::Write32(offset + 0x00AD0250, 0x01000000);
-	Process::Write32(offset + 0x00AD05C0, 0x00000000);
+	Process::Write32(offset + 0x00AD05C0, a1);
 	
 }
 
@@ -267,7 +160,7 @@ void cheat3(MenuEntry *entry)
 	MessageBox("相手貫通ON")();
 	}
 	if ( r == 1 ) {
-	Process::Write32(offset + 0x00650D80, 0xE3A00000);
+	Process::Write32(offset + 0x00650D80, a2);
 	MessageBox("相手貫通OFF")();
 	}
 }
@@ -279,8 +172,8 @@ void cheat4(MenuEntry *entry)
 		Process::Write32(offset + 0x0064EF0C, 0xEA000052);
 		Process::Write32(offset + 0x0064F070, 0xEA000001);
 		Process::Write32(offset + 0x0064F0E8, 0xEA000014);
-		Process::Write32(offset + 0x0064F19C, 0xE1A00000);
-		Process::Write32(offset + 0x0064F1B4, 0xE1A00000);
+		Process::Write32(offset + 0x0064F19C, a5);
+		Process::Write32(offset + 0x0064F1B4, a5);
 		Process::Write32(offset + 0x0064F1B8, 0xEA000026);
 		OSD::Notify("Through wall " << Color::Yellow << "ON!");
 	}
@@ -306,23 +199,23 @@ void cheat5(MenuEntry *entry)
 
 void cheat6(MenuEntry*entry)
 { /* チートonテスト */
-	offset = 0x00000000;
-	Process::Write32(offset + 0x596A30, 0xE3A00001);
-	Process::Write32(offset + 0x5A0FEC, 0xE1A00000);
-	Process::Write32(offset + 0x5A102C, 0xE3A00001);
+	offset = a1;
+	Process::Write32(offset + 0x596A30, a16);
+	Process::Write32(offset + 0x5A0FEC, a5);
+	Process::Write32(offset + 0x5A102C, a16);
 	Process::Write32(offset + 0x6502C4, 0x03500001);
-	Process::Write32(offset + 0x6502DC, 0xE1A00000);
+	Process::Write32(offset + 0x6502DC, a5);
 	Process::Write32(offset + 0x650594, 0x01000540);
 	Process::Write32(offset + 0x664948, 0xE3A01006);
 	Process::Write32(offset + 0x68A074, 0xE3A01016);
 	
 	Process::Write32(offset + 0xAD0250, 0x01000000);
 	
-	Process::Write32(offset + 0xAD05C0, 0x00000000);
+	Process::Write32(offset + 0xAD05C0, a1);
 	
 	Process::Write32(offset + 0x59E6D0, 0xEA000003);
 	Process::Write32(offset + 0x59E894, 0xEA000010);
-	Process::Write32(offset + 0x59FD8C, 0xE1A00000);
+	Process::Write32(offset + 0x59FD8C, a5);
 	
 	Process::Write32(offset + 0x596890, 0xE3A0001E);
 	
@@ -330,473 +223,12 @@ void cheat6(MenuEntry*entry)
 	Process::Write32(offset + 0xE15740, 0x45800000);
 	
 	
-	offset = 0x00000000;
-	if (Process::Read32(offset + 0x0986500, offset) && cheat_code(offset, 0x00000000, 0x00000000))
-	{
-		Process::Read32(offset + 0x0986500, offset);
-		Process::Read32(0x00000044, offset);
-		offset = 0x00000000;
-		Process::Write32(offset + 0x00838F00, offset);
-	}
-	offset = 0x00000000;
-	if (Process::Read32(offset + 0x0986500, offset) && cheat_code(offset, 0x00000000, 0x00000000))
-	{
-		Process::Read32(offset + 0x0986500, offset);
-		Process::Read32(0x00000048, offset);
-		offset = 0x00000000;
-		Process::Write32(offset + 0x00838F04, offset);
-	}
-	
+
 	
 }
 
 
-/////////////////////////////////////////////////////////////
-//                           島                            //
-/////////////////////////////////////////////////////////////
 
-void sima1(MenuEntry *entry)
-{ /* 島にワープ */
-	Process::Write32(offset + 0x00948450, 0x00000000);
-	Process::Write32(offset + 0x0094A3D0, 0x00010001);
-	Process::Write32(offset + 0x00951338, 0x65000000);
-}
-
-
-void sima2(MenuEntry *entry)
-{ /* 乗っ取り*/
-	Keyboard key("他のプレイヤーを乗っ取ることができます。\n乗っ取ることで他の人を帰らせることができます。(悪用厳禁)", {"1P","2P","3P","4P",});
-			
-	int r = key.Open();
-	if ( r == 0 ) {
-	MessageBox("1P乗っ取ったよ")();
-	offset = 0x32000000;
-	Process::Write32(offset + 0x18440, 0x00000400);
-	}
-	if ( r == 1 ) {
-	MessageBox("2P乗っ取ったよ")();
-	offset = 0x32000000;
-	Process::Write32(offset + 0x18440, 0x00000401);
-	}
-	if ( r == 2 ) {
-	MessageBox("3P乗っ取ったよ")();
-	offset = 0x32000000;
-	Process::Write32(offset + 0x18440, 0x00000402);
-	}
-	if ( r == 3 ) {
-	MessageBox("4P乗っ取ったよ")();
-	offset = 0x32000000;
-	Process::Write32(offset + 0x18440, 0x00000403);
-	}
-}
-
-void sima3(MenuEntry *entry)
-{ /* 視点乗っ取り */
-	Keyboard key("他のプレイヤーの視点を乗っ取ることが出来ます。(あんまり実用性無)", {"ON","OFF",});
-			
-	int r = key.Open();
-	if ( r == 0 ) {
-		Process::Write32(offset + 0x0075D7B0, 0xE1500000);
-		Process::Write32(offset + 0x0075D7C0, 0x03A00000);
-		MessageBox("視点乗っ取りON")();
-	}
-	
-	if ( r == 1 ) {
-		Process::Write32(offset + 0x0075D7B0, 0xE3520000);
-		MessageBox("視点乗っ取りOFF")();
-	}
-
-}
-
-void sima4(MenuEntry *entry)
-{ /* 他の人動かす */
-	Process::Write32(offset + 0x0075D7B0, 0xE1520000);
-	Process::Write32(offset + 0x0075D7C0, 0x03A00000);
-}
-
-void sima5(MenuEntry *entry)
-{ /* アクション乗っ取り */
-	Keyboard key("他の人のアクションを乗っ取ることができます。\n時々乗っ取れないことがあります。", {"1P","2P","3P","4P","ALL",});
-			
-	int r = key.Open();
-	if ( r == 0 ) {
-		offset = 0x32000000;
-		Process::Write32(offset + 0x000184A4, 0x61000000);
-		MessageBox("1Pアクション乗っ取り")();
-	}
-	if ( r == 1 ) {
-		offset = 0x32000000;
-		Process::Write32(offset + 0x000184A4, 0x61000100);
-		MessageBox("2Pアクション乗っ取り")();
-	}
-	if ( r == 2 ) {
-		offset = 0x32000000;
-		Process::Write32(offset + 0x000184A4, 0x61000200);
-		MessageBox("3Pアクション乗っ取り")();
-	}
-	if ( r == 3 ) {
-		offset = 0x32000000;
-		Process::Write32(offset + 0x000184A4, 0x61000300);
-		MessageBox("4Pアクション乗っ取り")();
-	}
-	if ( r == 4 ) {
-		offset = 0x32000000;
-		Process::Write32(offset + 0x000184A4, 0x61000000);
-		Process::Write32(offset + 0x000184A4, 0x61000100);
-		Process::Write32(offset + 0x000184A4, 0x61000200);
-		Process::Write32(offset + 0x000184A4, 0x61000300);
-		MessageBox("全員アクション乗っ取り")();
-	}
-}
-
-
-void sima7(MenuEntry *entry)
-{ /* 島で電気追加 */
-	Process::Write32(offset + 0x005B3BA0, 0xE1A00000);
-	Process::Write32(offset + 0x005B3BBC, 0xE1000026);
-	Process::Write32(offset + 0x005B5E90, 0xE3A0000A);
-}
-
-void sima8(MenuEntry *entry)
-{ /* 島でフレンド申請 */
-	Keyboard key("島でフレンドを交換することが出来ます。\nこの機能を持った人同士でのみ交換可能です。\n\n使い方\n・左下のソパカが出てくるところを押す。\n・プレイヤーの名前のところを押す\nフレンド申請を送る", {"ON","OFF",});
-			
-	int r = key.Open();
-	if ( r == 0 ) {
-		offset = 0x32000000;
-		Process::Write32(offset + 0x00018474, 0x00000008);
-		MessageBox("フレンド申請ON")();
-	}
-	if ( r == 1 ) {
-		offset = 0x32000000;
-		Process::Write32(offset + 0x00018474, 0x00000200);
-		MessageBox("フレンド申請OFF")();
-	}
-}
-
-void sima9(MenuEntry *entry)
-{ /* 島のアイテム無料 */
-	offset = 0x330DDF1C;
-	Process::Write32(offset + 0x00000000, 0x00000000);
-}
-
-void sima10(MenuEntry *entry)
-{ /* 引き取りBOX機能変更 */
-	Process::Write32(offset + 0x006D2F68, 0xE3A00000);
-}
-
-void sima11(MenuEntry *entry)
-{ /* プレイヤークラッシュ */
-	Keyboard key("現在使用不可", {"1P","2P","3P","4P",});
-			
-	int r = key.Open();
-	if ( r == 0 ) {
-		Process::Write32(offset + 0x320184D0, 0xFF670067);
-		Process::Write32(offset + 0x3309A110, 0x0606605F);
-		MessageBox("1Pクラッシュ完了")();
-	}
-	if ( r == 1 ) {
-		Process::Write32(offset + 0x320184D0, 0xFF670167);
-		Process::Write32(offset + 0x3309A110, 0x0606605F);
-		MessageBox("2Pクラッシュ完了")();
-	}
-	if ( r == 2 ) {
-		Process::Write32(offset + 0x320184D0, 0xFF670267);
-		Process::Write32(offset + 0x3309A110, 0x0606605F);
-		MessageBox("3Pクラッシュ完了")();
-	}
-	if ( r == 3 ) {
-		Process::Write32(offset + 0x320184D0, 0xFF670367);
-		Process::Write32(offset + 0x3309A110, 0x0606605F);
-		MessageBox("4Pクラッシュ完了")();
-	}
-	
-}
-
-void sima12(MenuEntry *entry)
-{ /* ツアーリセット */
-	Process::Write32(offset + 0x00947E08, 0x0404FF00);
-}
-
-void sima13(MenuEntry *entry)
-{ /* ロボット浮遊 */
-	offset = 0x33000000;
-	Process::Write32(offset + 0x000A44D4, 0x00000004);
-	Process::Write32(offset + 0x000E5B38, 0x01000020);
-}
-
-void sima14(MenuEntry *entry)
-{ /* ツアー強制終了 */
-	Process::Write32(offset + 0x0094A718, 0x01000100);
-}
-
-void sima15(MenuEntry *entry)
-{ /* ツアー時間無制限 */
-	Process::Write32(offset + 0x0094A718, 0x01000000);
-}
-
-void sima16(MenuEntry *entry)
-{ /* プレイヤー閉じ込め */
-	Keyboard key("プレイヤーを閉じ込め位置にワープします。\n\nバグ報告\n指定した座標にプレイヤーがテレポートしない場合があります。\nこのバグは早急に対処します。", {"1P","2P","3P","4P",});
-			
-	int r = key.Open();
-	if ( r == 0 ) {
-		offset = 0x33000000;
-		Process::Write32(offset + 0x00099F7C, 0x438DCA39);
-		Process::Write32(offset + 0x00099F84, 0x43E4002C);
-		MessageBox("1Pを閉じ込めたよ")();
-	}
-	if ( r == 1 ) {
-		offset = 0x33000000;
-		Process::Write32(offset + 0x00099F7C, 0x436C0936);
-		Process::Write32(offset + 0x00099F84, 0x43E4002C);
-		MessageBox("2Pを閉じ込めたよ")();
-	}
-	if ( r == 2 ) {
-		offset = 0x33000000;
-		Process::Write32(offset + 0x00099F7C, 0x43B87220);
-		Process::Write32(offset + 0x00099F84, 0x43E4002C);
-		MessageBox("3Pを閉じ込めたよ")();
-	}
-	if ( r == 3 ) {
-		offset = 0x33000000;
-		Process::Write32(offset + 0x00099F7C, 0x4396435B);
-		Process::Write32(offset + 0x00099F84, 0x43E4002C);
-		MessageBox("4Pを閉じ込めたよ")();
-	}
-}
-
-void sima17(MenuEntry *entry)
-{ /* チャット消えない */
-	offset = 0x00000000;
-	Process::Write32(offset + 0x214538, 0xE1A00000);
-}
-
-void sima18(MenuEntry *entry)
-{ /* @マーク使用可能 */
-	offset = 0x00000000;
-	Process::Write32(offset + 0xAD05C0, 0x00000000);
-}
-
-void sima19(MenuEntry *entry)
-{ /* 文字数制限解除 */
-	Process::Write8(offset + 0xAD0158, 0x02);
-}
-
-void sima20(MenuEntry *entry)
-{ /*強制エラー */
-	if (Controller::IsKeysPressed( L + X ))
-	{
-		offset = 0x32000000;
-		Process::Write16(offset + 0x18442, 0x0001);
-	}
-}
-
-void sima21(MenuEntry *entry)
-{ /* チャット乗っ取り */
-	if (Controller::IsKeysPressed(0x00000041))
-	{
-		offset = 0x32000000;
-		Process::Write32(offset + 0x00018440, 0x00000000);
-		OSD::Notify("1P Done");
-	}
-		
-	if (Controller::IsKeysPressed(0x00000011))
-	{
-		offset = 0x32000000;
-		Process::Write32(offset + 0x00018440, 0x00000001);
-		OSD::Notify("2P Done");
-	}
-	
-	if (Controller::IsKeysPressed(0x00000081))
-	{
-		offset = 0x32000000;
-		Process::Write32(offset + 0x00018440, 0x00000002);
-		OSD::Notify("3P Done");
-	}
-	
-	if (Controller::IsKeysPressed(0x00000021))
-	{
-		offset = 0x32000000;
-		Process::Write32(offset + 0x00018440, 0x00000003);
-		OSD::Notify("4P Done");
-	}
-
-}
-
-void sima22(MenuEntry *entry)
-{ /* 島のおみやげ変更 */
-	offset = 0x33000000;
-	Process::Write16(offset + 0x5B810, 0x2083);
-	Process::Write16(offset + 0x5B814, 0x2083);
-	Process::Write16(offset + 0x5B818, 0x2083);
-	Process::Write16(offset + 0x5B81C, 0x2083);
-}
-
-void sima23(MenuEntry *entry)
-{ /* 透明化 */
-	offset = 0x33000000;
-	Process::Write32(offset + 0x9A824, 0x00000000);
-	Process::Write32(offset + 0x9A6F8, 0x00000000);
-}
-
-void sima24(MenuEntry *entry)
-{ /* */
-	Keyboard key("自分と同じ動作をさせます", {"1P","2P","3P","4P","解除",});
-	int r = key.Open();
-	if ( r == 0 ) {
-		Process::Write32(offset + 0x62764C, 0xE3A01000);
-		Process::Write32(offset + 0x675FFC, 0xE1A00000);
-		MessageBox("1P ON")();
-	}
-	if ( r == 1 ) {
-		Process::Write32(offset + 0x62764C, 0xE3A01001);
-		Process::Write32(offset + 0x675FFC, 0xE1A00000);
-		MessageBox("2P ON")();
-	}
-	if ( r == 2 ) {
-		Process::Write32(offset + 0x62764C, 0xE3A01002);
-		Process::Write32(offset + 0x675FFC, 0xE1A00000);
-		MessageBox("3P ON")();
-	}
-	if ( r == 3 ) {
-		Process::Write32(offset + 0x62764C, 0xE3A01003);
-		Process::Write32(offset + 0x675FFC, 0xE1A00000);
-		MessageBox("4P ON")();
-	}
-	if ( r == 4 ) {
-		Process::Write32(offset + 0x62764C, 0xE5D11268);
-		Process::Write32(offset + 0x675FFC, 0x1A000017);
-		MessageBox("解除")();
-	}
-}
-
-void sima25(MenuEntry *entry)
-{
-	offset = 0x32000000;
-	Process::Write8(offset + 0x184D3, 0x000000B9);
-}
-
-void sima26(MenuEntry *entry)
-{
-	offset = 0x32000000;
-	Keyboard key("乗っ取るプレイヤーを変更します\n1P\n2P\n3P\n4P", {"1P","2P","3P","4P",});
-	int r = key.Open();
-	if ( r == 0 ) {
-		Process::Write8(offset + 0x184D1, 0x00000000);
-		MessageBox("1Pを乗っ取ったよ")();
-	}
-	if ( r == 1 ) {
-		Process::Write8(offset + 0x184D1, 0x00000001);
-		MessageBox("2Pを乗っ取ったよ")();
-	}
-	if ( r == 2 ) {
-		Process::Write8(offset + 0x184D1, 0x00000002);
-		MessageBox("3Pを乗っ取ったよ")();
-	}
-	if ( r == 3 ) {
-		Process::Write8(offset + 0x184D1, 0x00000003);
-		MessageBox("4Pを乗っ取ったよ")();
-	}
-}
-
-void sima27(MenuEntry *entry)
-{
-	offset = 0x32000000;
-	Process::Write8(offset + 0x184D0, 0x00000067);
-}
-
-void sima28(MenuEntry *entry)
-{
-	if(Controller::IsKeysPressed( L + DPadUp ))
-	{
-		offset = 0x33000000;
-		Process::Write32(offset + 0x9A702, 0x67DEF77);
-		OSD::Notify("Moon jump " << Color::Yellow << "ON!");
-	}
-	if(Controller::IsKeysPressed( L + DPadDown ))
-	{
-		offset = 0x33000000;
-		Process::Write32(offset + 0x9A702, 0x600C871);
-		OSD::Notify("Moon jump " << Color::Yellow << "OFF!");
-	}
-}
-
-void sima29(MenuEntry *entry)
-{
-	offset = 0x30000000;
-	Process::Write32(offset + 0x508584, 0x00002ECA);
-}
-
-void sima30(MenuEntry *entry)
-{
-	Keyboard key("島のアイテムを全消去します\n"<< Color::Red << "オフライン用",{"実行"});
-	int r = key.Open();
-	if ( r == 0 ) {
-		date32 = 0x00007FFE;
-		for (int i = 0; i < 0x00000FFC; i++)
-		{
-			Process::Write32(offset + 0x31FB98D8, date32);
-		}
-	}
-}
-
-void sima31(MenuEntry *entry)
-{
-	Keyboard key("全アイテムに水やり\n"<< Color::Red << "オフライン用",{"実行"});
-	int r = key.Open();
-	if ( r == 0 ) {
-		offset = 0x31000000;
-		for (int i = 0; i < 0x00000FFC; i++)
-		{
-			Process::Write8(offset + 0x0FB98D8, 0x00000040);
-			offset += 0x00000004;
-		}
-	}
-}
-
-void sima32(MenuEntry *entry)
-{
-	Keyboard key("ハニワ変更\nハニワをほかの建物に変更します",{"戻す","カフェ"});
-	int r = key.Open();
-	if ( r == 0 ) {
-		offset = 0x31000000;
-		Process::Write8(offset + 0xFBA8DC, 0x6A);
-	}
-	if ( r == 1 ) {
-		offset = 0x31000000;
-		Process::Write8(offset + 0xFBA8DC, 0x4E);
-	}
-}
-
-void sima33(MenuEntry *entry)
-{
-	Process::Write32(offset + 0xAD0158, 0x00000000);
-}
-
-void sima34(MenuEntry *entry)
-{
-	Keyboard key("プレイヤー1の判定になります(ホスト判定)",{"ON","OFF"});
-	int r = key.Open();
-	if ( r == 0 ) {
-		Process::Write32(offset + 0x59E6D0, 0x0A000003);
-		Process::Write32(offset + 0x59E894, 0x0A000010);
-		Process::Write32(offset + 0x59FC2C, 0x0A00002C);
-		Process::Write32(offset + 0x59FD8C, 0x0A00002C);
-	}
-	if ( r == 1 ) {
-		Process::Write32(offset + 0x59E6D0, 0xEA000003);
-		Process::Write32(offset + 0x59E894, 0xEA000010);
-		Process::Write32(offset + 0x59FC2C, 0xE1A00000);
-		Process::Write32(offset + 0x59FD8C, 0xE1A00000);
-	}
-}
-
-
-
-/////////////////////////////////////////////////////////////
-//                          アイテム                         //
-/////////////////////////////////////////////////////////////
 
 void item1(MenuEntry *entry)
 {
@@ -824,7 +256,7 @@ void item1(MenuEntry *entry)
 
 void item2(MenuEntry *entry)
 {
-	Process::Write32(offset + 0x00597D94, 0xE1A00000);
+	Process::Write32(offset + 0x00597D94, a5);
 }
 
 void item3(MenuEntry *entry)
@@ -837,7 +269,7 @@ void item3(MenuEntry *entry)
 		MessageBox("木切れないON")();
 	}
 	if ( r == 1 ) {
-		Process::Write32(offset + 0x00597D98, 0xE1A00000);
+		Process::Write32(offset + 0x00597D98, a5);
 		MessageBox("木切れないOFF")();
 	}
 }
@@ -848,8 +280,8 @@ void item4(MenuEntry *entry)
 			
 	int r = key.Open();
 	if ( r == 0 ) {
-	Process::Write32(offset + 0x19C42C, 0x00000000);
-	Process::Write32(offset + 0x19C4D0, 0x00000000);
+	Process::Write32(offset + 0x19C42C, a1);
+	Process::Write32(offset + 0x19C4D0, a1);
 	MessageBox("ON")();
 	}
 	if ( r == 1 ) {
@@ -875,20 +307,20 @@ void item5(MenuEntry *entry)
 			if ( r == 2 ) {
 				 if (Controller::IsKeysPressed( Y ))
 				 {
-				Process::Write32(offset + 0x0032251C, 0xE3A00001);
+				Process::Write32(offset + 0x0032251C, a16);
 				Process::Write32(offset + 0x005988E0, 0xEA000008);
 				Process::Write32(offset + 0x005989FC, 0xEA00003D);
 				Process::Write32(offset + 0x00598AF8, 0xE3A04001);
-				Process::Write32(offset + 0x00598B84, 0xE3A00001);
+				Process::Write32(offset + 0x00598B84, a16);
 				Process::Write32(offset + 0x0059E5DC, 0xEA000004);
 				Process::Write32(offset + 0x00660390, 0xE5C48004);
 				Process::Write32(offset + 0x00660394, 0xE5CA9013);
 				Process::Write32(offset + 0x006603B8, 0xE3A0103D);
 				Process::Write32(offset + 0x00660E20, 0xE3A01006);
-				Process::Write32(offset + 0x005976D4, 0xE3A00001);
-				Process::Write32(offset + 0x00598908, 0xE3A00001);
+				Process::Write32(offset + 0x005976D4, a16);
+				Process::Write32(offset + 0x00598908, a16);
 				Process::Write32(offset + 0x00598AF8, 0xE3A04001);
-				Process::Write32(offset + 0x00598B84, 0xE3A00001);
+				Process::Write32(offset + 0x00598B84, a16);
 				Process::Write32(offset + 0x006603B8, 0xE3A0103D);
 				Process::Write32(offset + 0x0066F30C, 0xE3A0103D);
 				 }
@@ -920,10 +352,10 @@ void item8(MenuEntry *entry)
 			
 	int r = key.Open();
 	if ( r == 0 ) {
-	Process::Write32(offset + 0x19C548, 0xE1A00000);
-	Process::Write32(offset + 0x19DDE4, 0xE1A00000);
-	Process::Write32(offset + 0x19DF08, 0xE1A00000);
-	Process::Write32(offset + 0x26F000, 0xE1A00000);
+	Process::Write32(offset + 0x19C548, a5);
+	Process::Write32(offset + 0x19DDE4, a5);
+	Process::Write32(offset + 0x19DF08, a5);
+	Process::Write32(offset + 0x26F000, a5);
 	Process::Write32(offset + 0x30B844, 0xBA000001);
 	}
 	if ( r == 1 ) {
@@ -1030,17 +462,17 @@ void item18(MenuEntry *entry)
 		MessageBox("掘り出すスピード上昇ON")();
 	}
 	if ( r == 3 ) {
-		offset = 0x00000000;
+		offset = a1;
 		Process::Write16(offset + 0x669626, 0x4040);
 		MessageBox("ジョウロのスピード上昇ON")();
 	}
 	if ( r == 4 ) {
-		offset = 0x00000000;
+		offset = a1;
 		Process::Write16(offset + 0x668E8E, 0x4040);
 		MessageBox("網のスピード上昇ON")();
 	}
 	if ( r == 5 ) {
-		offset = 0x00000000;
+		offset = a1;
 		Process::Write16(offset + 0x671946, 0x7777);
 		MessageBox("オノ跳ね返りのスピード上昇ON")();
 	}
@@ -1088,7 +520,7 @@ void item20(MenuEntry *entry)
 			
 	int r = key.Open();
 	if ( r == 0 ) {
-		Process::Write32(offset + 0x530070, 0x00000000);
+		Process::Write32(offset + 0x530070, a1);
 		MessageBox("ドアの開閉のスピード上昇ON")();
 	}
 	if ( r == 1 ) {
@@ -1334,12 +766,12 @@ void item27(MenuEntry *entry)
 
 void item28(MenuEntry *entry)
 {	
-	Process::Write32(offset + 0x7238C0, 0xE1A00000);
+	Process::Write32(offset + 0x7238C0, a5);
 }
 
 void item29(MenuEntry *entry)
 {
-	Process::Write32(offset + 0x32251C, 0xE3A00001);
+	Process::Write32(offset + 0x32251C, a16);
 }
 
 void item30(MenuEntry *entry)
@@ -1348,7 +780,7 @@ void item30(MenuEntry *entry)
 	int r = key.Open();
 	if ( r == 0 ) {
 		Process::Write32(offset + 0x19B504, 0xE3A07000);
-		Process::Write32(offset + 0x19CF5C, 0xE1A00000);
+		Process::Write32(offset + 0x19CF5C, a5);
 	}
 }
 
@@ -1357,15 +789,15 @@ void item31(MenuEntry *entry)
 	Keyboard key("物を重ねて置くことができます",{"ON"});
 	int r = key.Open();
 	if ( r == 0 ) {
-		Process::Write32(offset + 0x0165510, 0xE1A00000);
+		Process::Write32(offset + 0x0165510, a5);
 		Process::Write32(offset + 0x059F8B0, 0x0059FA58);
 		Process::Write32(offset + 0x059F8B4, 0x0059FA58);
 		Process::Write32(offset + 0x059F8B8, 0x0059FA58);
 		Process::Write32(offset + 0x059F8BC, 0x0059FA58);
 		Process::Write32(offset + 0x059E6D0, 0xEA000003);
 		Process::Write32(offset + 0x059E894, 0xEA000010);
-		Process::Write32(offset + 0x059FC2C, 0xE1A00000);
-		Process::Write32(offset + 0x059FD8C, 0xE1A00000);
+		Process::Write32(offset + 0x059FC2C, a5);
+		Process::Write32(offset + 0x059FD8C, a5);
 	}
 }
 
@@ -1668,18 +1100,18 @@ void item33(MenuEntry *entry)
 
 void item34(MenuEntry *entry)
 {
-	Process::Write32(offset+ 0x19BFC8, 0xE1A00000);//部屋に飾る,壁にかける
-	Process::Write32(offset+ 0x19C150, 0xE1A00000);//食べる
-	Process::Write32(offset+ 0x19B8F8, 0xE1A00000);//地面に植える
-	Process::Write32(offset+ 0x19B9D8, 0xE1A00000);//みせびらかす
-	Process::Write32(offset+ 0x19BB64, 0xE1A00000);//飲む
-	Process::Write32(offset+ 0x19BB08, 0xE1A00000);//タイマーを計る
-	Process::Write32(offset+ 0x19BACC, 0xE1A00000);//おサイフにしまう
+	Process::Write32(offset+ 0x19BFC8, a5);//部屋に飾る,壁にかける
+	Process::Write32(offset+ 0x19C150, a5);//食べる
+	Process::Write32(offset+ 0x19B8F8, a5);//地面に植える
+	Process::Write32(offset+ 0x19B9D8, a5);//みせびらかす
+	Process::Write32(offset+ 0x19BB64, a5);//飲む
+	Process::Write32(offset+ 0x19BB08, a5);//タイマーを計る
+	Process::Write32(offset+ 0x19BACC, a5);//おサイフにしまう
 }
 
 void item35(MenuEntry *entry)
 {
-	Process::Write32(offset+ 0x19B8C0, 0xE1A00000);//やめるのみ
+	Process::Write32(offset+ 0x19B8C0, a5);//やめるのみ
 }
 
 void item36(MenuEntry *entry)
@@ -1687,7 +1119,7 @@ void item36(MenuEntry *entry)
 	Keyboard key("食べたり埋めたりしてもアイテムが消えなくなります",{"ON","OFF"});
 	int r = key.Open();
 	if ( r == 0 ) {
-		Process::Write32(offset + 0x32251C, 0xE3A00000);
+		Process::Write32(offset + 0x32251C, a2);
 		MessageBox("ON")();
 	}
 	if ( r == 1 ) {
@@ -1696,61 +1128,54 @@ void item36(MenuEntry *entry)
 	}
 }
 
+
+
 void item37(MenuEntry *entry)
 {
 	Keyboard key("道具の機能を変更します",{"網","スコップ","斧","ジョウロ","元に戻す"});
 	int r = key.Open();
 	if ( r == 0 ) {
-		Process::Write32(offset + 0x682AA0, 0xE3A01070);
-		Process::Write32(offset + 0x67E840, 0xE3A01070);
-		Process::Write32(offset + 0x669D28, 0xE3A01070);
-		Process::Write32(offset + 0x669D4C, 0xE3A01070);
-		Process::Write32(offset + 0x669DA4, 0xE3A01070);
-		Process::Write32(offset + 0x669E04, 0xE3A01070);
+		Process::Write32(offset + 0x682AA0, a7);
+		Process::Write32(offset + 0x67E840, a7);
+		Process::Write32(offset + 0x669D28, a7);
+		Process::Write32(offset + 0x669D4C, a7);
+		Process::Write32(offset + 0x669DA4, a7);
+		Process::Write32(offset + 0x669E04, a7);
 		MessageBox("全道具の機能を 網 に変更したよ")();
 	}
 	if ( r == 1 ) {
-		Process::Write32(offset + 0x682AA0, 0xE3A01049);
-		Process::Write32(offset + 0x67E840, 0xE3A01049);
-		Process::Write32(offset + 0x669D28, 0xE3A01049);
-		Process::Write32(offset + 0x669D4C, 0xE3A01049);
-		Process::Write32(offset + 0x669DA4, 0xE3A01049);
-		Process::Write32(offset + 0x669E04, 0xE3A01049);
+		Process::Write32(offset + 0x682AA0, a8);
+		Process::Write32(offset + 0x67E840, a8);
+		Process::Write32(offset + 0x669D28, a8);
+		Process::Write32(offset + 0x669D4C, a8);
+		Process::Write32(offset + 0x669DA4, a8);
+		Process::Write32(offset + 0x669E04, a8);
 		MessageBox("全道具の機能を スコップ に変更したよ")();
 	}
 	if ( r == 2 ) {
-		Process::Write32(offset + 0x682AA0, 0xE3A01055);
-		Process::Write32(offset + 0x67E840, 0xE3A01055);
-		Process::Write32(offset + 0x669D28, 0xE3A01055);
-		Process::Write32(offset + 0x669D4C, 0xE3A01055);
-		Process::Write32(offset + 0x669DA4, 0xE3A01055);
-		Process::Write32(offset + 0x669E04, 0xE3A01055);
+		Process::Write32(offset + 0x682AA0, a9);
+		Process::Write32(offset + 0x67E840, a9);
+		Process::Write32(offset + 0x669D28, a9);
+		Process::Write32(offset + 0x669D4C, a9);
+		Process::Write32(offset + 0x669DA4, a9);
+		Process::Write32(offset + 0x669E04, a9);
 		MessageBox("全道具の機能を 斧 に変更したよ")();
 	}
 	if ( r == 3 ) {
-		Process::Write32(offset + 0x682AA0, 0xE3A01055);
-		Process::Write32(offset + 0x67E840, 0xE3A01055);
-		Process::Write32(offset + 0x669D28, 0xE3A01055);
-		Process::Write32(offset + 0x669D4C, 0xE3A01055);
-		Process::Write32(offset + 0x669DA4, 0xE3A01055);
-		Process::Write32(offset + 0x669E04, 0xE3A01055);
-		MessageBox("全道具の機能を 斧 に変更したよ")();
-	}
-	if ( r == 4 ) {
-		Process::Write32(offset + 0x682AA0, 0xE3A0106C);
-		Process::Write32(offset + 0x67E840, 0xE3A0106C);
-		Process::Write32(offset + 0x669D28, 0xE3A0106C);
-		Process::Write32(offset + 0x669D4C, 0xE3A0106C);
-		Process::Write32(offset + 0x669DA4, 0xE3A0106C);
-		Process::Write32(offset + 0x669E04, 0xE3A0106C);
+		Process::Write32(offset + 0x682AA0, a10);
+		Process::Write32(offset + 0x67E840, a10);
+		Process::Write32(offset + 0x669D28, a10);
+		Process::Write32(offset + 0x669D4C, a10);
+		Process::Write32(offset + 0x669DA4, a10);
+		Process::Write32(offset + 0x669E04, a10);
 		MessageBox("全道具の機能を ジョウロ に変更したよ")();
 	}
-	if ( r == 5 ) {
-		Process::Write32(offset + 0x682AA0, 0xE3A01049);
+	if ( r == 4 ) {
+		Process::Write32(offset + 0x682AA0, a8);
 		Process::Write32(offset + 0x67E840, 0xE3A010B1);
-		Process::Write32(offset + 0x669D28, 0xE3A01070);
-		Process::Write32(offset + 0x669D4C, 0xE3A01055);
-		Process::Write32(offset + 0x669DA4, 0xE3A0106C);
+		Process::Write32(offset + 0x669D28, a7);
+		Process::Write32(offset + 0x669D4C, a9);
+		Process::Write32(offset + 0x669DA4, a10);
 		Process::Write32(offset + 0x669E04, 0xE3A010A0);
 		MessageBox("全道具の機能を元に戻したよ")();
 	}
@@ -1830,15 +1255,15 @@ void item51(MenuEntry *entry)
 	Keyboard key("アイテムの制限を解除します",{"ON","OFF"});
 	int r = key.Open();
 	if ( r == 0 ) {
-		offset = 0x00000000;
+		offset = a1;
 		Process::Write32(offset + 0x59FB00, 0xE3E00000);
 		Process::Write32(offset + 0x59FB04, 0xEA000012);
-		Process::Write32(offset + 0x59FD00, 0xE3A00000);
+		Process::Write32(offset + 0x59FD00, a2);
 		Process::Write32(offset + 0x59FD04, 0xE8BD83F0);
 		MessageBox("アイテム制限解除ON")();
 	}
 	if ( r == 1 ) {
-		offset = 0x00000000;
+		offset = a1;
 		Process::Write32(offset + 0x59FB00, 0xE1A05001);
 		Process::Write32(offset + 0x59FB04, 0x1A000001);
 		Process::Write32(offset + 0x59FD00, 0xE24DD01C);
@@ -1851,7 +1276,7 @@ void item52(MenuEntry *entry)
 {
 	if (Controller::IsKeysPressed( B + DPadDown ))
 	{
-		Process::Write32(offset + 0x595864, 0x00000000);
+		Process::Write32(offset + 0x595864, a1);
 		OSD::Notify("Role delete " << Color::Yellow << "ON!");
 	}
 	if (Controller::IsKeysPressed( B + DPadUp ))
@@ -1872,12 +1297,12 @@ void item53(MenuEntry *entry)
 	
 	if (Controller::IsKeysPressed( A ))
 	{
-		Process::Write32(offset + 0x596870, 0xE1A00000);
-		Process::Write32(offset + 0x596890, 0xE1A00000);
-		Process::Write32(offset + 0x5968D0, 0xE1A00000);
-		Process::Write32(offset + 0x5968D8, 0xE1A00000);
-		Process::Write32(offset + 0x5968E4, 0xE1A00000);
-		Process::Write32(offset + 0x596920, 0xE1A00000);
+		Process::Write32(offset + 0x596870, a5);
+		Process::Write32(offset + 0x596890, a5);
+		Process::Write32(offset + 0x5968D0, a5);
+		Process::Write32(offset + 0x5968D8, a5);
+		Process::Write32(offset + 0x5968E4, a5);
+		Process::Write32(offset + 0x596920, a5);
 		OSD::Notify(Color::Cyan << "Delete items now");
 	}
 }
@@ -1913,7 +1338,7 @@ void item57(MenuEntry *entry)
 	Keyboard key("食べるときの動作変更\n\n01:飴玉\n02:きのこ効果\n03:くちゃくちゃ食べない",{"01:飴玉","02:きのこ効果","03:くちゃくちゃ食べない"});
 	int r = key.Open();
 	if ( r == 0 ) {
-		Process::Write32(offset + 0x64FFF4, 0xE1A00000);
+		Process::Write32(offset + 0x64FFF4, a5);
 		MessageBox("きのこ効果ON")();
 	}
 	if ( r == 1 ) {
@@ -1927,43 +1352,43 @@ void item58(MenuEntry *entry)
 	Keyboard key("ポケット項目追加(手動)\n\n01:へやにかざる,カベにかける\n02:たべる\n03:地面に植える\n04:地面に植えるOFF\n05:みせびらかす\n06:みせびらかすOFF\n07:のむ\n08:のむOFF\n09:タイマーをはかる\n10:タイマーをはかるOFF\n11:おサイフにしまう\n12:オサイフにしまうOFF\n13:やめるのみ\n14:やめるのみOFF",{"01","02","03","04","05","06","07","08","09","10","11","12","13","14"});
 	int r = key.Open();
 	if ( r == 0 ) {
-		Process::Write32(offset + 0x19BFC8, 0xE1A00000);
+		Process::Write32(offset + 0x19BFC8, a5);
 	}
 	if ( r == 1 ) {
-		Process::Write32(offset + 0x19C150, 0xE1A00000);
+		Process::Write32(offset + 0x19C150, a5);
 	}
 	if ( r == 2 ) {
-		Process::Write32(offset + 0x19B8F8, 0xE1A00000);
+		Process::Write32(offset + 0x19B8F8, a5);
 	}
 	if ( r == 3 ) {
 		Process::Write32(offset + 0x19B8F8, 0x0A000009);
 	}
 	if ( r == 4 ) {
-		Process::Write32(offset + 0x19B9D8, 0xE1A00000);
+		Process::Write32(offset + 0x19B9D8, a5);
 	}
 	if ( r == 5 ) {
 		Process::Write32(offset + 0x19B9D8, 0x1A000012);
 	}
 	if ( r == 6 ) {
-		Process::Write32(offset + 0x19BB64, 0xE1A00000);
+		Process::Write32(offset + 0x19BB64, a5);
 	}
 	if ( r == 7 ) {
 		Process::Write32(offset + 0x19BB64, 0x1A000020);
 	}
 	if ( r == 8 ) {
-		Process::Write32(offset + 0x19BB08, 0xE1A00000);
+		Process::Write32(offset + 0x19BB08, a5);
 	}
 	if ( r == 9 ) {
 		Process::Write32(offset + 0x19BB08, 0x1A000011);
 	}
 	if ( r == 10 ) {
-		Process::Write32(offset + 0x19BACC, 0xE1A00000);
+		Process::Write32(offset + 0x19BACC, a5);
 	}
 	if ( r == 11 ) {
 		Process::Write32(offset + 0x19BACC, 0x1A000009);
 	}
 	if ( r == 12 ) {
-		Process::Write32(offset + 0x19B8C0, 0xE1A00000);
+		Process::Write32(offset + 0x19B8C0, a5);
 	}
 	if ( r == 13 ) {
 		Process::Write32(offset + 0x19B8C0, 0x0A000007);
@@ -1975,49 +1400,49 @@ void item59(MenuEntry *entry)
 	Keyboard key("ポケット項目追加(手動)\n\n01:身に着ける\n02:身に着けるOFF\n03:手紙を書く\n04:手紙を書くOFF\n05:ラッピングを開ける\n06:ラッピングを開けるOFF\n07:(ランダムでアイテムが出る)開ける\n08:(ランダムでアイテムが出る)開けるOFF\n09:にがす\n10:にがす2OFF\n11:にがす\n12:にがす2OFF\n13:捨てる\n14:捨てるOFF\n15:ラッピングする\n16:ラッピングするOFF",{"01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16"});
 	int r = key.Open();
 	if ( r == 0 ) {
-		Process::Write32(offset + 0x19B950, 0xE3A00000);
+		Process::Write32(offset + 0x19B950, a2);
 	}
 	if ( r == 1 ) {
 		Process::Write32(offset + 0x19B950, 0x0A000008);
 	}
 	if ( r == 2 ) {
-		Process::Write32(offset + 0x19BA38, 0xE3A00000);
+		Process::Write32(offset + 0x19BA38, a2);
 	}
 	if ( r == 3 ) {
 		Process::Write32(offset + 0x19BA38, 0x0A000008);
 	}
 	if ( r == 4 ) {
-		Process::Write32(offset + 0x19BC10, 0xE3A00000);
+		Process::Write32(offset + 0x19BC10, a2);
 	}
 	if ( r == 5 ) {
 		Process::Write32(offset + 0x19BC10, 0x0A000009);
 	}
 	if ( r == 6 ) {
-		Process::Write32(offset + 0x19BC44, 0xE3A00000);
+		Process::Write32(offset + 0x19BC44, a2);
 	}
 	if ( r == 7 ) {
 		Process::Write32(offset + 0x19BC44, 0x1A000009);
 	}
 	if ( r == 8 ) {
-		Process::Write32(offset + 0x19BCC0, 0xE3A00000);
+		Process::Write32(offset + 0x19BCC0, a2);
 	}
 	if ( r == 9 ) {
 		Process::Write32(offset + 0x19BCC0, 0x0A000013);
 	}
 	if ( r == 10 ) {
-		Process::Write32(offset + 0x19BD40, 0xE3A00000);
+		Process::Write32(offset + 0x19BD40, a2);
 	}
 	if ( r == 11 ) {
 		Process::Write32(offset + 0x19BD40, 0x0A000015);
 	}
 	if ( r == 12 ) {
-		Process::Write32(offset + 0x19BDDC, 0xE3A00000);
+		Process::Write32(offset + 0x19BDDC, a2);
 	}
 	if ( r == 13 ) {
 		Process::Write32(offset + 0x19BDDC, 0x1A000008);
 	}
 	if ( r == 14 ) {
-		Process::Write32(offset + 0x19B1A0, 0xE3A00000);
+		Process::Write32(offset + 0x19B1A0, a2);
 	}
 	if ( r == 15 ) {
 		Process::Write32(offset + 0x19B1A0, 0x1A000075);
@@ -2155,13 +1580,13 @@ void item62(MenuEntry *entry)
 			Process::Write32(offset + 0x0859234, 0xFEFEFEFE);
 			Process::Write32(offset + 0x0859238, 0xFEFEFEFE);
 			Process::Write32(offset + 0x085923C, 0xFFFEFEFE);
-			Process::Write32(offset + 0x0859240, 0xFFFFFFFF);
-			Process::Write32(offset + 0x0859244, 0xFFFFFFFF);
-			Process::Write32(offset + 0x0859248, 0xFFFFFFFF);
+			Process::Write32(offset + 0x0859240, a3);
+			Process::Write32(offset + 0x0859244, a3);
+			Process::Write32(offset + 0x0859248, a3);
 			Process::Write32(offset + 0x085924C, 0x0000FFFF);
-			Process::Write32(offset + 0x0859250, 0x00000000);
-			Process::Write32(offset + 0x0859254, 0x00000000);
-			Process::Write32(offset + 0x0859258, 0x00000000);
+			Process::Write32(offset + 0x0859250, a1);
+			Process::Write32(offset + 0x0859254, a1);
+			Process::Write32(offset + 0x0859258, a1);
 			Process::Write32(offset + 0x085925C, 0x01010100);
 			Process::Write32(offset + 0x0859260, 0x01010101);
 			Process::Write32(offset + 0x0859264, 0x01010101);
@@ -2255,12 +1680,12 @@ void item62(MenuEntry *entry)
 			Process::Write32(offset + 0x08591E4, 0xFEFEFEFE);
 			Process::Write32(offset + 0x08591E8, 0xFEFEFEFE);
 			Process::Write32(offset + 0x08591EC, 0xFFFFFEFE);
-			Process::Write32(offset + 0x08591F0, 0xFFFFFFFF);
-			Process::Write32(offset + 0x08591F4, 0xFFFFFFFF);
+			Process::Write32(offset + 0x08591F0, a3);
+			Process::Write32(offset + 0x08591F4, a3);
 			Process::Write32(offset + 0x08591F8, 0x00FFFFFF);
-			Process::Write32(offset + 0x08591FC, 0x00000000);
-			Process::Write32(offset + 0x0859200, 0x00000000);
-			Process::Write32(offset + 0x0859204, 0x00000000);
+			Process::Write32(offset + 0x08591FC, a1);
+			Process::Write32(offset + 0x0859200, a1);
+			Process::Write32(offset + 0x0859204, a1);
 			Process::Write32(offset + 0x0859208, 0x01010101);
 			Process::Write32(offset + 0x085920C, 0x01010101);
 			Process::Write32(offset + 0x0859210, 0x01010101);
@@ -2330,10 +1755,10 @@ void item62(MenuEntry *entry)
 			Process::Write32(offset + 0x08591A0, 0xFEFEFEFE);
 			Process::Write32(offset + 0x08591A4, 0xFEFEFEFE);
 			Process::Write32(offset + 0x08591A8, 0xFFFFFFFE);
-			Process::Write32(offset + 0x08591AC, 0xFFFFFFFF);
-			Process::Write32(offset + 0x08591B0, 0xFFFFFFFF);
-			Process::Write32(offset + 0x08591B4, 0x00000000);
-			Process::Write32(offset + 0x08591B8, 0x00000000);
+			Process::Write32(offset + 0x08591AC, a3);
+			Process::Write32(offset + 0x08591B0, a3);
+			Process::Write32(offset + 0x08591B4, a1);
+			Process::Write32(offset + 0x08591B8, a1);
 			Process::Write32(offset + 0x08591BC, 0x01000000);
 			Process::Write32(offset + 0x08591C0, 0x01010101);
 			Process::Write32(offset + 0x08591C4, 0x01010101);
@@ -2383,10 +1808,10 @@ void item62(MenuEntry *entry)
 			Process::Write32(offset + 0x0859164, 0xFEFDFDFD);
 			Process::Write32(offset + 0x0859168, 0xFEFEFEFE);
 			Process::Write32(offset + 0x085916C, 0xFEFEFEFE);
-			Process::Write32(offset + 0x0859170, 0xFFFFFFFF);
-			Process::Write32(offset + 0x0859174, 0xFFFFFFFF);
+			Process::Write32(offset + 0x0859170, a3);
+			Process::Write32(offset + 0x0859174, a3);
 			Process::Write32(offset + 0x0859178, 0x000000FF);
-			Process::Write32(offset + 0x085917C, 0x00000000);
+			Process::Write32(offset + 0x085917C, a1);
 			Process::Write32(offset + 0x0859180, 0x01010000);
 			Process::Write32(offset + 0x0859184, 0x01010101);
 			Process::Write32(offset + 0x0859188, 0x02010101);
@@ -2397,7 +1822,7 @@ void item62(MenuEntry *entry)
 			Process::Write32(offset + 0x085919C, 0x04040403);
 			Process::Write32(offset + 0x08591A0, 0x04040404);
 			Process::Write32(offset + 0x08591A4, 0x00000404);
-			Process::Write32(offset + 0x08591A8, 0x00000000);
+			Process::Write32(offset + 0x08591A8, a1);
 		}
 		if ( r == 4 ) {
 			Process::Write32(offset + 0x0597B80, 0xEA000006);
@@ -2421,9 +1846,9 @@ void item62(MenuEntry *entry)
 			Process::Write32(offset + 0x0859138, 0xFDFDFDFD);
 			Process::Write32(offset + 0x085913C, 0xFEFEFEFE);
 			Process::Write32(offset + 0x0859140, 0xFFFEFEFE);
-			Process::Write32(offset + 0x0859144, 0xFFFFFFFF);
+			Process::Write32(offset + 0x0859144, a3);
 			Process::Write32(offset + 0x0859148, 0x0000FFFF);
-			Process::Write32(offset + 0x085914C, 0x00000000);
+			Process::Write32(offset + 0x085914C, a1);
 			Process::Write32(offset + 0x0859150, 0x01010100);
 			Process::Write32(offset + 0x0859154, 0x01010101);
 			Process::Write32(offset + 0x0859158, 0x02020202);
@@ -2446,7 +1871,7 @@ void item62(MenuEntry *entry)
 			Process::Write32(offset + 0x085911C, 0xFEFEFE02);
 			Process::Write32(offset + 0x0859120, 0xFFFFFEFE);
 			Process::Write32(offset + 0x0859124, 0x00FFFFFF);
-			Process::Write32(offset + 0x0859128, 0x00000000);
+			Process::Write32(offset + 0x0859128, a1);
 			Process::Write32(offset + 0x085912C, 0x01010101);
 			Process::Write32(offset + 0x0859130, 0x02020201);
 			Process::Write32(offset + 0x0859134, 0x00000202);
@@ -2470,7 +1895,7 @@ void item62(MenuEntry *entry)
 			Process::Write32(offset + 0x085910C, 0xFFFF0000);
 			Process::Write32(offset + 0x0859110, 0x010000FF);
 			Process::Write32(offset + 0x0859114, 0x00000101);
-			Process::Write32(offset + 0x0859118, 0x00000000);
+			Process::Write32(offset + 0x0859118, a1);
 			Process::Write32(offset + 0x085911C, 0x00000008);
 			Process::Write32(offset + 0x0859120, 0x00000006);
 			Process::Write32(offset + 0x0859124, 0x00000007);
@@ -2479,7 +1904,7 @@ void item62(MenuEntry *entry)
 			Process::Write32(offset + 0x0859130, 0x00000002);
 			Process::Write32(offset + 0x0859134, 0x00000003);
 			Process::Write32(offset + 0x0859138, 0x00000001);
-			Process::Write32(offset + 0x085913C, 0x00000000);
+			Process::Write32(offset + 0x085913C, a1);
 			Process::Write32(offset + 0x0859140, 0x00000007);
 			Process::Write32(offset + 0x0859144, 0x00000008);
 			Process::Write32(offset + 0x0859148, 0x00000005);
@@ -2488,7 +1913,7 @@ void item62(MenuEntry *entry)
 			Process::Write32(offset + 0x0859154, 0x00000004);
 			Process::Write32(offset + 0x0859158, 0x00000001);
 			Process::Write32(offset + 0x085915C, 0x00000002);
-			Process::Write32(offset + 0x0859160, 0x00000000);
+			Process::Write32(offset + 0x0859160, a1);
 			Process::Write32(offset + 0x0859164, 0x00000005);
 			Process::Write32(offset + 0x0859168, 0x00000007);
 			Process::Write32(offset + 0x085916C, 0x00000003);
@@ -2497,7 +1922,7 @@ void item62(MenuEntry *entry)
 			Process::Write32(offset + 0x0859178, 0x00000006);
 			Process::Write32(offset + 0x085917C, 0x00000002);
 			Process::Write32(offset + 0x0859180, 0x00000004);
-			Process::Write32(offset + 0x0859184, 0x00000000);
+			Process::Write32(offset + 0x0859184, a1);
 			Process::Write32(offset + 0x0859188, 0x00000003);
 			Process::Write32(offset + 0x085918C, 0x00000005);
 			Process::Write32(offset + 0x0859190, 0x00000001);
@@ -2506,7 +1931,7 @@ void item62(MenuEntry *entry)
 			Process::Write32(offset + 0x085919C, 0x00000008);
 			Process::Write32(offset + 0x08591A0, 0x00000004);
 			Process::Write32(offset + 0x08591A4, 0x00000006);
-			Process::Write32(offset + 0x08591A8, 0x00000000);
+			Process::Write32(offset + 0x08591A8, a1);
 			Process::Write32(offset + 0x08591AC, 0x00000001);
 			Process::Write32(offset + 0x08591B0, 0x00000003);
 			Process::Write32(offset + 0x08591B4, 0x00000002);
@@ -2515,7 +1940,7 @@ void item62(MenuEntry *entry)
 			Process::Write32(offset + 0x08591C0, 0x00000007);
 			Process::Write32(offset + 0x08591C4, 0x00000006);
 			Process::Write32(offset + 0x08591C8, 0x00000008);
-			Process::Write32(offset + 0x08591CC, 0x00000000);
+			Process::Write32(offset + 0x08591CC, a1);
 			Process::Write32(offset + 0x08591D0, 0x00000002);
 			Process::Write32(offset + 0x08591D4, 0x00000001);
 			Process::Write32(offset + 0x08591D8, 0x00000004);
@@ -2524,7 +1949,7 @@ void item62(MenuEntry *entry)
 			Process::Write32(offset + 0x08591E4, 0x00000005);
 			Process::Write32(offset + 0x08591E8, 0x00000008);
 			Process::Write32(offset + 0x08591EC, 0x00000007);
-			Process::Write32(offset + 0x08591F0, 0x00000000);
+			Process::Write32(offset + 0x08591F0, a1);
 			Process::Write32(offset + 0x08591F4, 0x00000004);
 			Process::Write32(offset + 0x08591F8, 0x00000002);
 			Process::Write32(offset + 0x08591FC, 0x00000006);
@@ -2533,7 +1958,7 @@ void item62(MenuEntry *entry)
 			Process::Write32(offset + 0x0859208, 0x00000003);
 			Process::Write32(offset + 0x085920C, 0x00000007);
 			Process::Write32(offset + 0x0859210, 0x00000005);
-			Process::Write32(offset + 0x0859214, 0x00000000);
+			Process::Write32(offset + 0x0859214, a1);
 			Process::Write32(offset + 0x0859218, 0x00000006);
 			Process::Write32(offset + 0x085921C, 0x00000008);
 			Process::Write32(offset + 0x0859220, 0x00000004);
@@ -2580,17 +2005,17 @@ void item62(MenuEntry *entry)
 			Process::Write32(offset + 0x08592C4, 0x01350135);
 		}
 		if ( r == 9 ) {
-			Process::Write32(offset + 0x019DF08, 0xE1A00000);
+			Process::Write32(offset + 0x019DF08, a5);
 			Process::Write32(offset + 0x019B504, 0xE3A07000);
-			Process::Write32(offset + 0x019CF5C, 0xE1A00000);
-			Process::Write32(offset + 0x019C548, 0xE1A00000);
-			Process::Write32(offset + 0x019DDE4, 0xE1A00000);
-			Process::Write32(offset + 0x019DF08, 0xE1A00000);
-			Process::Write32(offset + 0x026F000, 0xE1A00000);
+			Process::Write32(offset + 0x019CF5C, a5);
+			Process::Write32(offset + 0x019C548, a5);
+			Process::Write32(offset + 0x019DDE4, a5);
+			Process::Write32(offset + 0x019DF08, a5);
+			Process::Write32(offset + 0x026F000, a5);
 			Process::Write32(offset + 0x030B844, 0x13A00001);
 		}
 		if ( r == 10 ) {
-			Process::Write32(offset + 0x019DF08, 0xE1A00000);
+			Process::Write32(offset + 0x019DF08, a5);
 			Process::Write32(offset + 0x019C548, 0xEB03FB85);
 			Process::Write32(offset + 0x019DDE4, 0xEB03F55E);
 			Process::Write32(offset + 0x019DF08, 0xEB10FA8C);
@@ -2598,18 +2023,18 @@ void item62(MenuEntry *entry)
 			Process::Write32(offset + 0x030B844, 0x13A00000);
 		}
 		if ( r == 11 ) {
-			Process::Write32(offset + 0x019DF08, 0xE1A00000);
+			Process::Write32(offset + 0x019DF08, a5);
 			Process::Write32(offset + 0x01654D4, 0xEA000005);
-			Process::Write32(offset + 0x01655D4, 0xE3A00001);
+			Process::Write32(offset + 0x01655D4, a16);
 			Process::Write32(offset + 0x01655E0, 0xEA000006);
-			Process::Write32(offset + 0x019B604, 0xE1A00000);
-			Process::Write32(offset + 0x019C548, 0xE1A00000);
-			Process::Write32(offset + 0x019DF08, 0xE1A00000);
-			Process::Write32(offset + 0x026F000, 0xE1A00000);
+			Process::Write32(offset + 0x019B604, a5);
+			Process::Write32(offset + 0x019C548, a5);
+			Process::Write32(offset + 0x019DF08, a5);
+			Process::Write32(offset + 0x026F000, a5);
 			Process::Write32(offset + 0x05989FC, 0xEA000026);
 		}
 		if ( r == 12 ) {
-			Process::Write32(offset + 0x019DF08, 0xE1A00000);
+			Process::Write32(offset + 0x019DF08, a5);
 			Process::Write32(offset + 0x01654D4, 0x0A000005);
 			Process::Write32(offset + 0x01655D4, 0xEB18007B);
 			Process::Write32(offset + 0x01655E0, 0x1A000005);
@@ -2621,7 +2046,7 @@ void item62(MenuEntry *entry)
 		}
 		if ( r == 13 ) {
 			Process::Write32(offset + 0x019B504, 0xE3A07000);
-			Process::Write32(offset + 0x019CF5C, 0xE1A00000);
+			Process::Write32(offset + 0x019CF5C, a5);
 		}
 		if ( r == 14 ) {
 			offset = 0x32000000;
@@ -2636,7 +2061,7 @@ void item63(MenuEntry *entry)
 	Process::Write32(offset + 0x598330, 0xEBF59214);
 	if (Controller::IsKeysPressed( A ))
 	{
-		Process::Write32(offset + 0x598330, 0xE3A00001);
+		Process::Write32(offset + 0x598330, a16);
 	}
 }
 
@@ -2670,8 +2095,8 @@ void item65(MenuEntry *entry)
 
 void item66(MenuEntry *entry)
 {
-	Process::Write32(offset + 0x595B0C, 0xE1A00000);
-	Process::Write32(offset + 0x595B14, 0xE1A00000);
+	Process::Write32(offset + 0x595B0C, a5);
+	Process::Write32(offset + 0x595B14, a5);
 	Process::Write32(offset + 0x595B1C, 0x1A00001B);
 	Process::Write32(offset + 0x595B24, 0xEA000080);
 }
@@ -2715,13 +2140,12 @@ void item70(MenuEntry *entry)
 	}
 }
 
-/////////////////////////////////////////////////////////////
-//                           移動                          //
-/////////////////////////////////////////////////////////////
+
+
 
 void move1(MenuEntry *entry)
 {
-	Process::Write16(offset + 0x00000000, 0x0000);
+	Process::Write16(offset + a1, 0x0000);
 	//座標移動未完成
 }
 
@@ -2730,7 +2154,7 @@ void move2(MenuEntry *entry)
 	offset = 0x33000000;
 	if (Controller::IsKeysPressed( A + DPadDown ))
 	{
-		Process::Write32(offset + 0x99E68, 0x00000000);
+		Process::Write32(offset + 0x99E68, a1);
 	}
 	if (Controller::IsKeysPressed( A + DPadRight ))
 	{
@@ -2748,7 +2172,7 @@ void move2(MenuEntry *entry)
 
 void move3(MenuEntry *entry)
 {
-	Process::Write32(offset + 0x651708, 0x3F800000);
+	Process::Write32(offset + 0x651708, a11);
 	if (Controller::IsKeysPressed( B ))
 	{
 		Process::Write32(offset + 0x651708, 0x40100000);
@@ -2763,7 +2187,7 @@ void move4(MenuEntry *entry)
 	if ( r == 0 ) {
 		Process::Write32(offset + 0x948450, 0x00000100);
 		Process::Write32(offset + 0x94A3D0, 0x00010001);
-		Process::Write32(offset + 0x951338, 0x00000000);
+		Process::Write32(offset + 0x951338, a1);
 		MessageBox("村にワープしたよ")();
 	}//村
 	if ( r == 1 ) {
@@ -2849,7 +2273,7 @@ void move6(MenuEntry *entry)
 {
 	Process::Write32(offset + 0x664814, 0xE3A01035);
 	offset = 0x33000000;
-	if (Process::Read32(0x99F84, offset) && offset != 0xFFFFFFFF)
+	if (Process::Read32(0x99F84, offset) && offset != a3)
 		u32 offset;
 	{
 		offset += 0x0000012C;
@@ -2890,22 +2314,22 @@ void move6(MenuEntry *entry)
 	if (Controller::IsKeysPressed( DPadUp + B ))
 	{
 		Process::Write32(offset + 0x62764C, 0xE3A01000);
-		Process::Write32(offset + 0x675FFC, 0xE1A00000);
+		Process::Write32(offset + 0x675FFC, a5);
 	}
 	if (Controller::IsKeysPressed( DPadRight + B ))
 	{
 		Process::Write32(offset + 0x62764C, 0xE3A01001);
-		Process::Write32(offset + 0x675FFC, 0xE1A00000);
+		Process::Write32(offset + 0x675FFC, a5);
 	}
 	if (Controller::IsKeysPressed( DPadDown + B ))
 	{
 		Process::Write32(offset + 0x62764C, 0xE3A01002);
-		Process::Write32(offset + 0x675FFC, 0xE1A00000);
+		Process::Write32(offset + 0x675FFC, a5);
 	}
 	if (Controller::IsKeysPressed( DPadLeft + B ))
 	{
 		Process::Write32(offset + 0x62764C, 0xE3A01003);
-		Process::Write32(offset + 0x675FFC, 0xE1A00000);
+		Process::Write32(offset + 0x675FFC, a5);
 	}
 }
 
@@ -2958,14 +2382,13 @@ void move8(MenuEntry *entry)
 		MessageBox("スライドパッドだけでダッシュON")();
 	}
 	if ( r == 1 ) {
-		Process::Write32(offset + 0x68CCA0, 0xE3A00001);
+		Process::Write32(offset + 0x68CCA0, a16);
 		MessageBox("スライドパッドだけでダッシュOFF")();
 	}
 }
 
-/////////////////////////////////////////////////////////////
-//                         アクション                         //
-/////////////////////////////////////////////////////////////
+
+
 
 void act1(MenuEntry *entry)
 {
@@ -3119,7 +2542,7 @@ void act7(MenuEntry *entry)
 		MessageBox("空気イス")();
 	}
 	if ( r == 7 ) {
-		offset = 0x00000000;
+		offset = a1;
 		Process::Write16(offset + 0x668E8E, 0x4040);
 		MessageBox("連続アミ振り")();
 	}
@@ -3136,16 +2559,16 @@ void act7(MenuEntry *entry)
 	if ( r == 10 ) {
 		if (Controller::IsKeysPressed( L + DPadUp ))
 		{
-			Process::Write32(offset + 0x064D324, 0xE3A00001);
-			Process::Write32(offset + 0x076225C, 0xE3A00000);
-			Process::Write32(offset + 0x0651C4C, 0xE3A00000);
-			Process::Write32(offset + 0x0652028, 0xE3A00000);
+			Process::Write32(offset + 0x064D324, a16);
+			Process::Write32(offset + 0x076225C, a2);
+			Process::Write32(offset + 0x0651C4C, a2);
+			Process::Write32(offset + 0x0652028, a2);
 			OSD::Notify("Swim " << Color::Yellow << "ON!");
 		}
 		if (Controller::IsKeysPressed( L + DPadDown ))
 		{
-			Process::Write32(offset + 0x064D324, 0xE3A00000);
-			Process::Write32(offset + 0x076225C, 0xE3A00001);
+			Process::Write32(offset + 0x064D324, a2);
+			Process::Write32(offset + 0x076225C, a16);
 			Process::Write32(offset + 0x0651C4C, 0xEBFC62D8);
 			Process::Write32(offset + 0x0652028, 0xEB00AFB7);
 			OSD::Notify("Swim " << Color::Yellow << "OFF!");
@@ -3170,7 +2593,7 @@ void act8(MenuEntry *entry)
 		offset = 0x33000000;
 		if (Controller::IsKeysPressed( L + DPadUp ))
 		{
-			if (Process::Read32(offset + 0x99F7C, offset) && offset != 0xFFFFFFFF)
+			if (Process::Read32(offset + 0x99F7C, offset) && offset != a3)
 			{
 				Process::Write32(offset + 0x9A0E0, 0x00038001);
 				Process::Write32(offset + 0x9A0DC, 0x00000036);
@@ -3669,7 +3092,7 @@ void act14(MenuEntry *entry)
 
 void act15(MenuEntry *entry)
 {
-	Process::Write32(offset + 0x2725AC, 0x00000000);
+	Process::Write32(offset + 0x2725AC, a1);
 }
 
 void act16(MenuEntry *entry)
@@ -3698,8 +3121,8 @@ void act19(MenuEntry *entry)
 	if (Controller::IsKeysPressed( B ))
 	{
 		offset = 0x33000000;
-		Process::Write16(offset + 0x9A3F5, 0x00000000);
-		Process::Write16(offset + 0x9A521, 0x00000000);
+		Process::Write16(offset + 0x9A3F5, a1);
+		Process::Write16(offset + 0x9A521, a1);
 		OSD::Notify("End reaction " << Color::Yellow << "ON!");
 	}
 	if (Controller::IsKeysPressed( R ))
@@ -3744,13 +3167,13 @@ void act23(MenuEntry *entry)
 {
 	if (Controller::IsKeysPressed( B + DPadRight ))
 	{
-		Process::Write32(offset + 0x653070, 0xE3A00001);
+		Process::Write32(offset + 0x653070, a16);
 		Process::Write32(offset + 0x880B2C, 0x40C00000);
 	}
 	if (Controller::IsKeysPressed( B + DPadLeft ))
 	{
 		Process::Write32(offset + 0x653070, 0x0A000004);
-		Process::Write32(offset + 0x880B2C, 0x3F800000);
+		Process::Write32(offset + 0x880B2C, a11);
 	}
 }
 
@@ -3779,9 +3202,447 @@ void act25(MenuEntry *entry)
 }
 
 
-/////////////////////////////////////////////////////////////
-//                         プレイヤー                        //
-/////////////////////////////////////////////////////////////
+
+
+void sima1(MenuEntry *entry)
+{ /* 島にワープ */
+	Process::Write32(offset + 0x00948450, a1);
+	Process::Write32(offset + 0x0094A3D0, 0x00010001);
+	Process::Write32(offset + 0x00951338, 0x65000000);
+}
+
+
+void sima2(MenuEntry *entry)
+{ /* 乗っ取り*/
+	Keyboard key("他のプレイヤーを乗っ取ることができます。\n乗っ取ることで他の人を帰らせることができます。(悪用厳禁)", {"1P","2P","3P","4P",});
+			
+	int r = key.Open();
+	if ( r == 0 ) {
+	MessageBox("1P乗っ取ったよ")();
+	offset = 0x32000000;
+	Process::Write32(offset + 0x18440, 0x00000400);
+	}
+	if ( r == 1 ) {
+	MessageBox("2P乗っ取ったよ")();
+	offset = 0x32000000;
+	Process::Write32(offset + 0x18440, 0x00000401);
+	}
+	if ( r == 2 ) {
+	MessageBox("3P乗っ取ったよ")();
+	offset = 0x32000000;
+	Process::Write32(offset + 0x18440, 0x00000402);
+	}
+	if ( r == 3 ) {
+	MessageBox("4P乗っ取ったよ")();
+	offset = 0x32000000;
+	Process::Write32(offset + 0x18440, 0x00000403);
+	}
+}
+
+void sima3(MenuEntry *entry)
+{ /* 視点乗っ取り */
+	Keyboard key("他のプレイヤーの視点を乗っ取ることが出来ます。(あんまり実用性無)", {"ON","OFF",});
+			
+	int r = key.Open();
+	if ( r == 0 ) {
+		Process::Write32(offset + 0x0075D7B0, 0xE1500000);
+		Process::Write32(offset + 0x0075D7C0, 0x03A00000);
+		MessageBox("視点乗っ取りON")();
+	}
+	
+	if ( r == 1 ) {
+		Process::Write32(offset + 0x0075D7B0, 0xE3520000);
+		MessageBox("視点乗っ取りOFF")();
+	}
+
+}
+
+void sima4(MenuEntry *entry)
+{ /* 他の人動かす */
+	Process::Write32(offset + 0x0075D7B0, 0xE1520000);
+	Process::Write32(offset + 0x0075D7C0, 0x03A00000);
+}
+
+void sima5(MenuEntry *entry)
+{ /* アクション乗っ取り */
+	Keyboard key("他の人のアクションを乗っ取ることができます。\n時々乗っ取れないことがあります。", {"1P","2P","3P","4P","ALL",});
+			
+	int r = key.Open();
+	if ( r == 0 ) {
+		offset = 0x32000000;
+		Process::Write32(offset + 0x000184A4, 0x61000000);
+		MessageBox("1Pアクション乗っ取り")();
+	}
+	if ( r == 1 ) {
+		offset = 0x32000000;
+		Process::Write32(offset + 0x000184A4, 0x61000100);
+		MessageBox("2Pアクション乗っ取り")();
+	}
+	if ( r == 2 ) {
+		offset = 0x32000000;
+		Process::Write32(offset + 0x000184A4, 0x61000200);
+		MessageBox("3Pアクション乗っ取り")();
+	}
+	if ( r == 3 ) {
+		offset = 0x32000000;
+		Process::Write32(offset + 0x000184A4, 0x61000300);
+		MessageBox("4Pアクション乗っ取り")();
+	}
+	if ( r == 4 ) {
+		offset = 0x32000000;
+		Process::Write32(offset + 0x000184A4, 0x61000000);
+		Process::Write32(offset + 0x000184A4, 0x61000100);
+		Process::Write32(offset + 0x000184A4, 0x61000200);
+		Process::Write32(offset + 0x000184A4, 0x61000300);
+		MessageBox("全員アクション乗っ取り")();
+	}
+}
+
+
+void sima7(MenuEntry *entry)
+{ /* 島で電気追加 */
+	Process::Write32(offset + 0x005B3BA0, a5);
+	Process::Write32(offset + 0x005B3BBC, 0xE1000026);
+	Process::Write32(offset + 0x005B5E90, 0xE3A0000A);
+}
+
+void sima8(MenuEntry *entry)
+{ /* 島でフレンド申請 */
+	Keyboard key("島でフレンドを交換することが出来ます。\nこの機能を持った人同士でのみ交換可能です。\n\n使い方\n・左下のソパカが出てくるところを押す。\n・プレイヤーの名前のところを押す\nフレンド申請を送る", {"ON","OFF",});
+			
+	int r = key.Open();
+	if ( r == 0 ) {
+		offset = 0x32000000;
+		Process::Write32(offset + 0x00018474, 0x00000008);
+		MessageBox("フレンド申請ON")();
+	}
+	if ( r == 1 ) {
+		offset = 0x32000000;
+		Process::Write32(offset + 0x00018474, 0x00000200);
+		MessageBox("フレンド申請OFF")();
+	}
+}
+
+void sima9(MenuEntry *entry)
+{ /* 島のアイテム無料 */
+	offset = 0x330DDF1C;
+	Process::Write32(offset + a1, a1);
+}
+
+void sima10(MenuEntry *entry)
+{ /* 引き取りBOX機能変更 */
+	Process::Write32(offset + 0x006D2F68, a2);
+}
+
+void sima11(MenuEntry *entry)
+{ /* プレイヤークラッシュ */
+	Keyboard key("現在使用不可", {"1P","2P","3P","4P",});
+			
+	int r = key.Open();
+	if ( r == 0 ) {
+		Process::Write32(offset + 0x320184D0, 0xFF670067);
+		Process::Write32(offset + 0x3309A110, 0x0606605F);
+		MessageBox("1Pクラッシュ完了")();
+	}
+	if ( r == 1 ) {
+		Process::Write32(offset + 0x320184D0, 0xFF670167);
+		Process::Write32(offset + 0x3309A110, 0x0606605F);
+		MessageBox("2Pクラッシュ完了")();
+	}
+	if ( r == 2 ) {
+		Process::Write32(offset + 0x320184D0, 0xFF670267);
+		Process::Write32(offset + 0x3309A110, 0x0606605F);
+		MessageBox("3Pクラッシュ完了")();
+	}
+	if ( r == 3 ) {
+		Process::Write32(offset + 0x320184D0, 0xFF670367);
+		Process::Write32(offset + 0x3309A110, 0x0606605F);
+		MessageBox("4Pクラッシュ完了")();
+	}
+	
+}
+
+void sima12(MenuEntry *entry)
+{ /* ツアーリセット */
+	Process::Write32(offset + 0x00947E08, 0x0404FF00);
+}
+
+void sima13(MenuEntry *entry)
+{ /* ロボット浮遊 */
+	offset = 0x33000000;
+	Process::Write32(offset + 0x000A44D4, 0x00000004);
+	Process::Write32(offset + 0x000E5B38, 0x01000020);
+}
+
+void sima14(MenuEntry *entry)
+{ /* ツアー強制終了 */
+	Process::Write32(offset + 0x0094A718, 0x01000100);
+}
+
+void sima15(MenuEntry *entry)
+{ /* ツアー時間無制限 */
+	Process::Write32(offset + 0x0094A718, 0x01000000);
+}
+
+void sima16(MenuEntry *entry)
+{ /* プレイヤー閉じ込め */
+	Keyboard key("プレイヤーを閉じ込め位置にワープします。\n\nバグ報告\n指定した座標にプレイヤーがテレポートしない場合があります。\nこのバグは早急に対処します。", {"1P","2P","3P","4P",});
+			
+	int r = key.Open();
+	if ( r == 0 ) {
+		offset = 0x33000000;
+		Process::Write32(offset + 0x00099F7C, 0x438DCA39);
+		Process::Write32(offset + 0x00099F84, 0x43E4002C);
+		MessageBox("1Pを閉じ込めたよ")();
+	}
+	if ( r == 1 ) {
+		offset = 0x33000000;
+		Process::Write32(offset + 0x00099F7C, 0x436C0936);
+		Process::Write32(offset + 0x00099F84, 0x43E4002C);
+		MessageBox("2Pを閉じ込めたよ")();
+	}
+	if ( r == 2 ) {
+		offset = 0x33000000;
+		Process::Write32(offset + 0x00099F7C, 0x43B87220);
+		Process::Write32(offset + 0x00099F84, 0x43E4002C);
+		MessageBox("3Pを閉じ込めたよ")();
+	}
+	if ( r == 3 ) {
+		offset = 0x33000000;
+		Process::Write32(offset + 0x00099F7C, 0x4396435B);
+		Process::Write32(offset + 0x00099F84, 0x43E4002C);
+		MessageBox("4Pを閉じ込めたよ")();
+	}
+}
+
+void sima17(MenuEntry *entry)
+{ /* チャット消えない */
+	offset = a1;
+	Process::Write32(offset + 0x214538, a5);
+}
+
+void sima18(MenuEntry *entry)
+{ /* @マーク使用可能 */
+	offset = a1;
+	Process::Write32(offset + 0xAD05C0, a1);
+}
+
+void sima19(MenuEntry *entry)
+{ /* 文字数制限解除 */
+	Process::Write8(offset + 0xAD0158, 0x02);
+}
+
+void sima20(MenuEntry *entry)
+{ /*強制エラー */
+	if (Controller::IsKeysPressed( L + X ))
+	{
+		offset = 0x32000000;
+		Process::Write16(offset + 0x18442, 0x0001);
+	}
+}
+
+void sima21(MenuEntry *entry)
+{ /* チャット乗っ取り */
+	if (Controller::IsKeysPressed(0x00000041))
+	{
+		offset = 0x32000000;
+		Process::Write32(offset + 0x00018440, a1);
+		OSD::Notify("1P Done");
+	}
+		
+	if (Controller::IsKeysPressed(0x00000011))
+	{
+		offset = 0x32000000;
+		Process::Write32(offset + 0x00018440, 0x00000001);
+		OSD::Notify("2P Done");
+	}
+	
+	if (Controller::IsKeysPressed(0x00000081))
+	{
+		offset = 0x32000000;
+		Process::Write32(offset + 0x00018440, 0x00000002);
+		OSD::Notify("3P Done");
+	}
+	
+	if (Controller::IsKeysPressed(0x00000021))
+	{
+		offset = 0x32000000;
+		Process::Write32(offset + 0x00018440, 0x00000003);
+		OSD::Notify("4P Done");
+	}
+
+}
+
+void sima22(MenuEntry *entry)
+{ /* 島のおみやげ変更 */
+	offset = 0x33000000;
+	Process::Write16(offset + 0x5B810, 0x2083);
+	Process::Write16(offset + 0x5B814, 0x2083);
+	Process::Write16(offset + 0x5B818, 0x2083);
+	Process::Write16(offset + 0x5B81C, 0x2083);
+}
+
+void sima23(MenuEntry *entry)
+{ /* 透明化 */
+	offset = 0x33000000;
+	Process::Write32(offset + 0x9A824, a1);
+	Process::Write32(offset + 0x9A6F8, a1);
+}
+
+void sima24(MenuEntry *entry)
+{ /* */
+	Keyboard key("自分と同じ動作をさせます", {"1P","2P","3P","4P","解除",});
+	int r = key.Open();
+	if ( r == 0 ) {
+		Process::Write32(offset + 0x62764C, 0xE3A01000);
+		Process::Write32(offset + 0x675FFC, a5);
+		MessageBox("1P ON")();
+	}
+	if ( r == 1 ) {
+		Process::Write32(offset + 0x62764C, 0xE3A01001);
+		Process::Write32(offset + 0x675FFC, a5);
+		MessageBox("2P ON")();
+	}
+	if ( r == 2 ) {
+		Process::Write32(offset + 0x62764C, 0xE3A01002);
+		Process::Write32(offset + 0x675FFC, a5);
+		MessageBox("3P ON")();
+	}
+	if ( r == 3 ) {
+		Process::Write32(offset + 0x62764C, 0xE3A01003);
+		Process::Write32(offset + 0x675FFC, a5);
+		MessageBox("4P ON")();
+	}
+	if ( r == 4 ) {
+		Process::Write32(offset + 0x62764C, 0xE5D11268);
+		Process::Write32(offset + 0x675FFC, 0x1A000017);
+		MessageBox("解除")();
+	}
+}
+
+void sima25(MenuEntry *entry)
+{
+	offset = 0x32000000;
+	Process::Write8(offset + 0x184D3, 0x000000B9);
+}
+
+void sima26(MenuEntry *entry)
+{
+	offset = 0x32000000;
+	Keyboard key("乗っ取るプレイヤーを変更します\n1P\n2P\n3P\n4P", {"1P","2P","3P","4P",});
+	int r = key.Open();
+	if ( r == 0 ) {
+		Process::Write8(offset + 0x184D1, a1);
+		MessageBox("1Pを乗っ取ったよ")();
+	}
+	if ( r == 1 ) {
+		Process::Write8(offset + 0x184D1, 0x00000001);
+		MessageBox("2Pを乗っ取ったよ")();
+	}
+	if ( r == 2 ) {
+		Process::Write8(offset + 0x184D1, 0x00000002);
+		MessageBox("3Pを乗っ取ったよ")();
+	}
+	if ( r == 3 ) {
+		Process::Write8(offset + 0x184D1, 0x00000003);
+		MessageBox("4Pを乗っ取ったよ")();
+	}
+}
+
+void sima27(MenuEntry *entry)
+{
+	offset = 0x32000000;
+	Process::Write8(offset + 0x184D0, 0x00000067);
+}
+
+void sima28(MenuEntry *entry)
+{
+	if(Controller::IsKeysPressed( L + DPadUp ))
+	{
+		offset = 0x33000000;
+		Process::Write32(offset + 0x9A702, 0x67DEF77);
+		OSD::Notify("Moon jump " << Color::Yellow << "ON!");
+	}
+	if(Controller::IsKeysPressed( L + DPadDown ))
+	{
+		offset = 0x33000000;
+		Process::Write32(offset + 0x9A702, 0x600C871);
+		OSD::Notify("Moon jump " << Color::Yellow << "OFF!");
+	}
+}
+
+void sima29(MenuEntry *entry)
+{
+	offset = 0x30000000;
+	Process::Write32(offset + 0x508584, 0x00002ECA);
+}
+
+void sima30(MenuEntry *entry)
+{
+	Keyboard key("島のアイテムを全消去します\n"<< Color::Red << "オフライン用",{"実行"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		date32 = 0x00007FFE;
+		for (int i = 0; i < 0x00000FFC; i++)
+		{
+			Process::Write32(offset + 0x31FB98D8, date32);
+		}
+	}
+}
+
+void sima31(MenuEntry *entry)
+{
+	Keyboard key("全アイテムに水やり\n"<< Color::Red << "オフライン用",{"実行"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		offset = 0x31000000;
+		for (int i = 0; i < 0x00000FFC; i++)
+		{
+			Process::Write8(offset + 0x0FB98D8, 0x00000040);
+			offset += 0x00000004;
+		}
+	}
+}
+
+void sima32(MenuEntry *entry)
+{
+	Keyboard key("ハニワ変更\nハニワをほかの建物に変更します",{"戻す","カフェ"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		offset = 0x31000000;
+		Process::Write8(offset + 0xFBA8DC, 0x6A);
+	}
+	if ( r == 1 ) {
+		offset = 0x31000000;
+		Process::Write8(offset + 0xFBA8DC, 0x4E);
+	}
+}
+
+void sima33(MenuEntry *entry)
+{
+	Process::Write32(offset + 0xAD0158, a1);
+}
+
+void sima34(MenuEntry *entry)
+{
+	Keyboard key("プレイヤー1の判定になります(ホスト判定)",{"ON","OFF"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		Process::Write32(offset + 0x59E6D0, 0x0A000003);
+		Process::Write32(offset + 0x59E894, 0x0A000010);
+		Process::Write32(offset + 0x59FC2C, 0x0A00002C);
+		Process::Write32(offset + 0x59FD8C, 0x0A00002C);
+	}
+	if ( r == 1 ) {
+		Process::Write32(offset + 0x59E6D0, 0xEA000003);
+		Process::Write32(offset + 0x59E894, 0xEA000010);
+		Process::Write32(offset + 0x59FC2C, a5);
+		Process::Write32(offset + 0x59FD8C, a5);
+	}
+}
+
+
+
 
 void player1(MenuEntry *entry)
 {
@@ -3790,8 +3651,8 @@ void player1(MenuEntry *entry)
 		Process::Write32(offset + 0x0064EF0C, 0xEA000052);
 		Process::Write32(offset + 0x0064F070, 0xEA000001);
 		Process::Write32(offset + 0x0064F0E8, 0xEA000014);
-		Process::Write32(offset + 0x0064F19C, 0xE1A00000);
-		Process::Write32(offset + 0x0064F1B4, 0xE1A00000);
+		Process::Write32(offset + 0x0064F19C, a5);
+		Process::Write32(offset + 0x0064F1B4, a5);
 		Process::Write32(offset + 0x0064F1B8, 0xEA000026);
 		OSD::Notify("Through wall " << Color::Yellow << "ON!");
 	}
@@ -3820,7 +3681,7 @@ void player3(MenuEntry *entry)
 	Keyboard key("ソパカの国籍を変更します",{"なし","日本","埼玉","特別区","連邦保護領","ソウル特別市","アメリカ","韓国","イタリア","フィンランド","バチカン市国","チワワ州","タパスコ州","イカ","パラ","ファルコン","ララ","ホホ"});
 	int r = key.Open();
 	if ( r == 0 ) {
-		if (Process::Read32(offset + 0x0AA914C, offset) && offset != 0x00000000)
+		if (Process::Read32(offset + 0x0AA914C, offset) && offset != a1)
 		{
 			Process::Read32(offset + 0x0AA914C, offset);
 			Process::Write8(offset + 0x00055D2, 0x00);
@@ -3829,7 +3690,7 @@ void player3(MenuEntry *entry)
 		MessageBox("国籍を変更したよ")();
 	}
 	if ( r == 1 ) {
-		if (Process::Read32(offset + 0x0AA914C, offset) && offset != 0x00000000)
+		if (Process::Read32(offset + 0x0AA914C, offset) && offset != a1)
 		{
 			Process::Read32(offset + 0x0AA914C, offset);
 			Process::Write8(offset + 0x00055D2, 0x01);
@@ -3838,7 +3699,7 @@ void player3(MenuEntry *entry)
 		MessageBox("国籍を変更したよ")();
 	}
 	if ( r == 2 ) {
-		if (Process::Read32(offset + 0x0AA914C, offset) && offset != 0x00000000)
+		if (Process::Read32(offset + 0x0AA914C, offset) && offset != a1)
 		{
 			Process::Read32(offset + 0x0AA914C, offset);
 			Process::Write8(offset + 0x00055D2, 0x01);
@@ -3847,7 +3708,7 @@ void player3(MenuEntry *entry)
 		MessageBox("国籍を変更したよ")();
 	}
 	if ( r == 3 ) {
-		if (Process::Read32(offset + 0x0AA914C, offset) && offset != 0x00000000)
+		if (Process::Read32(offset + 0x0AA914C, offset) && offset != a1)
 		{
 			Process::Read32(offset + 0x0AA914C, offset);
 			Process::Write8(offset + 0x00055D2, 0x0A);
@@ -3856,7 +3717,7 @@ void player3(MenuEntry *entry)
 		MessageBox("国籍を変更したよ")();
 	}
 	if ( r == 4 ) {
-		if (Process::Read32(offset + 0x0AA914C, offset) && offset != 0x00000000)
+		if (Process::Read32(offset + 0x0AA914C, offset) && offset != a1)
 		{
 			Process::Read32(offset + 0x0AA914C, offset);
 			Process::Write8(offset + 0x00055D2, 0x34);
@@ -3865,7 +3726,7 @@ void player3(MenuEntry *entry)
 		MessageBox("国籍を変更したよ")();
 	}
 	if ( r == 5 ) {
-		if (Process::Read32(offset + 0x0AA914C, offset) && offset != 0x00000000)
+		if (Process::Read32(offset + 0x0AA914C, offset) && offset != a1)
 		{
 			Process::Read32(offset + 0x0AA914C, offset);
 			Process::Write8(offset + 0x00055D2, 0x88);
@@ -3874,7 +3735,7 @@ void player3(MenuEntry *entry)
 		MessageBox("国籍を変更したよ")();
 	}
 	if ( r == 6 ) {
-		if (Process::Read32(offset + 0x0AA914C, offset) && offset != 0x00000000)
+		if (Process::Read32(offset + 0x0AA914C, offset) && offset != a1)
 		{
 			Process::Read32(offset + 0x0AA914C, offset);
 			Process::Write8(offset + 0x00055D2, 0x31);
@@ -3883,7 +3744,7 @@ void player3(MenuEntry *entry)
 		MessageBox("国籍を変更したよ")();
 	}
 	if ( r == 7 ) {
-		if (Process::Read32(offset + 0x0AA914C, offset) && offset != 0x00000000)
+		if (Process::Read32(offset + 0x0AA914C, offset) && offset != a1)
 		{
 			Process::Read32(offset + 0x0AA914C, offset);
 			Process::Write8(offset + 0x00055D2, 0x88);
@@ -3892,7 +3753,7 @@ void player3(MenuEntry *entry)
 		MessageBox("国籍を変更したよ")();
 	}
 	if ( r == 8 ) {
-		if (Process::Read32(offset + 0x0AA914C, offset) && offset != 0x00000000)
+		if (Process::Read32(offset + 0x0AA914C, offset) && offset != a1)
 		{
 			Process::Read32(offset + 0x0AA914C, offset);
 			Process::Write8(offset + 0x00055D2, 0x53);
@@ -3901,7 +3762,7 @@ void player3(MenuEntry *entry)
 		MessageBox("国籍を変更したよ")();
 	}
 	if ( r == 9 ) {
-		if (Process::Read32(offset + 0x0AA914C, offset) && offset != 0x00000000)
+		if (Process::Read32(offset + 0x0AA914C, offset) && offset != a1)
 		{
 			Process::Read32(offset + 0x0AA914C, offset);
 			Process::Write8(offset + 0x00055D2, 0x4C);
@@ -3910,7 +3771,7 @@ void player3(MenuEntry *entry)
 		MessageBox("国籍を変更したよ")();
 	}
 	if ( r == 10 ) {
-		if (Process::Read32(offset + 0x0AA914C, offset) && offset != 0x00000000)
+		if (Process::Read32(offset + 0x0AA914C, offset) && offset != a1)
 		{
 			Process::Read32(offset + 0x0AA914C, offset);
 			Process::Write8(offset + 0x00055D2, 0xB9);
@@ -3919,7 +3780,7 @@ void player3(MenuEntry *entry)
 		MessageBox("国籍を変更したよ")();
 	}
 	if ( r == 11 ) {
-		if (Process::Read32(offset + 0x0AA914C, offset) && offset != 0x00000000)
+		if (Process::Read32(offset + 0x0AA914C, offset) && offset != a1)
 		{
 			Process::Read32(offset + 0x0AA914C, offset);
 			Process::Write8(offset + 0x00055D2, 0x24);
@@ -3928,7 +3789,7 @@ void player3(MenuEntry *entry)
 		MessageBox("国籍を変更したよ")();
 	}
 	if ( r == 12 ) {
-		if (Process::Read32(offset + 0x0AA914C, offset) && offset != 0x00000000)
+		if (Process::Read32(offset + 0x0AA914C, offset) && offset != a1)
 		{
 			Process::Read32(offset + 0x0AA914C, offset);
 			Process::Write8(offset + 0x00055D2, 0x24);
@@ -3937,7 +3798,7 @@ void player3(MenuEntry *entry)
 		MessageBox("国籍を変更したよ")();
 	}
 	if ( r == 13 ) {
-		if (Process::Read32(offset + 0x0AA914C, offset) && offset != 0x00000000)
+		if (Process::Read32(offset + 0x0AA914C, offset) && offset != a1)
 		{
 			Process::Read32(offset + 0x0AA914C, offset);
 			Process::Write8(offset + 0x00055D2, 0x2A);
@@ -3946,7 +3807,7 @@ void player3(MenuEntry *entry)
 		MessageBox("国籍を変更したよ")();
 	}
 	if ( r == 14 ) {
-		if (Process::Read32(offset + 0x0AA914C, offset) && offset != 0x00000000)
+		if (Process::Read32(offset + 0x0AA914C, offset) && offset != a1)
 		{
 			Process::Read32(offset + 0x0AA914C, offset);
 			Process::Write8(offset + 0x00055D2, 0x2E);
@@ -3955,7 +3816,7 @@ void player3(MenuEntry *entry)
 		MessageBox("国籍を変更したよ")();
 	}
 	if ( r == 15 ) {
-		if (Process::Read32(offset + 0x0AA914C, offset) && offset != 0x00000000)
+		if (Process::Read32(offset + 0x0AA914C, offset) && offset != a1)
 		{
 			Process::Read32(offset + 0x0AA914C, offset);
 			Process::Write8(offset + 0x00055D2, 0x34);
@@ -3964,7 +3825,7 @@ void player3(MenuEntry *entry)
 		MessageBox("国籍を変更したよ")();
 	}
 	if ( r == 16 ) {
-		if (Process::Read32(offset + 0x0AA914C, offset) && offset != 0x00000000)
+		if (Process::Read32(offset + 0x0AA914C, offset) && offset != a1)
 		{
 			Process::Read32(offset + 0x0AA914C, offset);
 			Process::Write8(offset + 0x00055D2, 0x34);
@@ -3973,7 +3834,7 @@ void player3(MenuEntry *entry)
 		MessageBox("国籍を変更したよ")();
 	}
 	if ( r == 17 ) {
-		if (Process::Read32(offset + 0x0AA914C, offset) && offset != 0x00000000)
+		if (Process::Read32(offset + 0x0AA914C, offset) && offset != a1)
 		{
 			Process::Read32(offset + 0x0AA914C, offset);
 			Process::Write8(offset + 0x00055D2, 0x6A);
@@ -3991,15 +3852,15 @@ void player4(MenuEntry *entry)
 void player5(MenuEntry *entry)
 {
 	if (Controller::IsKeysPressed( B + DPadRight )) {
-		Process::Write32(offset + 0x064D324, 0xE3A00001);
-		Process::Write32(offset + 0x076225C, 0xE3A00000);
-		Process::Write32(offset + 0x0651C4C, 0xE1A00000);
-		Process::Write32(offset + 0x0652028, 0xE3A00000);
+		Process::Write32(offset + 0x064D324, a16);
+		Process::Write32(offset + 0x076225C, a2);
+		Process::Write32(offset + 0x0651C4C, a5);
+		Process::Write32(offset + 0x0652028, a2);
 		OSD::Notify("Swim anywhere " << Color::Yellow << "ON!");
 	}
 	if (Controller::IsKeysPressed( B + DPadLeft )) {
-		Process::Write32(offset + 0x064D324, 0xE3A00000);
-		Process::Write32(offset + 0x076225C, 0xE3A00001);
+		Process::Write32(offset + 0x064D324, a2);
+		Process::Write32(offset + 0x076225C, a16);
 		Process::Write32(offset + 0x0651C4C, 0xEBFC62D8);
 		Process::Write32(offset + 0x0652028, 0xEB00AFB7);
 		OSD::Notify("Swim anywhere " << Color::Yellow << "OFF!");
@@ -4008,15 +3869,15 @@ void player5(MenuEntry *entry)
 
 void player6(MenuEntry *entry)
 {
-	offset = 0x00000000;
+	offset = a1;
 	if (Controller::IsKeysPressed( X + DPadUp ))
 	{
-		Process::Write32(offset + 0x2FEC78, 0xE3A00001);
+		Process::Write32(offset + 0x2FEC78, a16);
 		OSD::Notify("Rewrite My Design " << Color::Yellow << "ON!");
 	}
 	if (Controller::IsKeysPressed( X + DPadDown ))
 	{
-		Process::Write32(offset + 0x2FEC78, 0xE3A00000);
+		Process::Write32(offset + 0x2FEC78, a2);
 		OSD::Notify("Rewrite My Design " << Color::Yellow << "OFF!");
 	}
 }
@@ -4028,7 +3889,7 @@ void player7(MenuEntry *entry)
 
 void player8(MenuEntry *entry)
 {
-	offset = 0x00000000;
+	offset = a1;
 	if (Controller::IsKeysPressed( DPadUp ))
 	{
 		Process::Write32(offset + 0x6E63F4, 0xE3A01011);
@@ -4041,7 +3902,7 @@ void player8(MenuEntry *entry)
 
 void player9(MenuEntry *entry)
 {
-	offset = 0x00000000;
+	offset = a1;
 	if (Controller::IsKeysPressed( DPadUp ))
 	{
 		Process::Write32(offset + 0x6E63F4, 0xE3A01013);
@@ -4054,7 +3915,7 @@ void player9(MenuEntry *entry)
 
 void player10(MenuEntry *entry)
 {
-	offset = 0x00000000;
+	offset = a1;
 	if (Controller::IsKeysPressed( DPadUp ))
 	{
 		Process::Write32(offset + 0x6E63F4, 0xE3A01014);
@@ -4067,7 +3928,7 @@ void player10(MenuEntry *entry)
 
 void player11(MenuEntry *entry)
 {
-	offset = 0x00000000;
+	offset = a1;
 	if (Controller::IsKeysPressed( DPadUp ))
 	{
 		Process::Write32(offset + 0x6E63F4, 0xE3A0101B);
@@ -4194,45 +4055,46 @@ void player13(MenuEntry *entry)
 	
 }
 
+
 void player14(MenuEntry *entry)
 {
 	Keyboard key("歩くスピードを変更します\n通常 で元の速度に戻せます",{"通常","遅い","超遅い","速い","超速い"});
 	int r = key.Open();
 	if ( r == 0 ) {
-		Process::Write32(offset + 0x880B2C, 0x3F800000);
-		Process::Write32(offset + 0x880B34, 0x3F800000);
-		Process::Write32(offset + 0x880C04, 0x3F800000);
+		Process::Write32(offset + 0x880B2C, a11);
+		Process::Write32(offset + 0x880B34, a11);
+		Process::Write32(offset + 0x880C04, a11);
 		MessageBox("速度: 通常")();
 	}
 	if ( r == 1 ) {
-		Process::Write32(offset + 0x880B2C, 0x3F000000);
-		Process::Write32(offset + 0x880B34, 0x3F000000);
-		Process::Write32(offset + 0x880C04, 0x3F000000);
+		Process::Write32(offset + 0x880B2C, a12);
+		Process::Write32(offset + 0x880B34, a12);
+		Process::Write32(offset + 0x880C04, a12);
 		MessageBox("速度: 遅い")();
 	}
 	if ( r == 2 ) {
-		Process::Write32(offset + 0x880B2C, 0x3E000000);
-		Process::Write32(offset + 0x880B34, 0x3E000000);
-		Process::Write32(offset + 0x880C04, 0x3E000000);
+		Process::Write32(offset + 0x880B2C, a13);
+		Process::Write32(offset + 0x880B34, a13);
+		Process::Write32(offset + 0x880C04, a13);
 		MessageBox("速度: 超遅い")();
 	}
 	if ( r == 3 ) {
-		Process::Write32(offset + 0x880B2C, 0x3FF00000);
-		Process::Write32(offset + 0x880B34, 0x3FF00000);
-		Process::Write32(offset + 0x880C04, 0x3FF00000);
+		Process::Write32(offset + 0x880B2C, a14);
+		Process::Write32(offset + 0x880B34, a14);
+		Process::Write32(offset + 0x880C04, a14);
 		MessageBox("速度: 速い")();
 	}
 	if ( r == 4 ) {
-		Process::Write32(offset + 0x880B2C, 0x41000000);
-		Process::Write32(offset + 0x880B34, 0x41000000);
-		Process::Write32(offset + 0x880C04, 0x41000000);
+		Process::Write32(offset + 0x880B2C, a15);
+		Process::Write32(offset + 0x880B34, a15);
+		Process::Write32(offset + 0x880C04, a15);
 		MessageBox("速度: 超速い")();
 	}
 }
 
 void player15(MenuEntry *entry)
 {
-	Process::Write32(offset + 0x68B128, 0xE1A00000);
+	Process::Write32(offset + 0x68B128, a5);
 }
 
 void player16(MenuEntry *entry)
@@ -4255,7 +4117,7 @@ void player17(MenuEntry *entry)
 		Process::Write32(offset + 0x6519F0, 0x77777777);
 	}
 	if ( r == 1 ) {
-		Process::Write32(offset + 0x6519F0, 0x3F800000);
+		Process::Write32(offset + 0x6519F0, a11);
 	}
 }
 
@@ -4269,13 +4131,12 @@ void player18(MenuEntry *entry)
 	}
 	if ( r == 1 ) {
 		offset = 0x33000000;
-		Process::Write32(offset + 0x9A330, 0x3F800000);
+		Process::Write32(offset + 0x9A330, a11);
 	}
 }
 
-/////////////////////////////////////////////////////////////
-//                        写真館                           //
-/////////////////////////////////////////////////////////////
+
+
 
 void photo1(MenuEntry *entry)
 	{
@@ -4333,18 +4194,18 @@ void photo2(MenuEntry *entry)
         }
     }
 	
-/////////////////////////////////////////////////////////////
-//                          ベル                            //
-/////////////////////////////////////////////////////////////
+	
+	
+	
 void money1(MenuEntry *entry)
 {
-	Process::Write32(offset + 0x2C01C8, 0xE3A08000);
+	Process::Write32(offset + 0x2C01C8, a6);
 }
 
 void money2(MenuEntry *entry)
 {
-	offset = 0x00000000;
-	if (Process::Read32(offset + 0xAA914C, cmp32) && cmp32 != 0x00000000)
+	offset = a1;
+	if (Process::Read32(offset + 0xAA914C, cmp32) && cmp32 != a1)
 	{
 		Process::Read32(offset + 0xAA914C, offset);
 		Process::Write32(offset + 0x6B8C, 0x8CF95678);
@@ -4354,8 +4215,8 @@ void money2(MenuEntry *entry)
 
 void money3(MenuEntry *entry)
 {
-	offset = 0x00000000;
-	if (Process::Read32(offset + 0xAA914C, cmp32) && cmp32 != 0x00000000)
+	offset = a1;
+	if (Process::Read32(offset + 0xAA914C, cmp32) && cmp32 != a1)
 	{
 	Process::Read32(offset + 0xAA914C, offset);
 	Process::Write32(offset + 0x8D1C, 0xE3911E31);
@@ -4365,18 +4226,17 @@ void money3(MenuEntry *entry)
 
 void money4(MenuEntry *entry)
 {
-	offset = 0x00000000;
-	if (Process::Read32(offset + 0xAA914C, cmp32) && cmp32 != 0x00000000)
+	offset = a1;
+	if (Process::Read32(offset + 0xAA914C, cmp32) && cmp32 != a1)
 	{
 	Process::Read32(offset + 0xAA914C, offset);
 	Process::Write32(offset + 0x6B9C, 0xE3911E31);
 	Process::Write32(offset + 0x6BA0, 0x7D0D5687);
 	}
 }
-	
-/////////////////////////////////////////////////////////////
-//                         スタイル                          //
-/////////////////////////////////////////////////////////////
+
+
+
 
 void style1(MenuEntry *entry)
 {	
@@ -4410,16 +4270,388 @@ void style3(MenuEntry *entry)
 }
 
 
-/////////////////////////////////////////////////////////////
-//                         その他                           //
-/////////////////////////////////////////////////////////////
+
+
+void music1(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	Process::Write32(offset + 0x9B310, a1);
+	if(Process::Read32(offset + 0x0099F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	if (Controller::IsKeysPressed( R ))
+	{
+		Process::Write32(offset + 0x99FE4, 0x060D0600); //stop
+	}
+	offset = 0x33000000;
+	Process::Write16(offset + 0x9A706, 0x002E);
+	if (Controller::IsKeysPressed( L + DPadUp ))
+	{
+		Process::Write32(offset + 0x682A68, a5);
+		Process::Write32(offset + 0x682A8C, a5);
+		Process::Write32(offset + 0x682A20, a5);
+		Process::Write32(offset + 0x682AA0, 0xE3A010C4); //ON
+	}
+	if (Controller::IsKeysPressed( L + DPadDown ))
+	{
+		Process::Write32(offset + 0x0682A8C, 0x1A000008);
+		Process::Write32(offset + 0x0682A68, 0x1A000014);
+		Process::Write32(offset + 0x0682A20, 0x0A000026);
+		Process::Write32(offset + 0x0682AA0, 0xE3A01070); //OFF
+	}
+}
+
+void music2(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000560);
+}
+
+void music3(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000560);
+}
+
+void music4(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000400);
+}
+
+void music5(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000402);
+}
+
+void music6(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x0100068E);
+}
+
+void music7(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000117);
+}
+
+void music8(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x0100012B);
+}
+
+void music9(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000660);
+}
+
+void music10(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x010004C4);
+}
+
+void music11(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000832);
+}
+
+void music12(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000940);
+}
+
+void music13(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000450);
+}
+
+void music14(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x010000D0);
+}
+
+void music15(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x010000D1);
+}
+
+void music16(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x010000D2);
+}
+
+void music17(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x010000D3);
+}
+
+void music18(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x010000D4);
+}
+
+void music19(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x010000D5);
+}
+
+void music20(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x010007F5);
+}
+
+void music21(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000650);
+}
+
+void music22(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x010004B2);
+}
+
+void music23(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x0100093D);
+}
+
+void music24(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000810);
+}
+
+void music25(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000000);
+}
+
+void music26(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000001);
+}
+
+void music27(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000002);
+}
+
+void music28(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000003);
+}
+
+void music29(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000008);
+}
+
+void music30(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x0100000B);
+}
+
+void music31(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x0100000C);
+}
+
+void music32(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x0100000E);
+}
+
+void music33(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x0100000F);
+}
+
+void music34(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000945);
+}
+
+/*void music(MenuEntry *entry)
+{
+	offset = 0x33000000;
+	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	{
+		offset += 0x0000012C;
+	}
+	Process::Write32(offset + 0x9A708, 0x01000C17);
+}*/
+
+
+
+
 void other1(MenuEntry *entry)
 {
 	Keyboard key("セーブメニューの表示設定をします",{"OFF","ON"});
 	int r = key.Open();
 	if ( r == 0 ) {
-		Process::Write32(offset + 0x1A08C8, 0xE1A00000);
-		Process::Write32(offset + 0x1A08CC, 0xE3A00000);
+		Process::Write32(offset + 0x1A08C8, a5);
+		Process::Write32(offset + 0x1A08CC, a2);
 		Process::Write32(offset + 0x1A08D0, 0xEB0E011D);
 		MessageBox("セーブメニューをオフにしたよ")();
 	}
@@ -4436,7 +4668,7 @@ void other2(MenuEntry *entry)
 	Keyboard key("スクリーンショットの設定をします",{"OFF","ON"});
 	int r = key.Open();
 	if ( r == 0 ) {
-		Process::Write32(offset + 0x5B2AE0, 0xE3A00001);
+		Process::Write32(offset + 0x5B2AE0, a16);
 		MessageBox("スクリーンショットをオフにしたよ")();
 	}
 	if ( r == 1 ) {
@@ -4458,7 +4690,7 @@ void other4(MenuEntry *entry)
 
 void other5(MenuEntry *entry)
 {
-	Process::Write32(offset + 0x6D12A0, 0xE3A00001);
+	Process::Write32(offset + 0x6D12A0, a16);
 }
 
 void other6(MenuEntry *entry)
@@ -4484,388 +4716,20 @@ void other9(MenuEntry *entry)
 
 void other10(MenuEntry *entry)
 {
-	offset = 0x00000000;
-	Process::Write32(offset + 0x94A724, 0x7FFFFFFF);
-	Process::Write32(offset + 0x94A728, 0x7FFFFFFF);
-	Process::Write32(offset + 0x94A72C, 0x7FFFFFFF);
+	offset = a1;
+	Process::Write32(offset + 0x94A724, a4);
+	Process::Write32(offset + 0x94A728, a4);
+	Process::Write32(offset + 0x94A72C, a4);
 }
 
-/////////////////////////////////////////////////////////////
-//                           音楽                          //
-/////////////////////////////////////////////////////////////
-void music1(MenuEntry *entry)
+void other11(MenuEntry *entry)
 {
-	offset = 0x33000000;
-	Process::Write32(offset + 0x9B310, 0x00000000);
-	if(Process::Read32(offset + 0x0099F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	if (Controller::IsKeysPressed( R ))
-	{
-		Process::Write32(offset + 0x99FE4, 0x060D0600); //stop
-	}
-	offset = 0x33000000;
-	Process::Write16(offset + 0x9A706, 0x002E);
-	if (Controller::IsKeysPressed( L + DPadUp ))
-	{
-		Process::Write32(offset + 0x682A68, 0xE1A00000);
-		Process::Write32(offset + 0x682A8C, 0xE1A00000);
-		Process::Write32(offset + 0x682A20, 0xE1A00000);
-		Process::Write32(offset + 0x682AA0, 0xE3A010C4); //ON
-	}
-	if (Controller::IsKeysPressed( L + DPadDown ))
-	{
-		Process::Write32(offset + 0x0682A8C, 0x1A000008);
-		Process::Write32(offset + 0x0682A68, 0x1A000014);
-		Process::Write32(offset + 0x0682A20, 0x0A000026);
-		Process::Write32(offset + 0x0682AA0, 0xE3A01070); //OFF
-	}
+	Process::Write32(offset + 0x48352C, 0x77777777);
 }
 
-void music2(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x01000560);
-}
 
-void music3(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x01000560);
-}
 
-void music4(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x01000400);
-}
 
-void music5(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x01000402);
-}
-
-void music6(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x0100068E);
-}
-
-void music7(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x01000117);
-}
-
-void music8(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x0100012B);
-}
-
-void music9(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x01000660);
-}
-
-void music10(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x010004C4);
-}
-
-void music11(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x01000832);
-}
-
-void music12(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x01000940);
-}
-
-void music13(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x01000450);
-}
-
-void music14(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x010000D0);
-}
-
-void music15(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x010000D1);
-}
-
-void music16(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x010000D2);
-}
-
-void music17(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x010000D3);
-}
-
-void music18(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x010000D4);
-}
-
-void music19(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x010000D5);
-}
-
-void music20(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x010007F5);
-}
-
-void music21(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x01000650);
-}
-
-void music22(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x010004B2);
-}
-
-void music23(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x0100093D);
-}
-
-void music24(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x01000810);
-}
-
-void music25(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x01000000);
-}
-
-void music26(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x01000001);
-}
-
-void music27(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x01000002);
-}
-
-void music28(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x01000003);
-}
-
-void music29(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x01000008);
-}
-
-void music30(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x0100000B);
-}
-
-void music31(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x0100000C);
-}
-
-void music32(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x0100000E);
-}
-
-void music33(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x0100000F);
-}
-
-void music34(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x01000945);
-}
-
-/*void music(MenuEntry *entry)
-{
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != 0xFFFFFFFF)
-	{
-		offset += 0x0000012C;
-	}
-	Process::Write32(offset + 0x9A708, 0x01000C17);
-}*/
-
-/////////////////////////////////////////////////////////////
-//                         メンテ                            //
-/////////////////////////////////////////////////////////////
 void maintenance1(MenuEntry *entry)
 {
 	Keyboard key("ファイル、フォルダ等を管理する模擬システムです\n現在未完成のため動作で不具合を起こす可能性があります",{"txtファイル作成1","txtファイル作成2","txtファイル作成3"});
@@ -5029,7 +4893,7 @@ void maintenance3(MenuEntry *entry)
 		//あらかじめ、file.binにバイナリデータ ff ff ff ffと書いておく
 		File file;
 		File::Open(file,"dunp.bin");
-		file.Inject(0x184E0,4);//0x100000の値が0xffffffffになる
+		file.Inject(0x184E0,4);//0x100000の値がa3になる
 		file.Close();
 	}
 }
@@ -5048,12 +4912,9 @@ void maintenance4(MenuEntry *entry)
 
 void maintenance5(MenuEntry *entry)
 {
-	offset = 0x00000000;
+	offset = a1;
 	Process::Write16(offset + 0x94CAE4, 0xE0FF);
 }
 
-
-
-//終わりの括弧↓
 }
 
