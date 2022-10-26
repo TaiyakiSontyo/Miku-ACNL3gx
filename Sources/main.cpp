@@ -1,7 +1,6 @@
 #include <CTRPluginFramework.hpp>
 #include "3ds.h"
 #include "cheats.hpp"
-#include "colorset.hpp"
 #include "csvc.h"
 
 
@@ -82,6 +81,21 @@ namespace CTRPluginFramework
             file.Read((void*)&blue_value, sizeof(u8));
             file.Close();
             settings.BackgroundBorderColor = Color(red_value, green_value, blue_value);
+        }
+		
+		if (File::Exists("color1.bin")) {
+            u8 red_value = 255;
+            u8 green_value = 255;
+            u8 blue_value = 255;
+            File file;
+            File::Open(file,"color1.bin");
+            file.Read((void*)&red_value, sizeof(u8));
+            file.Seek(1);
+            file.Read((void*)&green_value, sizeof(u8));
+            file.Seek(1);
+            file.Read((void*)&blue_value, sizeof(u8));
+            file.Close();
+            settings.BackgroundMainColor = Color(red_value, green_value, blue_value);
         }
     }
 
@@ -403,6 +417,7 @@ namespace CTRPluginFramework
 		
 			MenuFolder *fh1 = new MenuFolder(Color::Orange << "ベル");
 				*fh1 += new MenuEntry(Color::Orange << "所持金額固定",money1);
+				*fh1 += new MenuEntry(Color::Orange << "所持金変更",nullptr,money5);
 				*fh1 += new MenuEntry(Color::Orange << "貯金最大",money2);
 			fh->Append(fh1);
 			
@@ -441,6 +456,7 @@ namespace CTRPluginFramework
 			
 		MenuFolder *fj = new MenuFolder(Color::Orange << "その他");
 			MenuFolder *fj1 = new MenuFolder(Color::Orange << "音声");
+				*fj1 += new MenuEntry(Color::Orange << "音楽を再生",nullptr,music35,"自分で好きなidを入力して流せます");
 				MenuFolder *fj1a = new MenuFolder(Color::Orange << "効果音");
 					*fj1a += new MenuEntry(Color::Orange << "効果音を有効にする",music1,"L+↑:ON,L+↓:OFF,A:実行,R:stop\n\n効果音を有効にする前にONにしておいて下さい");
 					*fj1a += new MenuEntry(Color::Orange << "コインを置く音",music2);
@@ -493,6 +509,7 @@ namespace CTRPluginFramework
 				*fj2 += new MenuEntry(Color::Orange << "魚逃げない",other8);
 				*fj2 += new MenuEntry(Color::Orange << "魚が一発の食いつきで釣れる",other9);
 				*fj2 += new MenuEntry(Color::Orange << "タイマーカンスト",other10);
+				*fj2 += new MenuEntry(Color::Orange << "動作が早くなる",other11);
 			fj->Append(fj2);
 			MenuFolder *fj3 = new MenuFolder(Color::Orange << "常駐OFF");
 			
@@ -501,10 +518,11 @@ namespace CTRPluginFramework
 		
 		MenuFolder *fk = new MenuFolder("メンテナンス");
 			*fk += new MenuEntry(Color::Orange << "ファイル編集",nullptr,maintenance1);
-			*fk += new MenuEntry(Color::Orange << "3gx関連ファイル編集",nullptr,maintenance2);
+			//*fk += new MenuEntry(Color::Orange << "3gx関連ファイル編集",nullptr,maintenance2);
 			*fk += new MenuEntry(Color::Orange << "ファイル記入系",nullptr,maintenance3);
 			*fk += new MenuEntry(Color::Orange << "Utile系",nullptr,maintenance4);
 			*fk += new MenuEntry(Color::Orange << "ゲームコイン最大",maintenance5);
+			*fk += new MenuEntry(Color::Orange << "ゲームコイン枚数変更",nullptr,maintenance6);
 		
 		
 		*Pmenu += new MenuEntry(Color::Orange << "各種説明",nullptr,setumei2);
@@ -527,8 +545,14 @@ namespace CTRPluginFramework
 		/*その他*/
 		//*Pmenu += new MenuEntry(menuColor << "文字の色変更",nullptr,menuColorsSelector);
 		//
-		*Pmenu += new MenuEntry("Set Background Color", nullptr, set_background_border_color);
-		/*Set Background Color*/
+		*Pmenu += new MenuEntry("Set Main Text Color", nullptr, set_main_text_color);
+		*Pmenu += new MenuEntry("Set Menu Selected Item Color", nullptr, set_menu_selecteditem_color);
+		*Pmenu += new MenuEntry("Set Menu Unselected Item Color", nullptr, set_menu_unselecteditem_color);
+		*Pmenu += new MenuEntry("Set Window Title Color", nullptr, set_window_title_color);
+		*Pmenu += new MenuEntry("Set Background Border Color", nullptr, set_background_border_color);
+		*Pmenu += new MenuEntry("Set Background Main Color", nullptr, set_background_main_color);
+		*Pmenu += new MenuEntry("Set Background Secondary Color", nullptr, set_background_secondary_color);
+		/*Set Color*/
 		*Pmenu += fk;
 		/*メンテナンス*/
 		*Pmenu += fa;
@@ -553,23 +577,25 @@ namespace CTRPluginFramework
 		
 		MessageBox("チート画面で下画面の'Tools'の中の'Settings'の中の'auto'の項目4点にチェックを入れると、設定したものとFavoriteを記憶します。\n他の3gxからの変更やバージョンの変更で動作がおかしい場合は" << Color::Yellow << " CTRPFDate.bin " << Color::White << "を削除して初期設定を行ってください\n\nなにかバグ等不具合があれば" << Color::Cyan << " たいやき#5374 " << Color::White << "まで。",DialogType::DialogOk).SetClear(ClearScreen::None)();
 		
-		Pmenu = new PluginMenu(Color::LimeGreen << CTRPFname, 0, 1, 0, about1 + NewLINE + about2 + NewLINE + about3 + NewLINE + about4 + NewLINE + about5);
+		Pmenu = new PluginMenu(Color::LimeGreen << CTRPFname, 0, 1, 1, about1 + NewLINE + about2 + NewLINE + about3 + NewLINE + about4 + NewLINE + about5);
 		Pmenu->SynchronizeWithFrame(true);
 		OSD::Notify(Color::Cyan << "Made by Taiyaki!");
 		OSD::Notify(Color::Cyan << "Loading ACNL_PLG...");
 		OSD::Notify(Color::Red << "P" << 
-					Color::Lime << "l" << 
-					Color::Blue << "u" <<
-					Color::Yellow << "g" <<
-					Color::Cyan << "i" << 
-					Color::Magenta << "n " << 
-					Color::Red << "R" <<
-					Color::Green << "e" << 
-					Color::Purple << "a" << 
-					Color::SkyBlue << "d" << 
-					Color::Orange << "y" << 
-					Color::LimeGreen << "!");
+					Color::Orange << "l" << 
+					Color::Yellow << "u" <<
+					Color::Lime << "g" <<
+					Color::Green << "i" << 
+					Color::Cyan << "n " << 
+					Color::Blue << "R" <<
+					Color::Purple << "e" << 
+					Color::Red << "a" << 
+					Color::Orange << "d" << 
+					Color::Yellow << "y" << 
+					Color::Lime << "!");
 		Pmenu->ShowWelcomeMessage(false);
+		
+		Pmenu->OnNewFrame = OnNewFrameCallback;
 		
 		
 		InitMenu();

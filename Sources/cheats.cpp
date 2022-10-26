@@ -79,11 +79,14 @@ void setumei2(MenuEntry *entry)
 
 void setumei3(MenuEntry *entry)
 { /* 協力者 */
-	Keyboard key("協力者", {"のむさん",});
+	Keyboard key("協力者", {"のむさん","ジュアン"});
 			
 	int r = key.Open();
 	if ( r == 0 )MessageBox(
 	"のむさん#7891")();
+	
+	if ( r == 1 )MessageBox(
+	"ジュアン#0509")();
 }
 
 
@@ -4235,6 +4238,17 @@ void money4(MenuEntry *entry)
 	}
 }
 
+void money5(MenuEntry *entry)
+{	
+	u32 i;
+	Keyboard key("所持金変更");
+	key.IsHexadecimal(false);
+	if (key.Open(i) != -1 )
+	{
+		Process::Write32(offset + 0xC31B55C, i);
+	}
+}
+
 
 
 
@@ -4632,15 +4646,21 @@ void music34(MenuEntry *entry)
 	Process::Write32(offset + 0x9A708, 0x01000945);
 }
 
-/*void music(MenuEntry *entry)
+void music35(MenuEntry *entry)
 {
-	offset = 0x33000000;
-	if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+	u32 i;
+	Keyboard key("音楽のidを入力して下さい\n01000XXX\nXXXのところは好きな数を入れてください");
+	key.IsHexadecimal(false);
+	if (key.Open(i) != -1 )
 	{
-		offset += 0x0000012C;
+		offset = 0x33000000;
+		if (Process::Read32(offset + 0x99F84, cmp32) && cmp32 != a3)
+		{
+			offset += 0x0000012C;
+		}
+		Process::Write32(offset + 0x9A708, i);
 	}
-	Process::Write32(offset + 0x9A708, 0x01000C17);
-}*/
+}
 
 
 
@@ -4797,7 +4817,7 @@ void maintenance1(MenuEntry *entry)
 	
 }
 
-void maintenance2(MenuEntry *entry)
+/*void maintenance2(MenuEntry *entry)
 {
 	Keyboard key("3gxのファイル関連を管理します",{"color.bin無効化","color.binの確認","color.binを開く","color.binを読む","color.binが開かれているか確認","3gxのサイズを表示","3gxの配置確認","3gxの名前確認","3gxの拡張子確認"});
 	int r = key.Open();
@@ -4859,7 +4879,7 @@ void maintenance2(MenuEntry *entry)
 		file.Close();
 	}
 }
-
+*/
 void maintenance3(MenuEntry *entry)
 {
 	Keyboard key("記入、ダンプ系\n不具合多め",{"32.binに19194545記入","32.txtに野獣先輩と記入","dump.binに184E0の値をダンプ","dump.binにdumpした値を書き込む"});
@@ -4914,6 +4934,18 @@ void maintenance5(MenuEntry *entry)
 {
 	offset = a1;
 	Process::Write16(offset + 0x94CAE4, 0xE0FF);
+}
+
+void maintenance6(MenuEntry *entry)
+{
+	offset = a1;
+	u16 i;
+	Keyboard key("ゲームコイン枚数変更");
+	key.IsHexadecimal(false);
+	if (key.Open(i) != -1 )
+	{
+		Process::Write16(offset + 0x94CAE4, i);
+	}
 }
 
 }

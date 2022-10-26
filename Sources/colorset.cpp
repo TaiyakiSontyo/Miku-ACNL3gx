@@ -83,9 +83,9 @@ namespace CTRPluginFramework
 
 
 	void set_background_border_color(MenuEntry *entry) {
-		if (File::Exists("color.bin")) {
+		if (File::Exists("background_border.bin")) {
 			File file;
-			File::Open(file,"color.bin");
+			File::Open(file,"background_border.bin");
 			file.Read((void*)&red_value, sizeof(u8));
 			file.Seek(1);
 			file.Read((void*)&green_value, sizeof(u8));
@@ -125,12 +125,71 @@ namespace CTRPluginFramework
 		FwkSettings &settings = FwkSettings::Get();
 		settings.BackgroundBorderColor = Color(red_value, green_value, blue_value);
 
-		if (!File::Exists("color.bin")) {
-			File::Create("color.bin");
+		if (!File::Exists("background_border.bin")) {
+			File::Create("background_border.bin");
 		}
 
 		File file;
-		File::Open(file, "color.bin");
+		File::Open(file, "background_border.bin");
+		file.Write((void*)&red_value, sizeof(u8));
+		file.Seek(1);
+		file.Write((void*)&green_value, sizeof(u8));
+		file.Seek(1);
+		file.Write((void*)&blue_value, sizeof(u8));
+		file.Flush();
+		file.Close();
+	}
+	
+	
+	void set_background_main_color(MenuEntry *entry) {
+		if (File::Exists("background_main.bin")) {
+			File file;
+			File::Open(file,"background_main.bin");
+			file.Read((void*)&red_value, sizeof(u8));
+			file.Seek(1);
+			file.Read((void*)&green_value, sizeof(u8));
+			file.Seek(1);
+			file.Read((void*)&blue_value, sizeof(u8));
+			file.Close();
+		}
+
+		Keyboard keyboard(
+			make_color_message(red_value, green_value, blue_value),
+			{
+				"赤の値を入力",
+				"緑の値を入力",
+				"青の値を入力",
+				"結果表示"
+			}
+		);
+
+		int choice = keyboard.Open();
+
+		if (choice == 0) {
+			red_value = color_input(Color::Red << "赤" << Color::White);
+		}
+		else if (choice == 1) {
+			green_value = color_input(Color::Green << "緑" << Color::White);
+		}
+		else if (choice == 2) {
+			blue_value = color_input(Color::Blue << "青" << Color::White);
+		}
+		else if (choice == 3) {
+			MessageBox(
+				Color(red_value, green_value, blue_value) <<
+				("■■■■■■■■■\n■■■■■■■■■\n■■■■■■■■■")
+			)();
+		}
+
+		FwkSettings &settings = FwkSettings::Get();
+		settings.BackgroundMainColor = Color(red_value, green_value, blue_value);
+
+		if (!File::Exists("background_main.bin")) {
+			File::Create("background_main.bin");
+		}
+
+		File file;
+		File::Open(file, "background_main.bin");
 		file.Write((void*)&red_value, sizeof(u8));
 		file.Seek(1);
 		file.Write((void*)&green_value, sizeof(u8));
@@ -140,4 +199,295 @@ namespace CTRPluginFramework
 		file.Close();
 	}
 
+
+	void set_main_text_color(MenuEntry *entry) {
+		if (File::Exists("main_text.bin")) {
+			File file;
+			File::Open(file,"main_text.bin");
+			file.Read((void*)&red_value, sizeof(u8));
+			file.Seek(1);
+			file.Read((void*)&green_value, sizeof(u8));
+			file.Seek(1);
+			file.Read((void*)&blue_value, sizeof(u8));
+			file.Close();
+		}
+
+		Keyboard keyboard(
+			make_color_message(red_value, green_value, blue_value),
+			{
+				"赤の値を入力",
+				"緑の値を入力",
+				"青の値を入力",
+				"結果表示"
+			}
+		);
+
+		int choice = keyboard.Open();
+
+		if (choice == 0) {
+			red_value = color_input(Color::Red << "赤" << Color::White);
+		}
+		else if (choice == 1) {
+			green_value = color_input(Color::Green << "緑" << Color::White);
+		}
+		else if (choice == 2) {
+			blue_value = color_input(Color::Blue << "青" << Color::White);
+		}
+		else if (choice == 3) {
+			MessageBox(
+				Color(red_value, green_value, blue_value) <<
+				("■■■■■■■■■\n■■■■■■■■■\n■■■■■■■■■")
+			)();
+		}
+
+		FwkSettings &settings = FwkSettings::Get();
+		settings.MainTextColor = Color(red_value, green_value, blue_value);
+
+		if (!File::Exists("main_text.bin")) {
+			File::Create("main_text.bin");
+		}
+
+		File file;
+		File::Open(file, "main_text.bin");
+		file.Write((void*)&red_value, sizeof(u8));
+		file.Seek(1);
+		file.Write((void*)&green_value, sizeof(u8));
+		file.Seek(1);
+		file.Write((void*)&blue_value, sizeof(u8));
+		file.Flush();
+		file.Close();
+	}
+
+	void set_window_title_color(MenuEntry *entry) {
+		if (File::Exists("window_title.bin")) {
+			File file;
+			File::Open(file,"window_title.bin");
+			file.Read((void*)&red_value, sizeof(u8));
+			file.Seek(1);
+			file.Read((void*)&green_value, sizeof(u8));
+			file.Seek(1);
+			file.Read((void*)&blue_value, sizeof(u8));
+			file.Close();
+		}
+
+		Keyboard keyboard(
+			make_color_message(red_value, green_value, blue_value),
+			{
+				"赤の値を入力",
+				"緑の値を入力",
+				"青の値を入力",
+				"結果表示"
+			}
+		);
+
+		int choice = keyboard.Open();
+
+		if (choice == 0) {
+			red_value = color_input(Color::Red << "赤" << Color::White);
+		}
+		else if (choice == 1) {
+			green_value = color_input(Color::Green << "緑" << Color::White);
+		}
+		else if (choice == 2) {
+			blue_value = color_input(Color::Blue << "青" << Color::White);
+		}
+		else if (choice == 3) {
+			MessageBox(
+				Color(red_value, green_value, blue_value) <<
+				("■■■■■■■■■\n■■■■■■■■■\n■■■■■■■■■")
+			)();
+		}
+
+		FwkSettings &settings = FwkSettings::Get();
+		settings.WindowTitleColor = Color(red_value, green_value, blue_value);
+
+		if (!File::Exists("window_title.bin")) {
+			File::Create("window_title.bin");
+		}
+
+		File file;
+		File::Open(file, "window_title.bin");
+		file.Write((void*)&red_value, sizeof(u8));
+		file.Seek(1);
+		file.Write((void*)&green_value, sizeof(u8));
+		file.Seek(1);
+		file.Write((void*)&blue_value, sizeof(u8));
+		file.Flush();
+		file.Close();
+	}
+
+	void set_menu_selecteditem_color(MenuEntry *entry) {
+		if (File::Exists("menu_selecteditem.bin")) {
+			File file;
+			File::Open(file,"menu_selecteditem.bin");
+			file.Read((void*)&red_value, sizeof(u8));
+			file.Seek(1);
+			file.Read((void*)&green_value, sizeof(u8));
+			file.Seek(1);
+			file.Read((void*)&blue_value, sizeof(u8));
+			file.Close();
+		}
+
+		Keyboard keyboard(
+			make_color_message(red_value, green_value, blue_value),
+			{
+				"赤の値を入力",
+				"緑の値を入力",
+				"青の値を入力",
+				"結果表示"
+			}
+		);
+
+		int choice = keyboard.Open();
+
+		if (choice == 0) {
+			red_value = color_input(Color::Red << "赤" << Color::White);
+		}
+		else if (choice == 1) {
+			green_value = color_input(Color::Green << "緑" << Color::White);
+		}
+		else if (choice == 2) {
+			blue_value = color_input(Color::Blue << "青" << Color::White);
+		}
+		else if (choice == 3) {
+			MessageBox(
+				Color(red_value, green_value, blue_value) <<
+				("■■■■■■■■■\n■■■■■■■■■\n■■■■■■■■■")
+			)();
+		}
+
+		FwkSettings &settings = FwkSettings::Get();
+		settings.MenuSelectedItemColor = Color(red_value, green_value, blue_value);
+
+		if (!File::Exists("menu_selecteditem.bin")) {
+			File::Create("menu_selecteditem.bin");
+		}
+
+		File file;
+		File::Open(file, "menu_selecteditem.bin");
+		file.Write((void*)&red_value, sizeof(u8));
+		file.Seek(1);
+		file.Write((void*)&green_value, sizeof(u8));
+		file.Seek(1);
+		file.Write((void*)&blue_value, sizeof(u8));
+		file.Flush();
+		file.Close();
+	}
+
+	void set_menu_unselecteditem_color(MenuEntry *entry) {
+		if (File::Exists("menu_unselecteditem.bin")) {
+			File file;
+			File::Open(file,"menu_unselecteditem.bin");
+			file.Read((void*)&red_value, sizeof(u8));
+			file.Seek(1);
+			file.Read((void*)&green_value, sizeof(u8));
+			file.Seek(1);
+			file.Read((void*)&blue_value, sizeof(u8));
+			file.Close();
+		}
+
+		Keyboard keyboard(
+			make_color_message(red_value, green_value, blue_value),
+			{
+				"赤の値を入力",
+				"緑の値を入力",
+				"青の値を入力",
+				"結果表示"
+			}
+		);
+
+		int choice = keyboard.Open();
+
+		if (choice == 0) {
+			red_value = color_input(Color::Red << "赤" << Color::White);
+		}
+		else if (choice == 1) {
+			green_value = color_input(Color::Green << "緑" << Color::White);
+		}
+		else if (choice == 2) {
+			blue_value = color_input(Color::Blue << "青" << Color::White);
+		}
+		else if (choice == 3) {
+			MessageBox(
+				Color(red_value, green_value, blue_value) <<
+				("■■■■■■■■■\n■■■■■■■■■\n■■■■■■■■■")
+			)();
+		}
+
+		FwkSettings &settings = FwkSettings::Get();
+		settings.MenuUnselectedItemColor = Color(red_value, green_value, blue_value);
+
+		if (!File::Exists("menu_unselecteditem.bin")) {
+			File::Create("menu_unselecteditem.bin");
+		}
+
+		File file;
+		File::Open(file, "menu_unselecteditem.bin");
+		file.Write((void*)&red_value, sizeof(u8));
+		file.Seek(1);
+		file.Write((void*)&green_value, sizeof(u8));
+		file.Seek(1);
+		file.Write((void*)&blue_value, sizeof(u8));
+		file.Flush();
+		file.Close();
+	}
+
+	void set_background_secondary_color(MenuEntry *entry) {
+		if (File::Exists("background_secondary.bin")) {
+			File file;
+			File::Open(file,"background_secondary.bin");
+			file.Read((void*)&red_value, sizeof(u8));
+			file.Seek(1);
+			file.Read((void*)&green_value, sizeof(u8));
+			file.Seek(1);
+			file.Read((void*)&blue_value, sizeof(u8));
+			file.Close();
+		}
+
+		Keyboard keyboard(
+			make_color_message(red_value, green_value, blue_value),
+			{
+				"赤の値を入力",
+				"緑の値を入力",
+				"青の値を入力",
+				"結果表示"
+			}
+		);
+
+		int choice = keyboard.Open();
+
+		if (choice == 0) {
+			red_value = color_input(Color::Red << "赤" << Color::White);
+		}
+		else if (choice == 1) {
+			green_value = color_input(Color::Green << "緑" << Color::White);
+		}
+		else if (choice == 2) {
+			blue_value = color_input(Color::Blue << "青" << Color::White);
+		}
+		else if (choice == 3) {
+			MessageBox(
+				Color(red_value, green_value, blue_value) <<
+				("■■■■■■■■■\n■■■■■■■■■\n■■■■■■■■■")
+			)();
+		}
+
+		FwkSettings &settings = FwkSettings::Get();
+		settings.BackgroundSecondaryColor = Color(red_value, green_value, blue_value);
+
+		if (!File::Exists("background_secondary.bin")) {
+			File::Create("background_secondary.bin");
+		}
+
+		File file;
+		File::Open(file, "background_secondary.bin");
+		file.Write((void*)&red_value, sizeof(u8));
+		file.Seek(1);
+		file.Write((void*)&green_value, sizeof(u8));
+		file.Seek(1);
+		file.Write((void*)&blue_value, sizeof(u8));
+		file.Flush();
+		file.Close();
+	}
 }
+
