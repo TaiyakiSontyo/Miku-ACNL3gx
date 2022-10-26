@@ -9,7 +9,15 @@ namespace CTRPluginFramework
 {
 	using StringVector = std::vector<std::string>;
     void set_background_border_color(MenuEntry *entry);
-    u8 color_input(const std::string& color_name) ;
+	void set_background_main_color(MenuEntry *entry);
+	void set_main_text_color(MenuEntry *entry);
+	void set_window_title_color(MenuEntry *entry);
+	void set_menu_selecteditem_color(MenuEntry *entry);
+	void set_menu_unselecteditem_color(MenuEntry *entry);
+	void set_background_secondary_color(MenuEntry *entry);
+    u8 color_input(const std::string& color_name);
+	
+	void OnNewFrameCallback(Time ttime);
 	
 	void setumei1(MenuEntry *entry);
 	void setumei2(MenuEntry *entry);
@@ -188,6 +196,7 @@ namespace CTRPluginFramework
 	void money2(MenuEntry *entry);
 	void money3(MenuEntry *entry);
 	void money4(MenuEntry *entry);
+	void money5(MenuEntry *entry);
 	
 	void style1(MenuEntry *entry);
 	void style2(MenuEntry *entry);
@@ -227,7 +236,7 @@ namespace CTRPluginFramework
 	void music32(MenuEntry *entry);
 	void music33(MenuEntry *entry);
 	void music34(MenuEntry *entry);
-	//void music(MenuEntry *entry);
+	void music35(MenuEntry *entry);
 	
 	void other1(MenuEntry *entry);
 	void other2(MenuEntry *entry);
@@ -242,10 +251,11 @@ namespace CTRPluginFramework
 	void other11(MenuEntry *entry);
 	
 	void maintenance1(MenuEntry *entry);
-	void maintenance2(MenuEntry *entry);
+//	void maintenance2(MenuEntry *entry);
 	void maintenance3(MenuEntry *entry);
 	void maintenance4(MenuEntry *entry);
 	void maintenance5(MenuEntry *entry);
+	void maintenance6(MenuEntry *entry);
 	
 }
 #endif
