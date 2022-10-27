@@ -19,6 +19,10 @@ namespace CTRPluginFramework
 	
 	void OnNewFrameCallback(Time ttime);
 	
+	void HashDumper(MenuEntry *entry);
+	
+	//void testdebug(MenuEntry *entry);
+	
 	void setumei1(MenuEntry *entry);
 	void setumei2(MenuEntry *entry);
 	void setumei3(MenuEntry *entry);
@@ -109,6 +113,7 @@ namespace CTRPluginFramework
 	void move6(MenuEntry *entry);
 	/*void move7(MenuEntry *entry);*/
 	void move8(MenuEntry *entry);
+	void move9(MenuEntry *entry);
 	
 	void act1(MenuEntry *entry);
 	void act2(MenuEntry *entry);
