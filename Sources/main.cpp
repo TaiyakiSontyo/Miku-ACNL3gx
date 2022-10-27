@@ -271,7 +271,8 @@ namespace CTRPluginFramework
 		
 			MenuFolder *fe1 = new MenuFolder(Color::Orange << "移動");
 				/**fe1 += new MenuEntry(Color::Orange << "タッチワープ",move7,"下画面のタッチしたところに移動します");*/
-				*fe1 += new MenuEntry(Color::Orange << "座標移動＊未完成",move1,"asmコードc++にするのわけわからん");
+				*fe1 += new MenuEntry(Color::Orange << "座標移動",move1,"十字キー + A");
+				*fe1 += new MenuEntry(Color::Orange << "座標移動2",move9,"スライドパッド + R");
 				*fe1 += new MenuEntry(Color::Orange << "座標移動向き指定",move2,"座標移動と一緒び使うと、移動した方向に体が向くようになります");
 				*fe1 += new MenuEntry(Color::Orange << "Bダッシュ速くなる",move3,"Bダッシュのスピードが速くなります");
 				*fe1 += new MenuEntry(Color::Orange << "歩くスピード変更",nullptr,player14);
@@ -517,12 +518,23 @@ namespace CTRPluginFramework
 		
 		
 		MenuFolder *fk = new MenuFolder("メンテナンス");
-			*fk += new MenuEntry(Color::Orange << "ファイル編集",nullptr,maintenance1);
-			//*fk += new MenuEntry(Color::Orange << "3gx関連ファイル編集",nullptr,maintenance2);
-			*fk += new MenuEntry(Color::Orange << "ファイル記入系",nullptr,maintenance3);
-			*fk += new MenuEntry(Color::Orange << "Utile系",nullptr,maintenance4);
-			*fk += new MenuEntry(Color::Orange << "ゲームコイン最大",maintenance5);
-			*fk += new MenuEntry(Color::Orange << "ゲームコイン枚数変更",nullptr,maintenance6);
+			MenuFolder *fk1 = new MenuFolder("色変更");
+				*fk1 += new MenuEntry("Set Main Text Color", nullptr, set_main_text_color);
+				*fk1 += new MenuEntry("Set Menu Selected Item Color", nullptr, set_menu_selecteditem_color);
+				*fk1 += new MenuEntry("Set Menu Unselected Item Color", nullptr, set_menu_unselecteditem_color);
+				*fk1 += new MenuEntry("Set Window Title Color", nullptr, set_window_title_color);
+				*fk1 += new MenuEntry("Set Background Border Color", nullptr, set_background_border_color);
+				*fk1 += new MenuEntry("Set Background Main Color", nullptr, set_background_main_color);
+				*fk1 += new MenuEntry("Set Background Secondary Color", nullptr, set_background_secondary_color);
+			fk->Append(fk1);
+				*fk += new MenuEntry(Color::Orange << "ファイル編集",nullptr,maintenance1);
+				//*fk += new MenuEntry(Color::Orange << "3gx関連ファイル編集",nullptr,maintenance2);
+				*fk += new MenuEntry(Color::Orange << "ファイル記入系",nullptr,maintenance3);
+				*fk += new MenuEntry(Color::Orange << "Utile系",nullptr,maintenance4);
+				*fk += new MenuEntry(Color::Orange << "ゲームコイン最大",maintenance5);
+				*fk += new MenuEntry(Color::Orange << "ゲームコイン枚数変更",nullptr,maintenance6);
+				*fk += new MenuEntry("hash表示",nullptr, HashDumper),
+				//*fk += new MenuEntry("TestDebug",testdebug);
 		
 		
 		*Pmenu += new MenuEntry(Color::Orange << "各種説明",nullptr,setumei2);
@@ -543,16 +555,6 @@ namespace CTRPluginFramework
 		/*自分のスタイル/家のスタイル/リフォーム*/
 		*Pmenu += fj;
 		/*その他*/
-		//*Pmenu += new MenuEntry(menuColor << "文字の色変更",nullptr,menuColorsSelector);
-		//
-		*Pmenu += new MenuEntry("Set Main Text Color", nullptr, set_main_text_color);
-		*Pmenu += new MenuEntry("Set Menu Selected Item Color", nullptr, set_menu_selecteditem_color);
-		*Pmenu += new MenuEntry("Set Menu Unselected Item Color", nullptr, set_menu_unselecteditem_color);
-		*Pmenu += new MenuEntry("Set Window Title Color", nullptr, set_window_title_color);
-		*Pmenu += new MenuEntry("Set Background Border Color", nullptr, set_background_border_color);
-		*Pmenu += new MenuEntry("Set Background Main Color", nullptr, set_background_main_color);
-		*Pmenu += new MenuEntry("Set Background Secondary Color", nullptr, set_background_secondary_color);
-		/*Set Color*/
 		*Pmenu += fk;
 		/*メンテナンス*/
 		*Pmenu += fa;
@@ -577,7 +579,51 @@ namespace CTRPluginFramework
 		
 		MessageBox("チート画面で下画面の'Tools'の中の'Settings'の中の'auto'の項目4点にチェックを入れると、設定したものとFavoriteを記憶します。\n他の3gxからの変更やバージョンの変更で動作がおかしい場合は" << Color::Yellow << " CTRPFDate.bin " << Color::White << "を削除して初期設定を行ってください\n\nなにかバグ等不具合があれば" << Color::Cyan << " たいやき#5374 " << Color::White << "まで。",DialogType::DialogOk).SetClear(ClearScreen::None)();
 		
-		Pmenu = new PluginMenu(Color::LimeGreen << CTRPFname, 0, 1, 1, about1 + NewLINE + about2 + NewLINE + about3 + NewLINE + about4 + NewLINE + about5);
+		//------------------------------------------
+		if ( Process::GetTitleID() != 0x0004000000086200 )
+			return 0;
+		
+		static bool file = false;
+		if(!file)
+		{
+		    if(!File::Exists("miku_pass.bin"))
+			{
+			    Keyboard    k("パスワードを入力してください");
+				std::string str;
+				k.Open(str);
+				if(str !="Ahoy")
+				{
+				    (MessageBox("パスワードが違います")());
+					bool select = (MessageBox("この3gxを終了します", DialogType::DialogYesNo)());;
+					if(!select)
+					{
+					    (MessageBox("強制終了します")());
+						
+					}
+				    abort();
+				}
+				else
+				{
+				    (MessageBox("認証完了!3gxが使用できます\n設定を反映させるために再起動してください")());
+					File::Create("miku_pass.bin");
+					abort();
+				}
+			}
+			file = true;
+		}
+		
+		u32 check_addr;
+		
+		while ( true )
+		{
+			Process::Read32(0x33099fe4, check_addr);
+			if ( check_addr == 0x44 ) break;
+			Sleep( Seconds(0.2) );
+		}
+		
+		//------------------------------------------
+		
+		Pmenu = new PluginMenu(Color::LimeGreen << CTRPFname, 0, 1, 2, about1 + NewLINE + about2 + NewLINE + about3 + NewLINE + about4 + NewLINE + about5);
 		Pmenu->SynchronizeWithFrame(true);
 		OSD::Notify(Color::Cyan << "Made by Taiyaki!");
 		OSD::Notify(Color::Cyan << "Loading ACNL_PLG...");

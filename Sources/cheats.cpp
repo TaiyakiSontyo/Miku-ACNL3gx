@@ -41,6 +41,29 @@ bool cheat_code1(u16 value, u16 lowerbound, u16 upperbound)
 	return value > lowerbound && value < upperbound;
 }
 
+/*bool test(const Screen& scr)
+{
+	if (scr.IsTop)
+	{
+		scr.Draw(Utile::Format("Player1: %d", 0x), 0, 0);
+	}
+	return true;
+}*/
+
+
+
+/*void testdebug(MenuEntry *entry)
+{
+	if (entry->WasJustActivated())
+	{
+		OSD::Run(test);
+	}
+	else if (!entry->IsActivated())
+	{
+		OSD::Stop(test);
+	}
+}*/
+
 
 /**/
 void setumei1(MenuEntry *entry)
@@ -2145,12 +2168,68 @@ void item70(MenuEntry *entry)
 
 
 
+u32 loc;
+u32 outz;
+u32 outx;
 
-void move1(MenuEntry *entry)
-{
-	Process::Write16(offset + a1, 0x0000);
-	//座標移動未完成
-}
+void move1( MenuEntry *entry)
+	{
+	    float out_pos_x, out_pos_y;
+	    float ind_pos_x, ind_pos_y;
+		
+	    if ( Process::ReadFloat(0x33099E58, out_pos_y) )
+		if ( Process::ReadFloat(0x33099E50, out_pos_x) )
+		if ( Process::ReadFloat(0x33099F84, ind_pos_y) )
+		if ( Process::ReadFloat(0x33099F7C, ind_pos_x) )
+		if ( Process::Read32(0x33099F84, loc) )
+			
+		if ( loc == -1 )
+		{
+			if ( Controller::IsKeysDown(A + DPadUp) )
+			{
+			    outz = out_pos_y - 9.0;
+				if ( Process::WriteFloat(0x33099E58, out_pos_y) );
+			}
+			if ( Controller::IsKeysDown(A + DPadDown) )
+			{
+			    outz = out_pos_y + 9.0;
+				if ( Process::WriteFloat(0x33099E58, out_pos_y) );
+			}
+			if ( Controller::IsKeysDown(A + DPadLeft) )
+			{
+			    outx = out_pos_x - 9.0;
+				if ( Process::WriteFloat(0x33099E50, out_pos_x) );
+			}
+			if ( Controller::IsKeysDown(A + DPadRight) )
+			{
+			    outx = out_pos_x + 9.0;
+				if ( Process::WriteFloat(0x33099E50, out_pos_x) );
+			}
+		}
+		else 
+	    {
+			if ( Controller::IsKeysDown(A + DPadUp) )
+			{
+			    ind_pos_y = ind_pos_y - 9.0;
+				if ( Process::WriteFloat(0x33099F84, ind_pos_y) );
+			}
+			if ( Controller::IsKeysDown(A + DPadDown) )
+			{
+			   ind_pos_y = ind_pos_y + 9.0;
+			   if ( Process::WriteFloat(0x33099F84, ind_pos_y) );
+			}
+			if ( Controller::IsKeysDown(A + DPadLeft) )
+			{
+			    ind_pos_x = ind_pos_x - 9.0;
+				if ( Process::WriteFloat(0x33099F7C, ind_pos_x) );
+			}
+			if ( Controller::IsKeysDown(A + DPadRight) )
+			{
+			    ind_pos_x = ind_pos_x + 9.0;
+				if ( Process:: WriteFloat(0x33099F7C, ind_pos_x) );
+			}
+	    }
+	}
 
 void move2(MenuEntry *entry)
 {
@@ -2389,6 +2468,65 @@ void move8(MenuEntry *entry)
 		MessageBox("スライドパッドだけでダッシュOFF")();
 	}
 }
+
+void move9( MenuEntry* entry )
+	{
+	    float out_pos_x, out_pos_y;
+	    float ind_pos_x, ind_pos_y;
+		
+	    if ( Process::ReadFloat(0x33099E58, out_pos_y) )
+		if ( Process::ReadFloat(0x33099E50, out_pos_x) )
+		if ( Process::ReadFloat(0x33099F84, ind_pos_y) )
+		if ( Process::ReadFloat(0x33099F7C, ind_pos_x) )
+		if ( Process::Read32(0x33099F84, loc) )
+			
+		if ( loc == -1 )
+		{
+			if ( Controller::IsKeysDown(R + CPadUp) )
+			{
+			    outz = out_pos_y - 9.0;
+				if ( Process::WriteFloat(0x33099E58, out_pos_y) );
+			}
+			if ( Controller::IsKeysDown(R + CPadDown) )
+			{
+			    outz = out_pos_y + 9.0;
+				if ( Process::WriteFloat(0x33099E58, out_pos_y) );
+			}
+			if ( Controller::IsKeysDown(R + CPadLeft) )
+			{
+			    outx = out_pos_x - 9.0;
+				if ( Process::WriteFloat(0x33099E50, out_pos_x) );
+			}
+			if ( Controller::IsKeysDown(R + CPadRight) )
+			{
+			    outx = out_pos_x + 9.0;
+				if ( Process::WriteFloat(0x33099E50, out_pos_x) );
+			}
+		}
+		else 
+	    {
+			if ( Controller::IsKeysDown(R + CPadUp) )
+			{
+			    ind_pos_y = ind_pos_y - 9.0;
+				if ( Process::WriteFloat(0x33099F84, ind_pos_y) );
+			}
+			if ( Controller::IsKeysDown(R + CPadDown) )
+			{
+			   ind_pos_y = ind_pos_y + 9.0;
+			   if ( Process::WriteFloat(0x33099F84, ind_pos_y) );
+			}
+			if ( Controller::IsKeysDown(R + CPadLeft) )
+			{
+			    ind_pos_x = ind_pos_x - 9.0;
+				if ( Process::WriteFloat(0x33099F7C, ind_pos_x) );
+			}
+			if ( Controller::IsKeysDown(R + CPadRight) )
+			{
+			    ind_pos_x = ind_pos_x + 9.0;
+				if ( Process:: WriteFloat(0x33099F7C, ind_pos_x) );
+			}
+	    }
+	}	
 
 
 
