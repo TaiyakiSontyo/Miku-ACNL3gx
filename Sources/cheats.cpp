@@ -2,15 +2,20 @@
 #include <CTRPluginFramework.hpp>
 #include <iomanip>
 #include <sstream>
-/*#define        WRITEFLOAT(addr, data)                *(float *)(addr) = data
-#define        WRITEFLOAT8(addr, data)      *(vu8*)(addr) = data*/
+/**
+#define        WRITEFLOAT(addr, data)                *(float *)(addr) = data
+#define        WRITEFLOAT8(addr, data)      *(vu8*)(addr) = data
+**/
 
 namespace CTRPluginFramework
 {
+/***** *****/
 u32 offset=0;
 u32 cmp32=0;
 u32 date32=0;
+/***********/
 
+/***** const *****/
 const u32 a1 = 0x00000000;
 const u32 a2 = 0xE3A00000;
 const u32 a3 = 0xFFFFFFFF;
@@ -27,10 +32,9 @@ const u32 a13 = 0x3E000000;
 const u32 a14 = 0x3FF00000;
 const u32 a15 = 0x41000000;
 const u32 a16 = 0xE3A00001;
+/*****************/
 
-
-
-
+/***** bool *****/
 bool cheat_code(u32 value, u32 lowerbound, u32 upperbound)
 	{
 		return value > lowerbound && value < upperbound;
@@ -41,18 +45,19 @@ bool cheat_code1(u16 value, u16 lowerbound, u16 upperbound)
 	return value > lowerbound && value < upperbound;
 }
 
-/*bool test(const Screen& scr)
+/** bool test
+bool test(const Screen& scr)
 {
 	if (scr.IsTop)
 	{
 		scr.Draw(Utile::Format("Player1: %d", 0x), 0, 0);
 	}
 	return true;
-}*/
+}
+**/
 
-
-
-/*void testdebug(MenuEntry *entry)
+/** debug
+void testdebug(MenuEntry *entry)
 {
 	if (entry->WasJustActivated())
 	{
@@ -62,12 +67,22 @@ bool cheat_code1(u16 value, u16 lowerbound, u16 upperbound)
 	{
 		OSD::Stop(test);
 	}
-}*/
+}
+**/
+/****************/
 
 
-/**/
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/**                                           チートコード                                          **/
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////
+/**                    説明                    **/
+/////////////////////////////////////////////////
+
 void setumei1(MenuEntry *entry)
-{ /* 製作者　*/
+{ //製作者
 	Keyboard key("製作者", {"Discord","Twitter","YouTube","Instagram",});
 			
 	int r = key.Open();
@@ -82,8 +97,8 @@ void setumei1(MenuEntry *entry)
 }
 
 void setumei2(MenuEntry *entry)
-{ /* 説明 */
-	Keyboard key("説明", {"アクションの停止方法","髪型変更(男)","髪型変更(女)","髪の毛の色変更"});
+{ //説明
+	Keyboard key("説明", {"アクションの停止方法","髪型変更(男)","髪型変更(女)","髪の毛の色変更","目の色変更"});
 			
 	int r = key.Open();
 	if ( r == 0 ) {
@@ -96,12 +111,15 @@ void setumei2(MenuEntry *entry)
 	MessageBox("有効な数字を入力しないとバグります\n11:自然が一番\n12:けだるいゆるさ\n13:片付けたい\n14:わざとだよ\n15:スタイリングする\n16:パーティーだよ\n17:憧れたい\n18:ふわっとしたゆるさ\n19:いつかは落ち着く\n1A:フレッシュで\n1B:ベテランで\n1C:根性で乗り越える\n1D:誰も寄せつけたくない\n1E:ずっとヤンチャ\n1F:デートなんです\n20:じっと耐えます\n21:ぼさぼさ")();
 	}
 	if ( r == 3 ) {
-	MessageBox("有効な数字を入力しないとバグります\n0:茶色")();
+	MessageBox("有効な数字を入力しないとバグります\n0:茶色\n1:明るい茶色\n2:オレンジ\n3:水色\n4:金色\n5:黄緑色\n6:桃色\n7:白色\n8:黒色\n9:赤茶色\nA:赤色\nB:濃い青色\nC:黄色\nD:緑色\nE:明るい紫色\nF:グレー")();
+	}
+	if ( r == 4 ) {
+		MessageBox("有効な数字を入力しないとバグります\n0:黒色\n1:茶色\n2:緑色\n3:濃い緑色\n4:濃い青色\n5:青色")();
 	}
 }
 
 void setumei3(MenuEntry *entry)
-{ /* 協力者 */
+{ //協力者
 	Keyboard key("協力者", {"のむさん","ジュアン"});
 			
 	int r = key.Open();
@@ -112,11 +130,12 @@ void setumei3(MenuEntry *entry)
 	"ジュアン#0509")();
 }
 
-
-
+/////////////////////////////////////////////////
+/**                    チート                   **/
+/////////////////////////////////////////////////
 
 void cheat1(MenuEntry *entry)
-{ /* チートON */
+{ //チートオン
 	Process::Write32(offset + 0x002C01C8, a6);
 	Process::Write8(offset + 0xAD0158, 0x02);
 	Process::Write32(offset + 0x00AD0250, 0x01000000);
@@ -171,13 +190,13 @@ void cheat1(MenuEntry *entry)
 
 
 void cheat2(MenuEntry *entry)
-{ /* 花散らさない */
+{ //花散らさない
 	Process::Write32(offset + 0x00596890, 0xE3A0001D);
 }
 
 
 void cheat3(MenuEntry *entry)
-{ /* 相手通り抜けられる */
+{ //相手通り抜けられる
 	Keyboard key("ONにすることでプレイヤーやNPCを貫通することができます。", {"ON", "OFF"});
 			
 	int r = key.Open();
@@ -192,7 +211,7 @@ void cheat3(MenuEntry *entry)
 }
 
 void cheat4(MenuEntry *entry)
-{ /* 壁貫通 */
+{ //壁貫通
 	if (Controller::IsKeysPressed( DPadRight + L ))
 	{
 		Process::Write32(offset + 0x0064EF0C, 0xEA000052);
@@ -218,13 +237,13 @@ void cheat4(MenuEntry *entry)
 }
 
 void cheat5(MenuEntry *entry)
-{ /* 穴に落ちなくなる */
+{ //穴に落ちなくなる
 	Process::Write32(offset + 0x00659160, 0xEA000014);
 	Process::Write32(offset + 0x006774DC, 0xEA00002D);
 }
 
 void cheat6(MenuEntry*entry)
-{ /* チートonテスト */
+{ //チートオンtest
 	offset = a1;
 	Process::Write32(offset + 0x596A30, a16);
 	Process::Write32(offset + 0x5A0FEC, a5);
@@ -253,8 +272,9 @@ void cheat6(MenuEntry*entry)
 	
 }
 
-
-
+/////////////////////////////////////////////////
+/**                   アイテム                   **/
+/////////////////////////////////////////////////
 
 void item1(MenuEntry *entry)
 {
@@ -2166,14 +2186,19 @@ void item70(MenuEntry *entry)
 	}
 }
 
+/////////////////////////////////////////////////
+/**                    移動                   **/
+/////////////////////////////////////////////////
 
-
-u32 loc;
-u32 outz;
-u32 outx;
+/***** zahyou *****/
+u32 loc = 0;
+u32 outz = 0;
+u32 outx =0;
+/******************/
 
 void move1( MenuEntry *entry)
 	{
+		
 	    float out_pos_x, out_pos_y;
 	    float ind_pos_x, ind_pos_y;
 		
@@ -2528,8 +2553,9 @@ void move9( MenuEntry* entry )
 	    }
 	}	
 
-
-
+/////////////////////////////////////////////////
+/**                 アクション                    **/
+/////////////////////////////////////////////////
 
 void act1(MenuEntry *entry)
 {
@@ -3342,8 +3368,9 @@ void act25(MenuEntry *entry)
 	}
 }
 
-
-
+/////////////////////////////////////////////////
+/**                     島                    **/
+/////////////////////////////////////////////////
 
 void sima1(MenuEntry *entry)
 { /* 島にワープ */
@@ -3782,8 +3809,21 @@ void sima34(MenuEntry *entry)
 	}
 }
 
+void sima35(MenuEntry *entry)
+{
+	Process::Write16(offset + 0x97FA10, 0x334F);
+	Process::Write16(offset + 0x97FA14, 0x3353);
+	Process::Write16(offset + 0x97FA18, 0x3357);
+	Process::Write16(offset + 0x97FA1C, 0x335B);
+	Process::Write16(offset + 0x97FA20, 0x335F);
+	Process::Write16(offset + 0x97FA24, 0x3363);
+	Process::Write16(offset + 0x97FA28, 0x3365);
+	Process::Write16(offset + 0x97FA2C, 0x2117);
+}
 
-
+/////////////////////////////////////////////////
+/**                   プレイヤー                 **/
+/////////////////////////////////////////////////
 
 void player1(MenuEntry *entry)
 {
@@ -4196,7 +4236,6 @@ void player13(MenuEntry *entry)
 	
 }
 
-
 void player14(MenuEntry *entry)
 {
 	Keyboard key("歩くスピードを変更します\n通常 で元の速度に戻せます",{"通常","遅い","超遅い","速い","超速い"});
@@ -4276,8 +4315,457 @@ void player18(MenuEntry *entry)
 	}
 }
 
+void player19(MenuEntry *entry)
+{
+	Keyboard keyboard("指定したプレイヤーに変化。", {"村長", "サブ1", "サブ2", "サブ3"});
+	int r = keyboard.Open();
+		if (r >= 0)
+		Process::Write32(0xAA914C, 0x31f49aa0 + r * 0xa480);
+}
+
+void player20(MenuEntry *entry)
+{
+	Keyboard key("プレイヤーを選ぶ", { "村名", "サブ1", "サブ2", "サブ3" });
+	int r = key.Open();
+	std::string str;
+	if (r >= 0)
+	{
+		Keyboard name_input;
+		name_input.Open(str);
+		
+		for (int i = 0; i < 4; i++)
+			Process::Write32((0x31f4f048 + ((r - 1) * 0xA480)) + (i * 4), 0);
+		
+			Process::WriteString((0x31f4f048 + ((r - 1) * 0xA480)), str, StringFormat::Utf16);
+	}
+}
+
+void player21(MenuEntry *entry)
+{
+	Keyboard key("プレイヤー", { "村長", "サブ1", "サブ2", "サブ3" });
+	int r0 = key.Open();
+
+	OSD::SwapBuffers();
+
+	if (r0 >= 0)
+	{
+		Keyboard denger("性別", { "男", "女" });
+		int r1 = denger.Open();
+		
+		if (r1 >= 0)
+			Process::Write8(0x31F4F05A + r0 * 0xA480, r1);
+	}
+}
+
+void player22(MenuEntry *entry)
+{
+	Keyboard key("プレイヤーを変更します",{"プレイヤー1(村長)","プレイヤー2(村民)","プレイヤー3(村民)","プレイヤー4(村民)"});
+	switch(key.Open())
+		{
+			case 0:
+			{
+				Process::Write32(offset + 0xAA914C, 0x31F49AA0);
+				offset = 0x32000000;
+				if (Process::Read32(offset + 0xAA914C, cmp32) && cmp32 != 00000212)
+				{
+					Process::Write8(offset + 0x18442, 0x00000001);
+				}
+			}
+			case 1:
+			{
+				Process::Write32(offset + 0xAA914C, 0x31F53F20);
+				offset = 0x32000000;
+				if (Process::Read32(offset + 0xAA914C, cmp32) && cmp32 != 00000212)
+				{
+					Process::Write8(offset + 0x18442, 0x00000001);
+				}
+			}
+			case 2:
+			{
+				Process::Write32(offset + 0xAA914C, 0x31F5E3A0);
+				offset = 0x32000000;
+				if (Process::Read32(offset + 0xAA914C, cmp32) && cmp32 != 00000212)
+				{
+					Process::Write8(offset + 0x18442, 0x00000001);
+				}
+			}
+			case 3:
+			{
+				Process::Write32(offset + 0xAA914C, 0x31F68820);
+				offset = 0x32000000;
+				if (Process::Read32(offset + 0xAA914C, cmp32) && cmp32 != 00000212)
+				{
+					Process::Write8(offset + 0x18442, 0x00000001);
+				}
+			}
+		}
+}
+
+/***** badge *****/
+const u32 dou = 0x01010101;
+const u32 gin = 0x02020202;
+const u32 kin = 0x03030303;
+const u32 dou1 = 0x09090909;
+const u32 gin1 = 0x07070707;
+const u32 kin1 = 0x08080808;
+/*****************/
+
+void player23(MenuEntry *entry)
+{
+	Keyboard key("バッジを変更します",{"なし","銅","銀","金"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		offset = 0x31000000;
+		Process::Write32(offset + 0xF4F13C, a1);
+		Process::Write32(offset + 0xF4F140, a1);
+		Process::Write32(offset + 0xF4F144, a1);
+		Process::Write32(offset + 0xF4F148, a1);
+		Process::Write32(offset + 0xF4F14C, a1);
+		Process::Write32(offset + 0xF4F150, a1);
+	}
+	if ( r == 1 ) {
+		offset = 0x31000000;
+		Process::Write32(offset + 0xF4F13C, dou);
+		Process::Write32(offset + 0xF4F140, dou);
+		Process::Write32(offset + 0xF4F144, dou);
+		Process::Write32(offset + 0xF4F148, dou);
+		Process::Write32(offset + 0xF4F14C, dou);
+		Process::Write32(offset + 0xF4F150, dou);
+	}
+	if ( r == 2 ) {
+		offset = 0x31000000;
+		Process::Write32(offset + 0xF4F13C, gin);
+		Process::Write32(offset + 0xF4F140, gin);
+		Process::Write32(offset + 0xF4F144, gin);
+		Process::Write32(offset + 0xF4F148, gin);
+		Process::Write32(offset + 0xF4F14C, gin);
+		Process::Write32(offset + 0xF4F150, gin);
+	}
+	if ( r == 3 ) {
+		offset = 0x31000000;
+		Process::Write32(offset + 0xF4F13C, kin);
+		Process::Write32(offset + 0xF4F140, kin);
+		Process::Write32(offset + 0xF4F144, kin);
+		Process::Write32(offset + 0xF4F148, kin);
+		Process::Write32(offset + 0xF4F14C, kin);
+		Process::Write32(offset + 0xF4F150, kin);
+	}
+}
+
+void player24(MenuEntry *entry)
+{
+	offset = 0x31000000;
+	Process::Write32(offset + 0xF4F13C, 0x2A343E49);
+	Process::Write32(offset + 0xF4F140, 0x2F0C1721);
+	Process::Write32(offset + 0xF4F144, 0x08111B26);
+	Process::Write32(offset + 0xF4F148, 0x5046505A);
+	Process::Write32(offset + 0xF4F14C, 0x28322846);
+	Process::Write32(offset + 0xF4F150, 0xE5F4FE0A);
+	return;
+}
+
+void player25(MenuEntry *entry)
+{
+	offset = 0x31000000;
+	Process::Write32(offset + 0xF4F13C, 0xCBD5C6CF);
+	Process::Write32(offset + 0xF4F140, 0x8AADB6A7);
+	Process::Write32(offset + 0xF4F144, 0x616C767F);
+	Process::Write32(offset + 0xF4F148, 0x3A434D57);
+	Process::Write32(offset + 0xF4F14C, 0x21C2530);
+	Process::Write32(offset + 0xF4F150, 0x030C1607);
+}
+
+void player26(MenuEntry *entry)
+{
+	offset = 0x31000000;
+	Process::Write32(offset + 0xF4F13C, 0x4453B1A2);
+	Process::Write32(offset + 0xF4F140, 0xA3A2B1F1);
+	Process::Write32(offset + 0xF4F144, 0x4167857F);
+	Process::Write32(offset + 0xF4F148, 0x233F3667);
+	Process::Write32(offset + 0xF4F14C, 0x8204040E);
+	Process::Write32(offset + 0xF4F150, 0x03B316B2);
+}
+
+void player27(MenuEntry *entry)
+{
+	offset = 0x31000000;
+	Process::Write32(offset + 0xF4F13C, 0x5A646E57);
+	Process::Write32(offset + 0xF4F140, 0xC3C202A);
+	Process::Write32(offset + 0xF4F144, 0xA6C7628);
+	Process::Write32(offset + 0xF4F148, 0x3A444E58);
+	Process::Write32(offset + 0xF4F14C, 0x121C2630);
+	Process::Write32(offset + 0xF4F150, 0x30D1708);
+}
+
+void player28(MenuEntry *entry)
+{
+	offset = 0x31000000;
+	Process::Write32(offset + 0xF4F13C, 0x2320202);
+	Process::Write32(offset + 0xF4F140, 0x2420202);
+	Process::Write32(offset + 0xF4F144, 0x3520202);
+	Process::Write32(offset + 0xF4F148, 0x2020202);
+	Process::Write32(offset + 0xF4F14C, 0x1520292);
+	Process::Write32(offset + 0xF4F150, 0x2020202);
+}
+
+void player29(MenuEntry *entry)
+{
+	offset = 0x31000000;
+	Process::Write32(offset + 0xF4F13C, 0x44530EA3);
+	Process::Write32(offset + 0xF4F140, 0xA3A3B2F1);
+	Process::Write32(offset + 0xF4F144, 0xAB12087F);
+	Process::Write32(offset + 0xF4F148, 0x49465D22);
+	Process::Write32(offset + 0xF4F14C, 0xB305053F);
+	Process::Write32(offset + 0xF4F150, 0x3241638);
+}
+
+void player30(MenuEntry *entry)
+{
+	offset = 0x31000000;
+	Process::Write32(offset + 0xF4F13C, 0x434DC6A2);
+	Process::Write32(offset + 0xF4F140, 0x71ADB1F1);
+	Process::Write32(offset + 0xF4F144, 0x416E8567);
+	Process::Write32(offset + 0xF4F148, 0x35464753);
+	Process::Write32(offset + 0xF4F14C, 0x82161F2A);
+	Process::Write32(offset + 0xF4F150, 0x2FF15FF);
+}
+
+void player31(MenuEntry *entry)
+{
+	offset = 0x31000000;
+	Process::Write32(offset + 0xF4F13C, kin1);
+	Process::Write32(offset + 0xF4F140, kin1);
+	Process::Write32(offset + 0xF4F144, kin1);
+	Process::Write32(offset + 0xF4F148, kin1);
+	Process::Write32(offset + 0xF4F14C, kin1);
+	Process::Write32(offset + 0xF4F150, kin1);
+}
+
+void player32(MenuEntry *entry)
+{
+	offset = 0x31000000;
+	Process::Write32(offset + 0xF4F13C, gin1);
+	Process::Write32(offset + 0xF4F140, gin1);
+	Process::Write32(offset + 0xF4F144, gin1);
+	Process::Write32(offset + 0xF4F148, gin1);
+	Process::Write32(offset + 0xF4F14C, gin1);
+	Process::Write32(offset + 0xF4F150, gin1);
+}
+
+void player33(MenuEntry *entry)
+{
+	offset = 0x31000000;
+	Process::Write32(offset + 0xF4F13C, dou1);
+	Process::Write32(offset + 0xF4F140, dou1);
+	Process::Write32(offset + 0xF4F144, dou1);
+	Process::Write32(offset + 0xF4F148, dou1);
+	Process::Write32(offset + 0xF4F14C, dou1);
+	Process::Write32(offset + 0xF4F150, dou1);
+}
+
+void player34(MenuEntry *entry)
+{
+	offset = 0x31000000;
+	Process::Write32(offset + 0xF4F13C, 0xE0E0E18);
+	Process::Write32(offset + 0xF4F140, 0x40E1804);
+	Process::Write32(offset + 0xF4F144, 0x2C36404A);
+	Process::Write32(offset + 0xF4F148, 0x40E1822);
+	Process::Write32(offset + 0xF4F14C, 0xE05050F);
+	Process::Write32(offset + 0xF4F150, 0x27040404);
+}
+
+void player35(MenuEntry *entry)
+{
+	offset = 0x31000000;
+	Process::Write32(offset + 0xF4F13C, 0x1C2B303F);
+	Process::Write32(offset + 0xF4F140, 0x680A0812);
+	Process::Write32(offset + 0xF4F144, 0x404A545E);
+	Process::Write32(offset + 0xF4F148, 0x182C2C40);
+	Process::Write32(offset + 0xF4F14C, 0x40418);
+	Process::Write32(offset + 0xF4F150, 0xE0EAF4FE);
+}
+
+void player36(MenuEntry *entry)
+{
+	offset = 0x31000000;
+	Process::Write32(offset + 0xF4F13C, 0x444E5862);
+	Process::Write32(offset + 0xF4F140, 0x1C26303A);
+	Process::Write32(offset + 0xF4F144, 0xEA030812);
+	Process::Write32(offset + 0xF4F148, 0x6A8D7E88);
+	Process::Write32(offset + 0xF4F14C, 0x5B655660);
+	Process::Write32(offset + 0xF4F150, 0x727C2E38);
+}
+
+void player37(MenuEntry *entry)
+{
+	offset = 0x31000000;
+	Process::Write32(offset + 0xF4F13C, 0xFFF0FE2D);
+	Process::Write32(offset + 0xF4F140, 0xCAAFFFFE);
+	Process::Write32(offset + 0xF4F144, 0xEFABEDCE);
+	Process::Write32(offset + 0xF4F148, 0xCAFECAFE);
+	Process::Write32(offset + 0xF4F14C, a3);
+	Process::Write32(offset + 0xF4F150, a3);
+}
+
+void player38(MenuEntry *entry)
+{
+	offset = 0x31000000;
+	Process::Write32(offset + 0xF4F13C, 0x808AAD9E);
+	Process::Write32(offset + 0xF4F140, 0x58626C76);
+	Process::Write32(offset + 0xF4F144, 0x303A444E);
+	Process::Write32(offset + 0xF4F148, 0x8121C26);
+	Process::Write32(offset + 0xF4F14C, 0x30D17);
+	Process::Write32(offset + 0xF4F150, a1);
+}
+
+void player39(MenuEntry *entry)
+{
+	offset = 0x31000000;
+	Process::Write32(offset + 0xF4F13C, 0xC1D0DADF);
+	Process::Write32(offset + 0xF4F140, 0x99A3ADBC);
+	Process::Write32(offset + 0xF4F144, 0x717B858F);
+	Process::Write32(offset + 0xF4F148, 0x49535D67);
+	Process::Write32(offset + 0xF4F14C, 0x212B353F);
+	Process::Write32(offset + 0xF4F150, 0x80D17);
+}
+
+void player40(MenuEntry *entry)
+{
+	offset = 0x31000000;
+	Process::Write32(offset + 0xF4F13C, 0x2B353F49);
+	Process::Write32(offset + 0xF4F140, 0x300D1721);
+	Process::Write32(offset + 0xF4F144, 0x8121C26);
+	Process::Write32(offset + 0xF4F148, 0x3C46505A);
+	Process::Write32(offset + 0xF4F14C, 0x1E2832);
+	Process::Write32(offset + 0xF4F150, 0xEAF4FE0A);
+}
+
+void player41(MenuEntry *entry)
+{
+	offset = 0x31000000;
+	Process::Write32(offset + 0xF4F13C, 0xCBD5C6E9);
+	Process::Write32(offset + 0xF4F140, 0x8AAD9EA8);
+	Process::Write32(offset + 0xF4F144, 0x626C7680);
+	Process::Write32(offset + 0xF4F148, 0x3A444E58);
+	Process::Write32(offset + 0xF4F14C, 0x121C2630);
+	Process::Write32(offset + 0xF4F150, 0x30D1708);
+}
+
+void player42(MenuEntry *entry)
+{
+	Keyboard key("誕生日変更",{"月","日"});
+	int r = key.Open();
+	if ( r == 0 ) 
+	{
+		Keyboard key("誕生月を入力してください");
+		key.SetMaxLength( 2 );
+		key.IsHexadecimal(false);
+		u8 input;
+		if (key.Open(input) != -1 )
+		{
+			if (12 < input) 
+			{
+				input = 12;
+			}
+			offset = 0x31000000;
+			Process::Write8(offset + 0xF63974, input);
+		}
+	}
+	if ( r == 1 )
+	{
+		Keyboard key("誕生日を入力してください");
+		key.SetMaxLength( 2 );
+		key.IsHexadecimal(false);
+		u8 input;
+		if (key.Open(input) != -1 )
+		{
+			if (31 < input) 
+			{
+				input = 31;
+			}
+			offset = 0x31000000;
+			Process::Write8(offset + 0xF63975, input);
+		}
+	}
+}
+
+void player43(MenuEntry *entry)
+{
+	Keyboard key("登録日変更",{"年","月","日"});
+	int r = key.Open();
+	if ( r == 0 ) 
+	{
+		Keyboard key("登録年を入力してください");
+		key.SetMaxLength( 4 );
+		key.IsHexadecimal(false);
+		u16 input;
+		if (key.Open(input) != -1 )
+		{
+			offset = 0x31000000;
+			Process::Write16(offset + 0xF63976, input);
+		}
+	}
+	if ( r == 1 ) 
+	{
+		Keyboard key("登録月を入力してください");
+		key.SetMaxLength( 2 );
+		key.IsHexadecimal(false);
+		u8 input;
+		if (key.Open(input) != -1 )
+		{
+			if (12 < input)
+			{	
+				input = 12;
+			}
+			offset = 0x31000000;
+			Process::Write8(offset + 0xF63978, input);
+		}
+	}
+	if ( r == 2 ) 
+	{
+		Keyboard key("登録日を入力してください");
+		key.SetMaxLength( 2 );
+		key.IsHexadecimal(false);
+		u8 input;
+		if (key.Open(input) != -1 )
+		{
+			if (31 < input)
+			{
+				input = 31;
+			}
+			offset = 0x31000000;
+			Process::Write8(offset + 0xF63979, input);
+		}
+	}
+}
 
 
+/////////////////////////////////////////////////
+/**                    夢見                   **/
+/////////////////////////////////////////////////
+
+void yumemi1(MenuEntry *entry)
+{
+	Keyboard key("夢番地状態変更",{"公開","非公開"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		offset = 0x31000000;
+		Process::Write8(offset + 0xF63A98, 0x01);
+		MessageBox("夢番地公開")();
+	}
+	if ( r == 1 ) {
+		offset = 0x31000000;
+		Process::Write8(offset + 0xF63A98, 0x00);
+		MessageBox("夢番地非公開")();
+	}
+}
+
+
+
+
+/////////////////////////////////////////////////
+/**                    写真                   **/
+/////////////////////////////////////////////////
 
 void photo1(MenuEntry *entry)
 	{
@@ -4335,8 +4823,9 @@ void photo2(MenuEntry *entry)
         }
     }
 	
-	
-	
+/////////////////////////////////////////////////
+/**                    お金                    **/
+/////////////////////////////////////////////////
 	
 void money1(MenuEntry *entry)
 {
@@ -4387,42 +4876,273 @@ void money5(MenuEntry *entry)
 	}
 }
 
-
-
+/////////////////////////////////////////////////
+/**                   スタイル                   **/
+/////////////////////////////////////////////////
 
 void style1(MenuEntry *entry)
 {	
-	 Keyboard key( "作成するファイルの名前を入力して下さい" );
-            key.SetMaxLength( 8 ); // 入力最大行
-            std::string input;
-
-            if( key.Open(input) != -1 )
-            {
-				offset = 0x32000000;
-				Process::Write8(offset + 0x184E0, 0x00);
-            }
+	Keyboard key( "髪型変更(男)" );
+        key.SetMaxLength( 2 ); // 入力最大行
+		key.IsHexadecimal(true);
+		u8 input;
+		if (key.Open(input) != -1 )
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0x184E0, input);
+		}
 }
 
 void style2(MenuEntry *entry)
 {
-	u8 value;
-	std::string filename;
-	Keyboard(filename).Open(value);
-	offset = 0x32000000;
-	Process::Write8(offset + 0x184E0, value);
+	Keyboard key( "髪型変更(女)" );
+        key.SetMaxLength( 2 ); // 入力最大行
+		key.IsHexadecimal(true);
+		u8 input;
+		if (key.Open(input) != -1 )
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0x184E0, input);
+		}
 }
 
 void style3(MenuEntry *entry)
 {
-	u8 value;
-	std::string filename;
-	Keyboard(filename).Open(value);
-	offset = 0x32000000;
-	Process::Write8(offset + 0x184E1, value);
+	Keyboard key( "髪の色変更" );
+        key.SetMaxLength( 1 ); // 入力最大行
+		key.IsHexadecimal(true);
+		u8 input;
+		if (key.Open(input) != -1 )
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0x184E1, input);
+		}
+}
+
+void style4(MenuEntry *entry)
+{
+	Keyboard key("目の色変更");
+		key.SetMaxLength( 1 );
+		key.IsHexadecimal(false);
+		u8 input;
+		if (key.Open(input) != -1 )
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0xF49AA7, input);
+		}
+}
+
+void style5(MenuEntry *entry)
+{
+	Keyboard key("目の形変更");
+		key.SetMaxLength( 1 );
+		key.IsHexadecimal(true);
+		u8 input;
+		if (key.Open(input) != -1 )
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0xF49AA6, input);
+		}
+}
+
+void style6(MenuEntry *entry)
+{
+	Keyboard key("日焼け度変更");
+		key.SetMaxLength( 1 );
+		key.IsHexadecimal(true);
+		u8 input;
+		if (key.Open(input) != -1 )
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0xF49AA8, input);
+		}
 }
 
 
+/////////////////////////////////////////////////
+/**                    音楽                   **/
+/////////////////////////////////////////////////
 
+void house1(MenuEntry *entry)
+{
+	Keyboard key("家の大きさを変更します",{"一階(小)","一階(中)","一階(大)","二階","右の部屋","左の部屋","最大"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		offset = 0x31000000;
+		Process::Write8(offset + 0xFA7304, 0x01);
+	}
+	if ( r == 1 ) {
+		offset = 0x31000000;
+		Process::Write8(offset + 0xFA7304, 0x02);
+	}
+	if ( r == 2 ) {
+		offset = 0x31000000;
+		Process::Write8(offset + 0xFA7304, 0x03);
+	}
+	if ( r == 3 ) {
+		offset = 0x31000000;
+		Process::Write8(offset + 0xFA7304, 0x04);
+	}
+	if ( r == 4 ) {
+		offset = 0x31000000;
+		Process::Write8(offset + 0xFA7304, 0x05);
+	}
+	if ( r == 5 ) {
+		offset = 0x31000000;
+		Process::Write8(offset + 0xFA7304, 0x06);
+	}
+	if ( r == 6 ) {
+		offset = 0x31000000;
+		Process::Write8(offset + 0xFA7304, 0x07);
+	}
+}
+
+void house2(MenuEntry *entry)
+{
+	Keyboard key("家の見た目を変更します",{"テント","お屋敷","和風なお城","洋風なお城","モダンな家"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		offset = 0x31000000;
+		Process::Write8(offset + 0xFA7304, 0x00);
+	}
+	if ( r == 1 ) {
+		offset = 0x31000000;
+		Process::Write8(offset + 0xFA7305, 0x00);
+	}
+	if ( r == 2 ) {
+		offset = 0x31000000;
+		Process::Write8(offset + 0xFA7305, 0x01);
+	}
+	if ( r == 3 ) {
+		offset = 0x31000000;
+		Process::Write8(offset + 0xFA7305, 0x02);
+	}
+	if ( r == 4 ) {
+		offset = 0x31000000;
+		Process::Write8(offset + 0xFA7305, 0x03);
+	}
+}
+
+void house3(MenuEntry *entry)
+{
+	Keyboard key("ドアの形変更",{"丸","四角"});
+	switch(key.Open())
+		{
+			case 0:
+			{
+				offset = 0x31000000;
+				Process::Write8(offset + 0xFA7306, 0x00);
+			}
+			case 1:
+			{
+				offset = 0x31000000;
+				Process::Write8(offset + 0xFA7306, 0x01);
+			}
+		}
+}
+
+void house4(MenuEntry *entry)
+{
+	Keyboard key("ドアの種類変更",{"丸窓のドア","サカナ窓のドア","近未来のドア","窓付きドア","アラブな黄色いドア","鉄のドア","ぼろいドア","お菓子のドア","マーメイドのドア","和風なドア","ログﾊｳｽのドア","メルヘンなドア","茶色いドア","アラブな緑ドア","重いドア","青いメルヘンなドア","ベージュなドア","中華なドア","ピンクのドア","カラフルなドア","竹のドア","黄金のドア"});
+	switch(key.Open())
+	{
+		case 0:
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0xFA7309, 0x00);
+		}
+		case 1:
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0xFA7309, 0x01);
+		}
+		case 2:
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0xFA7309, 0x02);
+		}
+		case 3:
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0xFA7309, 0x03);
+		}
+		case 4:
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0xFA7309, 0x04);
+		}
+		case 5:
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0xFA7309, 0x05);
+		}
+		case 6:
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0xFA7309, 0x06);
+		}
+		case 7:
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0xFA7309, 0x07);
+		}
+		case 8:
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0xFA7309, 0x08);
+		}
+		case 9:
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0xFA7309, 0x09);
+		}
+		case 10:
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0xFA7309, 0x0A);
+		}
+		case 11:
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0xFA7309, 0x0B);
+		}
+		case 12:
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0xFA7309, 0x0C);
+		}
+		case 13:
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0xFA7309, 0x0D);
+		}
+		case 14:
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0xFA7309, 0x0E);
+		}
+		case 15:
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0xFA7309, 0x0F);
+		}
+		case 16:
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0xFA7309, 0x10);
+		}
+		case 17:
+		{
+			offset = 0x31000000;
+			Process::Write8(offset + 0xFA7309, 0x11);
+		}
+		
+	}
+}
+
+/////////////////////////////////////////////////
+/**                    音楽                   **/
+/////////////////////////////////////////////////
 
 void music1(MenuEntry *entry)
 {
@@ -4800,8 +5520,9 @@ void music35(MenuEntry *entry)
 	}
 }
 
-
-
+/////////////////////////////////////////////////
+/**                   その他                   **/
+/////////////////////////////////////////////////
 
 void other1(MenuEntry *entry)
 {
@@ -4885,8 +5606,252 @@ void other11(MenuEntry *entry)
 	Process::Write32(offset + 0x48352C, 0x77777777);
 }
 
+void other12(MenuEntry *entry)
+{
+	Keyboard k("", {"オン", "オフ"});
+	switch(k.Open())
+	{
+		case 0:
+		{
+			Process::Write32(0x54c6e8, 0xe3e004ff);
+			break;
+		}
+		case 1:
+		{
+			Process::Write32(0x54c6e8, 0xe59400a0);
+			break;
+		}
+	}
+}
 
+void other13(MenuEntry *entry)
+{
+	Keyboard key("",
+		{
+			"晴れ(雲なし)",
+			"晴れ(雲あり)",
+			"くもり空",
+			"雨(小)",
+			"雨",
+			"雪(小)",
+			"雪",
+		});
+	
+	int r = key.Open();
+	
+	if (r >= 0)
+	{
+		Process::Write32(0x0062E728, 0xE3A00000 + r);
+		Process::Write32(0x00949530, 0x01000000 * r);
+	}
+}
 
+void other14(MenuEntry *entry)
+{
+	u16 a;
+	if(Process::Read16(0x0047D16E, a))
+	{
+	    if (Controller::IsKeysDown(Start + DPadDown))
+        {	 
+		    Process::Write16(0x0047D16E, 16256);
+		}
+		if (Controller::IsKeysDown(L))
+        {	 
+		    a--;
+		    Process::Write16(0x0047D16E, a);
+		}
+		if (Controller::IsKeysDown(R))
+        {	 
+		    a++;
+		    Process::Write16(0x0047D16E, a);
+		}
+	}
+} 
+
+void other15(MenuEntry *entry)
+{
+	Keyboard key("掲示板のメッセージを全て削除します",{"削除"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		offset = 0x31000000;
+		Process::Write32(offset + 0x00FB7E60, a1);
+		Process::Write32(offset + 0x00FB800C, a1);
+		Process::Write32(offset + 0x00FB81B8, a1);
+		Process::Write32(offset + 0x00FB8364, a1);
+		Process::Write32(offset + 0x00FB8510, a1);
+		Process::Write32(offset + 0x00FB86BC, a1);
+		Process::Write32(offset + 0x00FB8868, a1);
+		Process::Write32(offset + 0x00FB8A14, a1);
+		Process::Write32(offset + 0x00FB8BC0, a1);
+		Process::Write32(offset + 0x00FB8D6C, a1);
+		Process::Write32(offset + 0x00FB8F18, a1);
+		Process::Write32(offset + 0x00FB90C4, a1);
+		Process::Write32(offset + 0x00FB9270, a1);
+		Process::Write32(offset + 0x00FB941C, a1);
+		Process::Write32(offset + 0x00FB95C8, a1);
+		MessageBox("削除完了")();
+	}
+}
+
+void other16(MenuEntry *entry)
+{
+	Process::Write32(offset + 0x0064C680, 0xE3A01006);
+}
+
+void other17(MenuEntry *entry)
+{
+	Process::Write32(offset + 0x005C245C, 0xE3A01006);
+}
+
+void other18(MenuEntry *entry)
+{
+	Process::Write32(offset + 0x00601404, a2);
+}
+
+void other19(MenuEntry *entry)
+{
+	Process::Write32(offset + 0x00653E88, 0x1A000000);
+}
+
+void other20(MenuEntry *entry)
+{
+	Keyboard key("デバッグメニューを表示します",{"表示"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		offset = 0x32000000;
+		Process::Write32(offset + 0x35FF4, 0x59183329);
+		Process::Write32(offset + 0x41000, 0xFFFFFFFF);
+		Process::Write32(offset + 0x42000, 0xFFFFFFFF);
+		Process::Write32(offset + 0x43000, 0xFFFFFFFF);
+		Process::Write32(offset + 0x55180, 0xC0A0B05);
+	}
+}
+
+void other21(MenuEntry *entry)
+{
+	Keyboard key("ゲームモード変更\noff v=オフライン村\non v=オンライン村\non i=オンライン島\nyumemi=夢見",{"off v","on v","on i","yumemi"});
+	int r = key.Open();
+	if ( r == 0 ) {
+		offset = 0x32000000;
+		Process::Write8(offset + 0x18474, 0x08);
+		MessageBox("変更: オフライン村")();
+	}
+	if ( r == 1 ) {
+		offset = 0x32000000;
+		Process::Write16(offset + 0x18474, 0x0108);
+		MessageBox("変更: オンライン村")();
+	}
+	if ( r == 2 ) {
+		offset = 0x32000000;
+		Process::Write16(offset + 0x18474, 0x0208);
+		MessageBox("変更: オンライン島")();
+	}
+	if ( r == 3 ) {
+		offset = 0x32000000;
+		Process::Write16(offset + 0x18474, 0x0308);
+		MessageBox("変更: 夢見")();
+	}
+}
+
+void other22(MenuEntry *entry)
+{
+	Keyboard key("誰かが来た時のウィンドウ表示", {"オン", "オフ"});
+		switch( key.Open() )
+		{
+			case 0:
+			{
+				Process::Write32(offset + 0x568960, 0x41800000);
+			}
+			case 1:
+			{
+				Process::Write32(offset + 0x568960, 0x955FF4);
+			}
+		}
+}
+
+void other23(MenuEntry *entry)
+{
+	Keyboard key("ベストチャットのオンオフを切り替えます",{"オン","オフ"});
+	switch(key.Open())
+	{
+		case 0:
+		{
+			offset = 0x32000000;
+			Process::Write32(offset + 0xFF7BB0, 0x00000101);
+			MessageBox("ベスチャ:ON")();
+		}
+		case 1:
+		{
+			offset = 0x32000000;
+			Process::Write32(offset + 0xFF7BB0, 0x00000000);
+			MessageBox("ベスチャ:OFF")();
+		}
+	}
+}
+
+void other24(MenuEntry *entrey)
+{
+	Keyboard key("スピードハックのオンオフを切り替えます",{"ON","OFF"});
+	switch(key.Open())
+	{
+		case 0:
+		{
+			Process::Write32(offset + 0x54C6E8, 0xE3E004FF);
+		}
+		case 1:
+		{
+			Process::Write32(offset + 0x54C688, 0xE59400A0);
+		}
+	}
+}
+
+void other25(MenuEntry *entry)
+{
+	offset = 0x32000000;
+	Process::Write32(offset + 0x945744, 0x00000000);
+}
+
+void other26(MenuEntry *entry)
+{
+	if (Controller::IsKeysPressed(entry->Hotkeys[0].GetKeys())) {
+		offset = 0x32000000;
+		Process::Write32(offset + 0x945744, 0x00000000);
+	}
+}
+
+void other27(MenuEntry *entry)
+{
+	Keyboard key("図鑑の状態を変更します",{"全埋","全空"});
+	switch(key.Open())
+	{
+		case 0:
+		{
+			offset = 0x31000000;
+			Process::Write32(offset + 0xF50710, a3);
+			Process::Write32(offset + 0xF50714, a3);
+			Process::Write32(offset + 0xF50718, a3);
+			Process::Write32(offset + 0xF5071C, a3);
+			Process::Write32(offset + 0xF50720, a3);
+			Process::Write32(offset + 0xF50724, a3);
+			Process::Write32(offset + 0xF50728, a3);
+		}
+		case 1:
+		{
+			offset = 0x31000000;
+			Process::Write32(offset + 0xF50710, a1);
+			Process::Write32(offset + 0xF50714, a1);
+			Process::Write32(offset + 0xF50718, a1);
+			Process::Write32(offset + 0xF5071C, a1);
+			Process::Write32(offset + 0xF50720, a1);
+			Process::Write32(offset + 0xF50724, a1);
+			Process::Write32(offset + 0xF50728, a1);
+		}
+	}
+}
+
+/////////////////////////////////////////////////
+/**                  メンテナンス                 **/
+///////////////////////////////////////////////// 
 
 void maintenance1(MenuEntry *entry)
 {
@@ -4955,7 +5920,8 @@ void maintenance1(MenuEntry *entry)
 	
 }
 
-/*void maintenance2(MenuEntry *entry)
+/**
+void maintenance2(MenuEntry *entry)
 {
 	Keyboard key("3gxのファイル関連を管理します",{"color.bin無効化","color.binの確認","color.binを開く","color.binを読む","color.binが開かれているか確認","3gxのサイズを表示","3gxの配置確認","3gxの名前確認","3gxの拡張子確認"});
 	int r = key.Open();
@@ -5017,7 +5983,8 @@ void maintenance1(MenuEntry *entry)
 		file.Close();
 	}
 }
-*/
+**/
+
 void maintenance3(MenuEntry *entry)
 {
 	Keyboard key("記入、ダンプ系\n不具合多め",{"32.binに19194545記入","32.txtに野獣先輩と記入","dump.binに184E0の値をダンプ","dump.binにdumpした値を書き込む"});
@@ -5086,5 +6053,29 @@ void maintenance6(MenuEntry *entry)
 	}
 }
 
+void maintenance7(MenuEntry *entry)
+{
+	Keyboard key("ゲームを軽くします\n動作が重いときに使用してください",{"軽","普","重"});
+	switch(key.Open())
+		{
+			case 0:
+			{
+				Process::Write32(offset + 0x54C688, 0xE3A01000);
+			}
+			case 1:
+			{
+				Process::Write32(offset + 0x54C688, 0xE3A0100A);
+			}
+			case 2:
+			{
+				Process::Write32(offset + 0x54C688, 0xE3A010FF);
+			}
+		}
+}
+
+
+
+
+/**end**/
 }
 
