@@ -114,6 +114,7 @@ namespace CTRPluginFramework
 	/*void move7(MenuEntry *entry);*/
 	void move8(MenuEntry *entry);
 	void move9(MenuEntry *entry);
+
 	
 	void act1(MenuEntry *entry);
 	void act2(MenuEntry *entry);
@@ -174,6 +175,7 @@ namespace CTRPluginFramework
 	void sima32(MenuEntry *entry);
 	void sima33(MenuEntry *entry);
 	void sima34(MenuEntry *entry);
+	void sima35(MenuEntry *entry);
 	
 	void player1(MenuEntry *entry);
 	void player2(MenuEntry *entry);
@@ -193,6 +195,33 @@ namespace CTRPluginFramework
 	void player16(MenuEntry *entry);
 	void player17(MenuEntry *entry);
 	void player18(MenuEntry *entry);
+	void player19(MenuEntry *entry);
+	void player20(MenuEntry *entry);
+	void player21(MenuEntry *entry);
+	void player22(MenuEntry *entry);
+	void player23(MenuEntry *entry);
+	void player24(MenuEntry *entry);
+	void player25(MenuEntry *entry);
+	void player26(MenuEntry *entry);
+	void player27(MenuEntry *entry);
+	void player28(MenuEntry *entry);
+	void player29(MenuEntry *entry);
+	void player30(MenuEntry *entry);
+	void player31(MenuEntry *entry);
+	void player32(MenuEntry *entry);
+	void player33(MenuEntry *entry);
+	void player34(MenuEntry *entry);
+	void player35(MenuEntry *entry);
+	void player36(MenuEntry *entry);
+	void player37(MenuEntry *entry);
+	void player38(MenuEntry *entry);
+	void player39(MenuEntry *entry);
+	void player40(MenuEntry *entry);
+	void player41(MenuEntry *entry);
+	void player42(MenuEntry *entry);
+	void player43(MenuEntry *entry);
+	
+	void yumemi1(MenuEntry *entry);
 	
 	void photo1(MenuEntry *entry);
 	void photo2(MenuEntry *entry);
@@ -206,6 +235,14 @@ namespace CTRPluginFramework
 	void style1(MenuEntry *entry);
 	void style2(MenuEntry *entry);
 	void style3(MenuEntry *entry);
+	void style4(MenuEntry *entry);
+	void style5(MenuEntry *entry);
+	void style6(MenuEntry *entry);
+	
+	void house1(MenuEntry *entry);
+	void house2(MenuEntry *entry);
+	void house3(MenuEntry *entry);
+	void house4(MenuEntry *entry);
 	
 	void music1(MenuEntry *entry);
 	void music2(MenuEntry *entry);
@@ -254,6 +291,22 @@ namespace CTRPluginFramework
 	void other9(MenuEntry *entry);
 	void other10(MenuEntry *entry);
 	void other11(MenuEntry *entry);
+	void other12(MenuEntry *entry);
+	void other13(MenuEntry *entry);
+	void other14(MenuEntry *entry);
+	void other15(MenuEntry *entry);
+	void other16(MenuEntry *entry);
+	void other17(MenuEntry *entry);
+	void other18(MenuEntry *entry);
+	void other19(MenuEntry *entry);
+	void other20(MenuEntry *entry);
+	void other21(MenuEntry *entry);
+	void other22(MenuEntry *entry);
+	void other23(MenuEntry *entry);
+	void other24(MenuEntry *entry);
+	void other25(MenuEntry *entry);
+	void other26(MenuEntry *entry);
+	void other27(MenuEntry *entry);
 	
 	void maintenance1(MenuEntry *entry);
 //	void maintenance2(MenuEntry *entry);
@@ -261,6 +314,8 @@ namespace CTRPluginFramework
 	void maintenance4(MenuEntry *entry);
 	void maintenance5(MenuEntry *entry);
 	void maintenance6(MenuEntry *entry);
+	void maintenance7(MenuEntry *entry);
+
 	
 }
 #endif
