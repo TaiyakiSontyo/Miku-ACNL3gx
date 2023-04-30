@@ -14,7 +14,7 @@ luma links -> https://github.com/LumaTeam/Luma3DS/releases
 
 This plug-in was created based on Taiyaki Village Chief's Furichi (txt). I also asked the people of Discord to help me create it. thank you!
 
-Discord Server links -> https://discord.gg/GTXF665cXG
+Discord Server links -> https://discord.gg/wfmaUb92YX
 
 # プラグインの紹介 / Introduction to plugins
 このプラグインには多くのコードが入っていて、島コードやアクションなど基本的なものから、ネタコードや便利コードなども多く入っています！
